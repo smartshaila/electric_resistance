@@ -3,7 +3,7 @@
  */
 
 angular
-    .module('electric_resistance')
+    .module('electric_resistance', [])
     .controller('GameController',
         function ($scope) {
             $scope.players = [
