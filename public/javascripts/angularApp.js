@@ -13,7 +13,13 @@ angular
                 {'name': 'Hitanshu', 'logged_in': true},
                 {'name': 'Sneha', 'logged_in': false}
             ];
-            $scope.roles = ['Merlin', 'Assassin', 'Percival', 'Morgana', 'Loyal Servant of Arthur'];
+            $scope.roles = [
+                {'name': 'Merlin', 'faction': 'good', 'count': 1}, 
+                {'name': 'Assassin', 'faction': 'evil', 'count': 1}, 
+                {'name': 'Percival', 'faction': 'good', 'count': 1}, 
+                {'name': 'Morgana', 'faction': 'evil', 'count': 1}, 
+                {'name': 'Loyal Servant of Arthur', 'faction': 'good', 'count': 1}
+            ];
             $scope.waiting_on = ['Shaila', 'Nicholas', 'Hitanshu'];
             $scope.waiting_for = 'log in';
             $scope.current_mission = function() {return $scope.game.missions[$scope.game.mission_number]};
