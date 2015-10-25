@@ -1,32 +1,67 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular.min.js"></script>
-    <script src="/javascripts/angularApp.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body ng-app="electric_resistance" ng-controller="GameController">
-    <nav class="navbar navbar-default navbar-fixed-bottom">
-      <div class="container-fluid">
-          <div>
-              <ul class="nav navbar-nav">
-                  <li class="active"><a href="#">Game <span class="sr-only">(current)</span></a></li>
-                  <li><a href="#">Voting</a></li>
-                  <li><a href="#">Info</a></li>
-                  <li><a href="#">Log</a></li>
-              </ul>
-          </div><!-- /.navbar-collapse -->
-      </div><!-- /.container-fluid -->
-  </nav>
-
-        <div class="row">
-            <div class="form-group">
-                <input class="form-control" type="text" ng-model="game.mission_number" />
+    <head>
+        <title><%= title %></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="/javascripts/angularApp.js"></script>
+        <script src="/javascripts/filters.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+    </head>
+    <body ng-app="electric_resistance" ng-controller="GameController">
+        <nav class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Game <span class="sr-only">(current)</span></a></li>
+                    <li><a href="#">Voting</a></li>
+                    <li><a href="#">Info</a></li>
+                    <li><a href="#">Log</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="alert alert-info" role="alert">
+            Waiting for {{waiting_on | sentence}} to {{waiting_for}}.
+        </div>
+        <div class="btn-group" role="group" aria-label="mission_info">
+            <button type="button" class="btn btn-default btn-lg {{m.result | result_icon}}" ng-repeat="m in game.missions">{{m.result ? '' : m.capacity}}<sup style="{{(m.fails_needed > 1) ? '' : 'display:none'}}">{{m.fails_needed}}</sup></button>
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                Mission #{{game.mission_number + 1}}
+            </div>
+            <div class="panel-body">
+                <p>Leader: {{current_team().leader}}</p>
+                <p>Team: {{current_team().members | sentence}}</p>
+                <p>
+                    <button type="button" class="btn btn-success btn-lg">Accept</button>
+                    <button type="button" class="btn btn-danger btn-lg">Reject</button>
+                </p>
+                <p>Rejected Teams: {{current_mission().teams.length - 1}}</p>
             </div>
         </div>
-  </body>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                Players
+            </div>
+            <div class="panel-body">
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="p in players">
+                        <span class="glyphicon glyphicon-flash {{p.logged_in | connection_icon}}"> </span> {{p.name}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                Roles
+            </div>
+            <div class="panel-body">
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="r in roles">{{r}}</li>
+                </ul>
+            </div>
+        </div>
+    </body>
 </html>

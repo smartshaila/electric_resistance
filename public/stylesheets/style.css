@@ -6,3 +6,11 @@ body {
 a {
   color: #00B7FF;
 }
+
+.online {
+   color: #00b3ee;
+}
+
+.offline {
+   color: #c0c0c0;
+}

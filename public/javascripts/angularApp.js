@@ -3,7 +3,7 @@
  */
 
 angular
-    .module('electric_resistance', [])
+    .module('electric_resistance', ['resistance_filters'])
     .controller('GameController',
         function ($scope) {
             $scope.players = [
@@ -14,7 +14,7 @@ angular
                 {'name': 'Sneha', 'logged_in': false}
             ];
             $scope.roles = ['Merlin', 'Assassin', 'Percival', 'Morgana', 'Loyal Servant of Arthur'];
-            $scope.waiting_on = ['Shaila'];
+            $scope.waiting_on = ['Shaila', 'Nicholas', 'Hitanshu'];
             $scope.waiting_for = 'log in';
             $scope.current_mission = function() {return $scope.game.missions[$scope.game.mission_number]};
             $scope.current_team = function() {return $scope.current_mission().teams[$scope.current_mission().teams.length - 1]};
@@ -93,7 +93,7 @@ angular
                     {
                         'result': null,
                         'capacity': 3,
-                        'fails_needed': 1,
+                        'fails_needed': 2,
                         'teams': [
                             {
                                 'leader': 'Nicholas',
