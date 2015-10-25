@@ -34,4 +34,24 @@ angular.module('resistance_filters', [])
                 return 'offline';
             }
         };
+    }).filter('faction_style', function() {
+        return function(faction) {
+            if (faction == 'good'){
+                return 'text-info';
+            } else if (faction == 'evil'){
+                return 'text-danger';
+            } else {
+                return '';
+            }
+        };
+    }).filter('faction_icon', function() {
+        return function(faction) {
+          if (faction == 'good'){
+              return 'glyphicon glyphicon-tint';
+          } else if (faction == 'evil'){
+              return 'glyphicon glyphicon-fire';
+          } else {
+              return 'glyphicon';
+          }
+        };
     });
