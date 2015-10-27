@@ -22,6 +22,16 @@
                 <!--</ul>-->
             <!--</div>-->
         <!--</nav>-->
+        <div id="footer">
+            <div class="col-xs-12 navbar-default navbar-fixed-bottom">
+                <div class="row" id="bottomNav">
+                    <div class="col-xs-3 text-center"><a href="#"><i class="glyphicon glyphicon-home"></i><br>Game</a></div>
+                    <div class="col-xs-3 text-center"><a href="#"><i class="glyphicon glyphicon-blackboard"></i><br>Vote</a></div>
+                    <div class="col-xs-3 text-center"><a href="#"><i class="glyphicon glyphicon-eye-open"></i><br>Info</a></div>
+                    <div class="col-xs-3 text-center"><a href="#"><i class="glyphicon glyphicon-info-sign"></i><br>Log</a></div>
+                </div>
+            </div>
+        </div>
         <div class="container-fluid">
             <div class="alert alert-info" role="alert">
                 Waiting for {{waiting_on | sentence}} to {{waiting_for}}.
@@ -63,6 +73,33 @@
                             <span class="{{r.faction | faction_icon}}"> </span> {{r.name}} <span class="badge">{{r.count}}</span>
                         </li>
                     </ul>
+                </div>
+            </div>
+            <div class="panel panel-info">
+                <div class="panel-heading" data-toggle="collapse" href="#team_voting" aria-expanded="true" aria-controls="team_voting">Team Voting</div>
+                <div class="panel-body collapse in" id="team_voting">
+                    <p>Leader: {{current_team().leader}}</p>
+                    <p>Team: {{current_team().members | sentence}} in a table</p>
+                    <p>
+                        <button type="button" class="btn btn-success btn-lg">Accept</button>
+                        <button type="button" class="btn btn-danger btn-lg">Reject</button>
+                    </p>
+                </div>
+            </div>
+            <div class="panel panel-info">
+                <div class="panel-heading" data-toggle="collapse" href="#mission_voting" aria-expanded="true" aria-controls="mission_voting">Mission Voting</div>
+                <div class="panel-body collapse in" id="mission_voting">
+                    <p>Mission #{{game.mission_number + 1}}</p>
+                    <p>Team: {{current_team().members | sentence}} in a table</p>
+                    <p>
+                        <button type="button" class="btn btn-primary btn-lg">Pass</button>
+                        <button type="button" class="btn btn-danger btn-lg">Fail</button>
+                    </p>
+                </div>
+            </div>
+            <div class="panel panel-info">
+                <div class="panel-heading" data-toggle="collapse" href="#info" aria-expanded="true" aria-controls="info">Revealed Info</div>
+                <div class="panel-body collapse in" id="info">
                 </div>
             </div>
         </div>

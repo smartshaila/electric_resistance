@@ -24,6 +24,17 @@ angular
             $scope.waiting_for = 'log in';
             $scope.current_mission = function() {return $scope.game.missions[$scope.game.mission_number]};
             $scope.current_team = function() {return $scope.current_mission().teams[$scope.current_mission().teams.length - 1]};
+            $scope.user = {
+                'name': 'Shaila',
+                'user_id': 1
+            };
+            $scope.player = {
+                'role': 'Merlin',
+                'revealed_roles': [
+                    {'name': 'Nick', 'faction': 'evil'},
+                    {'name': 'Krista', 'faction': 'evil'}
+                ]
+            };
             $scope.game = {
                 'result': null,
                 'mission_number': 3,
