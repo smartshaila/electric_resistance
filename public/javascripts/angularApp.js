@@ -24,6 +24,14 @@ angular
             $scope.waiting_for = 'log in';
             $scope.current_mission = function() {return $scope.game.missions[$scope.game.mission_number]};
             $scope.current_team = function() {return $scope.current_mission().teams[$scope.current_mission().teams.length - 1]};
+            $scope.toggle_team_select = function(name) {
+                var index = $scope.current_team().members.indexOf(name);
+                if (index > -1) {
+                    $scope.current_team().members.splice(index, 1);
+                } else {
+                    $scope.current_team().members.push(name);
+                }
+            };
             $scope.user = {
                 'name': 'Shaila',
                 'user_id': 1

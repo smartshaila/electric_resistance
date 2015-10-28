@@ -76,6 +76,18 @@
                 </div>
             </div>
             <div class="panel panel-info">
+                <div class="panel-heading" data-toggle="collapse" href="#team_select" aria-expanded="true" aria-controls="team_select">Team Selection - {{current_team().members.length}}/{{current_mission().capacity}}</div>
+                <div class="panel-body collapse in" id="team_select">
+                    <label class="btn btn-block btn-primary" ng-repeat="p in players">
+                        <input type="checkbox"
+                               name="selected_players[]"
+                               value="{{p.name}}"
+                               ng-checked="current_team().members.indexOf(p.name) > -1"
+                               ng-click="toggle_team_select(p.name)"> {{p.name}}
+                    </label>
+                </div>
+            </div>
+            <div class="panel panel-info">
                 <div class="panel-heading" data-toggle="collapse" href="#team_voting" aria-expanded="true" aria-controls="team_voting">Team Voting</div>
                 <div class="panel-body collapse in" id="team_voting">
                     <p>Leader: {{current_team().leader}}</p>
@@ -100,6 +112,12 @@
             <div class="panel panel-info">
                 <div class="panel-heading" data-toggle="collapse" href="#info" aria-expanded="true" aria-controls="info">Revealed Info</div>
                 <div class="panel-body collapse in" id="info">
+                    <p>You are {{player.role}}</p>
+                    <ul class="list-group">
+                        <li class="list-group-item {{r.faction | faction_style}}" ng-repeat="r in player.revealed_roles">
+                            <span class="{{r.faction | faction_icon}}"> </span> {{r.name}}
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
