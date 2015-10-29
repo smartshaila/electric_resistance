@@ -3,25 +3,17 @@
     <head>
         <title><%= title %></title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
         <script src="/angular/angular.min.js"></script>
         <script src="/jquery/dist/jquery.min.js"></script>
         <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
         <script src="/javascripts/angularApp.js"></script>
         <script src="/javascripts/filters.js"></script>
+        <script src="/javascripts/socket.js"></script>
         <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css">
         <link rel='stylesheet' href="/stylesheets/style.css"/>
     </head>
     <body ng-app="electric_resistance" ng-controller="GameController">
-        <!--<nav class="navbar navbar-default navbar-fixed-bottom">-->
-            <!--<div class="container-fluid">-->
-                <!--<ul class="nav navbar-nav">-->
-                    <!--<li class="active"><a href="#">Game <span class="sr-only">(current)</span></a></li>-->
-                    <!--<li><a href="#">Voting</a></li>-->
-                    <!--<li><a href="#">Info</a></li>-->
-                    <!--<li><a href="#">Log</a></li>-->
-                <!--</ul>-->
-            <!--</div>-->
-        <!--</nav>-->
         <div id="footer">
             <div class="col-xs-12 navbar-default navbar-fixed-bottom">
                 <div class="row" id="bottomNav">

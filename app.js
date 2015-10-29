@@ -10,6 +10,17 @@ var users = require('./routes/users');
 
 var app = express();
 
+// Socket.io
+
+var socket_io = require( "socket.io" );
+var io = socket_io();
+app.io = io;
+
+io.on( "connection", function( socket )
+{
+    console.log( "A user connected" );
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -57,6 +68,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;
