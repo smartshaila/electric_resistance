@@ -16,11 +16,6 @@ var socket_io = require( "socket.io" );
 var io = socket_io();
 app.io = io;
 
-io.on( "connection", function( socket )
-{
-    console.log( "A user connected" );
-});
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -70,3 +65,6 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+module.exports.io = io;
+
+io.on('connection', require('./routes/socket'));

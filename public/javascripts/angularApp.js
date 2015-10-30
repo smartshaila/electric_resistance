@@ -6,6 +6,7 @@ var app = angular.module('electric_resistance', ['resistance_filters']);
 
 app.controller('GameController',
         function ($scope, socket) {
+            socket.on('console', function(data) {console.log(data)});
             socket.on('init', function (data) {
                 $scope.game = data.game;
             });
