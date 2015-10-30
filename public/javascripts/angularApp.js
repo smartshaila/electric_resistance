@@ -7,18 +7,13 @@ var app = angular.module('electric_resistance', ['resistance_filters']);
 app.controller('GameController',
         function ($scope, socket) {
             socket.on('console', function(data) {console.log(data)});
-            socket.on('init', function (data) {
+            socket.on('update', function (data) {
                 $scope.game = data.game;
             });
             $scope.current_mission = function() {return $scope.game.missions[$scope.game.mission_number]};
             $scope.current_team = function() {return $scope.current_mission().teams[$scope.current_mission().teams.length - 1]};
             $scope.toggle_team_select = function(name) {
-                var index = $scope.current_team().members.indexOf(name);
-                if (index > -1) {
-                    $scope.current_team().members.splice(index, 1);
-                } else {
-                    $scope.current_team().members.push(name);
-                }
+                socket.emit('toggle_team_select', name);
             };
             $scope.players = [
                 {'name': 'Nicholas', 'logged_in': true},

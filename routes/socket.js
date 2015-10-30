@@ -101,10 +101,26 @@ var game = {
     ]
 };
 
+function current_mission() {
+    return game.missions[game.mission_number]
+};
+function current_team() {
+    return current_mission().teams[current_mission().teams.length - 1]
+};
+
 module.exports = function (socket) {
 //    console.log(io);
 //    console.log(socket);
 //    io.emit('console', 'IO test');
 //    socket.emit('console', 'SOCKET test');
-    io.emit('init', {game: game});
+    io.emit('update', {game: game});
+    socket.on('toggle_team_select', function(name) {
+        var index = current_team().members.indexOf(name);
+        if (index > -1) {
+            current_team().members.splice(index, 1);
+        } else {
+            current_team().members.push(name);
+        }
+        io.emit('update', {game: game});
+    });
 };
