@@ -4,6 +4,17 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var passport = require('passport');
+var util = require('util');
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+GoogleStrategy.prototype.userProfile = function(token, done) {
+  done(null, {})
+}
+
+var GAPPS_CLIENT_ID = process.env.GAPPS_CLIENT_ID || '';
+var GAPPS_CLIENT_SECRET = process.env.GAPPS_CLIENT_SECRET || '';
+
+console.log(GAPPS_CLIENT_ID);
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -29,9 +40,42 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'bower_components')));
 
-
 app.use('/', routes);
 app.use('/users', users);
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+passport.use(new GoogleStrategy({
+    clientID: GAPPS_CLIENT_ID,
+    clientSecret: GAPPS_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/google/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    process.nextTick(function () {
+      var retVal = done(null, profile);
+      console.log('Profile: ' + JSON.stringify(profile));
+      return retVal;
+    });
+  }
+));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get('/auth/google', passport.authenticate('google', {scope: ['https://www.googleapis.com/auth/plus.login']}));
+
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -63,6 +107,7 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
 
 module.exports = app;
 module.exports.io = io;

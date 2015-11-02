@@ -102,11 +102,12 @@ var game = {
 };
 
 function current_mission() {
-    return game.missions[game.mission_number]
-};
+    return game.missions[game.mission_number];
+}
+
 function current_team() {
-    return current_mission().teams[current_mission().teams.length - 1]
-};
+    return current_mission().teams[current_mission().teams.length - 1];
+}
 
 module.exports = function (socket) {
 //    console.log(io);
