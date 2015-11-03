@@ -6,6 +6,23 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var util = require('util');
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/test');
+
+var db = mongoose.connection;
+db.on('error', console.error);
+db.once('open', function callback() {
+    console.log("Connected to db");
+});
+
+var User = require('./models/user');
+
+User.find({}, function(err, users) {
+    if (err) throw err;
+    console.log(users);
+});
+
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 var GAPPS_CLIENT_ID = process.env.GAPPS_CLIENT_ID || '';
@@ -49,14 +66,34 @@ passport.deserializeUser(function(obj, done) {
 });
 
 passport.use(new GoogleStrategy({
-    clientID: GAPPS_CLIENT_ID,
-    clientSecret: GAPPS_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/google/callback"
-  },
-  function(accessToken, refreshToken, profile, done) {
-    console.log('PROFILE: ' + JSON.stringify(profile));
-    return done(null, profile);
-  }
+        clientID: GAPPS_CLIENT_ID,
+        clientSecret: GAPPS_CLIENT_SECRET,
+        callbackURL: "http://localhost:3000/auth/google/callback"
+    },
+    function(accessToken, refreshToken, profile, done) {
+        User.findOne({ google_id: profile.id }, function(err, user) {
+            if(err) { console.log(err); }
+            if (!err && user != null) {
+                console.log(user);
+                done(null, user);
+            } else {
+                var userObj = new User({
+                    google_id: profile.id,
+                    google_profile: profile,
+                    name: profile.displayName,
+                    created: Date.now()
+                });
+                userObj.save(function(err) {
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        console.log("Saving user ...");
+                        done(null, user);
+                    }
+                });
+            }
+        });
+    }
 ));
 
 app.use(passport.initialize());
@@ -68,8 +105,8 @@ app.get('/auth/google', passport.authenticate('google', {scope: ['https://www.go
 app.get('/auth/google/callback', 
   passport.authenticate('google', { failureRedirect: '/' }),
   function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/');
+// Successful authentication, redirect home.
+      res.redirect('/');
   });
 
 // catch 404 and forward to error handler
