@@ -8,7 +8,7 @@ var passport = require('passport');
 var util = require('util');
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://localhost/resistance');
 
 var db = mongoose.connection;
 db.on('error', console.error);

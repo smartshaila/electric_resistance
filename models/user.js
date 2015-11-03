@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 // create a schema
 var userSchema = new Schema({
     google_id: String,
-    google_profile: Mixed,
+    google_profile: {},
     name: String,
     created: Date
 });
