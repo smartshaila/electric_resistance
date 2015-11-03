@@ -7,9 +7,6 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var util = require('util');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-GoogleStrategy.prototype.userProfile = function(token, done) {
-  done(null, {})
-}
 
 var GAPPS_CLIENT_ID = process.env.GAPPS_CLIENT_ID || '';
 var GAPPS_CLIENT_SECRET = process.env.GAPPS_CLIENT_SECRET || '';
@@ -57,18 +54,16 @@ passport.use(new GoogleStrategy({
     callbackURL: "http://localhost:3000/auth/google/callback"
   },
   function(accessToken, refreshToken, profile, done) {
-    process.nextTick(function () {
-      var retVal = done(null, profile);
-      console.log('Profile: ' + JSON.stringify(profile));
-      return retVal;
-    });
+    console.log('PROFILE: ' + JSON.stringify(profile));
+    return done(null, profile);
   }
 ));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/auth/google', passport.authenticate('google', {scope: ['https://www.googleapis.com/auth/plus.login']}));
+app.get('/auth/google', passport.authenticate('google', {scope: ['https://www.googleapis.com/auth/plus.login',
+                                                                 'https://www.googleapis.com/auth/plus.profile.emails.read']}));
 
 app.get('/auth/google/callback', 
   passport.authenticate('google', { failureRedirect: '/' }),
