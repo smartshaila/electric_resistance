@@ -11,6 +11,7 @@ var userSchema = new Schema({
 });
 
 userSchema.statics.findOrCreate = function(queryObj, profile, done) {
+    var self = this;
     this.findOne(queryObj, function(err, user) {
         if (err) {
             done(err, null);
@@ -18,7 +19,7 @@ userSchema.statics.findOrCreate = function(queryObj, profile, done) {
             console.log("Found User " + user.name);
             done(null, user);
         } else {
-            var userObj = new this({
+            var userObj = new self({
                 google_id: profile.id,
                 google_profile: profile._json,
                 name: profile.displayName,

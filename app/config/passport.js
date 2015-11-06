@@ -7,11 +7,18 @@ var GAPPS_CLIENT_ID = process.env.GAPPS_CLIENT_ID || '';
 var GAPPS_CLIENT_SECRET = process.env.GAPPS_CLIENT_SECRET || '';
 
 passport.serializeUser(function (user, done) {
+//    console.log('Serialize: ' + user)
     done(null, user.google_id);
+//    done(null, user);
 });
 
-passport.deserializeUser(function (user, done) {
-    done(null, User.find({ google_id: user}));
+passport.deserializeUser(function (google_id, done) {
+//    console.log('Deserialize: ' + google_id);
+    User.findOne({ google_id: google_id }, function(err, user) {
+//        console.log('Found: ' + user.name);
+        done(err, user);
+    });
+//    done(null, user);
 });
 
 passport.use(new GoogleStrategy({
@@ -25,7 +32,7 @@ passport.use(new GoogleStrategy({
 ));
 
 passport.ensureAuthenticated = function(req, res, next) {
-    if (req.path == '/auth/google' || req.path == '/auth/google/callback' || req.isAuthenticated()) {
+    if (req.path.indexOf('/auth') != -1 || req.isAuthenticated()) {
         return next();
     }
     res.redirect('/auth/google');

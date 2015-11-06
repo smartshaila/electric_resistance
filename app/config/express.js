@@ -12,7 +12,6 @@ var app = express();
 var io = require('socket.io')();
 app.io = io;
 module.exports.io = io;
-io.on('connection', require('../controllers/socket'));
 var mongoose = require('./mongoose');
 var passport = require('./passport');
 
@@ -32,17 +31,33 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 
+app.use(express.static(path.join(__dirname, '../../public')));
+app.use(express.static(path.join(__dirname, '../../bower_components')));
+
 // Session configuration
+var sessionStore = new MongoStore({ url: 'mongodb://localhost/test', touchAfter: 24 * 3600 });
 app.use(session(
     {
         secret: 'session_secret',
         saveUninitialized: false,
         resave: false,
-        store: new MongoStore({ url: 'mongodb://localhost/test', touchAfter: 24 * 3600 })
+        store: sessionStore
     }
 ));
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Expose Passport info to Sockets
+var passportSocketIo = require('passport.socketio');
+io.use(passportSocketIo.authorize({
+    cookieParser: cookieParser,
+    key: 'connect.sid',
+    secret: 'session_secret',
+    store: sessionStore
+}));
+
+// Import socket code/listeners
+require('../controllers/socket')(io);
 
 // GOOGLE AUTHENTICATION
 // Maybe this can be extracted?
@@ -62,8 +77,6 @@ app.get('/auth/google/callback',
 app.use(passport.ensureAuthenticated);
 
 // Serve static content
-app.use(express.static(path.join(__dirname, '../../public')));
-app.use(express.static(path.join(__dirname, '../../bower_components')));
 
 // Allow logging out
 // Maybe have a landing page for different login types?
@@ -71,6 +84,10 @@ app.get('/logout', function(req, res) {
     console.log(req.session.passport.user.name + ' has logged out.');
     req.logout();
     res.redirect('/');
+});
+
+app.get('/', function(req, res, next) {
+    res.render('index');
 });
 
 // catch 404 and forward to error handler

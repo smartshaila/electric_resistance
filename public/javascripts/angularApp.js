@@ -8,6 +8,7 @@ app.controller('GameController',
     function ($scope, socket) {
         socket.on('console', function(data) {console.log(data)});
         socket.on('update', function (data) {
+            console.log('UPDATE');
             $scope.game = data.game;
         });
         $scope.current_mission = function() {return $scope.game.missions[$scope.game.mission_number]};
