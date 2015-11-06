@@ -1,16 +1,16 @@
 body {
-  padding: 10px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 10px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+    color: #00B7FF;
 }
 
 .online {
-   color: #00b3ee;
+    color: #00b3ee;
 }
 
 .offline {
-   color: #c0c0c0;
+    color: #c0c0c0;
 }

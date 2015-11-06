@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+var app = require('../app/config/express');
 var debug = require('debug')('electric_resistance:server');
 var http = require('http');
 

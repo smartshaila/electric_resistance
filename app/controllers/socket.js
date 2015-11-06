@@ -1,4 +1,4 @@
-var io = require('../app.js').io;
+var io = require('../config/express').io;
 
 var game = {
     'result': null,
