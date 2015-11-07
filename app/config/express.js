@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
+var Game = require('../models/game');
 
 // Initialize express, socket.io, mongoose, and passport
 var app = express();
@@ -89,6 +90,12 @@ app.get('/logout', function(req, res) {
 app.get('/', function(req, res, next) {
     res.render('index');
 });
+
+//This is to test stuff...
+app.get('/newgame', function(req, res) {
+    console.dir(new Game({}));
+});
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
