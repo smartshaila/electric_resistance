@@ -109,7 +109,9 @@ function current_team() {
 
 module.exports = function (io) {
     io.on('connection', function(socket) {
-        console.log('Connected client: ' + socket.request.user.name);
+        socket.user = socket.request.user;
+        console.log('Connected client: ' + socket.user.name);
+        socket.emit('user', {user: });
         io.emit('update', {game: game});
         socket.on('toggle_team_select', function(name) {
             var index = current_team().members.indexOf(name);
@@ -122,7 +124,7 @@ module.exports = function (io) {
         });
 
         socket.on('disconnect', function(socket) {
-            console.log('Disconnected client: ' + socket.request.user.name);
+            console.log('Disconnected client: ' + socket.user.name);
         });
     });
 };
