@@ -80,7 +80,12 @@
                 <div class="panel-heading" data-toggle="collapse" href="#team_voting" aria-expanded="true" aria-controls="team_voting">Team Voting</div>
                 <div class="panel-body collapse in" id="team_voting">
                     <p>Leader: {{current_team().leader}}</p>
-                    <p>Team: {{current_team().members | sentence}} in a table</p>
+                    <p>Proposed Team</p>
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="m in current_team().members">
+                            {{m}}
+                        </li>
+                    </ul>
                     <p>
                         <button type="button" class="btn btn-success btn-lg">Accept</button>
                         <button type="button" class="btn btn-danger btn-lg">Reject</button>
@@ -90,8 +95,12 @@
             <div class="panel panel-info">
                 <div class="panel-heading" data-toggle="collapse" href="#mission_voting" aria-expanded="true" aria-controls="mission_voting">Mission Voting</div>
                 <div class="panel-body collapse in" id="mission_voting">
-                    <p>Mission #{{game.mission_number + 1}}</p>
-                    <p>Team: {{current_team().members | sentence}} in a table</p>
+                    <p>Mission #{{game.mission_number + 1}} Members</p>
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="m in current_team().members">
+                            {{m}}
+                        </li>
+                    </ul>
                     <p>
                         <button type="button" class="btn btn-primary btn-lg">Pass</button>
                         <button type="button" class="btn btn-danger btn-lg">Fail</button>

@@ -111,7 +111,7 @@ module.exports = function (io) {
     io.on('connection', function(socket) {
         socket.user = socket.request.user;
         console.log('Connected client: ' + socket.user.name);
-        socket.emit('user', {user: });
+        socket.emit('user', {user: socket.user});
         io.emit('update', {game: game});
         socket.on('toggle_team_select', function(name) {
             var index = current_team().members.indexOf(name);
