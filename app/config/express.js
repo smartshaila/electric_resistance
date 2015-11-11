@@ -93,7 +93,8 @@ app.get('/', function(req, res, next) {
 
 //This is to test stuff...
 app.get('/newgame', function(req, res) {
-    console.dir(new Game({}));
+    var g = new Game({});
+    g.setup_game()
 });
 
 
