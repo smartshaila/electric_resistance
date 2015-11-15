@@ -99,6 +99,8 @@ var game = {
     ]
 };
 
+var lobby_users = [];
+
 function current_mission() {
     return game.missions[game.mission_number];
 }
@@ -107,20 +109,41 @@ function current_team() {
     return current_mission().teams[current_mission().teams.length - 1];
 }
 
+function update_game(io, room) {
+    console.log('Update Game for ', room);
+//    console.dir(io.sockets.in(room));
+    io.sockets.in(room).emit('update', {game: game});
+}
+
+function update_lobby(io, room, user) {
+    io.sockets.in(room).emit('update', {users: lobby_users, me: user});
+}
+
 module.exports = function (io) {
     io.on('connection', function(socket) {
         socket.user = socket.request.user;
         console.log('Connected client: ' + socket.user.name);
-//        socket.emit('user', {user: socket.user});
-        io.emit('update', {game: game});
-        socket.on('toggle_team_select', function(name) {
-            var index = current_team().members.indexOf(name);
+        socket.emit('user', {user: socket.user});
+        socket.on('join_room', function(data) {
+            console.log(socket.user.name + ' has joined ' + data.room.name);
+            socket.join(data.room.name);
+            if (data.room.type == 'game') {
+                update_game(io, data.room.name);
+            } else if (data.room.type == 'lobby') {
+                update_lobby(io, data.room.name, socket.user);
+            }
+        });
+//        io.emit('update', {game: game});
+        socket.on('toggle_team_select', function(data) {
+            var index = current_team().members.indexOf(data.name);
             if (index > -1) {
                 current_team().members.splice(index, 1);
             } else {
-                current_team().members.push(name);
+                current_team().members.push(data.name);
             }
-            io.emit('update', {game: game});
+            console.log(data.name);
+            console.dir(current_team());
+            update_game(io, data.room.name);
         });
 
 //        socket.on('disconnect', function(socket) {

@@ -91,6 +91,10 @@ app.get('/', function(req, res, next) {
     res.render('index');
 });
 
+app.get('/game', function(req, res, next) {
+    res.render('game');
+});
+
 //This is to test stuff...
 app.get('/newgame', function(req, res) {
     var g = new Game({});
