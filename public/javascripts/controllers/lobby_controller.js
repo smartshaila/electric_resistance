@@ -18,6 +18,9 @@ app.controller('LobbyController',
         $scope.toggle_role_select = function(id) {
             socket.emit('toggle_role_select', {room: $scope.room, _id: id});
         };
+        $scope.create_game = function() {
+            socket.emit('create_game', {});
+        }
 
         // Socket listeners here
         socket.on('connect', setup_socket);

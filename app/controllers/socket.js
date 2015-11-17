@@ -1,4 +1,5 @@
 var helpers = require('../config/helpers');
+var Game = require('../models/game');
 
 var game = {
     'result': null,
@@ -184,6 +185,21 @@ module.exports = function (io) {
             });
 
             update_lobby(io, data.room.name);
+        });
+
+        socket.on('create_game', function() {
+            var g = new Game({});
+            g.setup_game(lobby_users.map(function(u){return u.user._id}), selected_role_ids);
+            g.save(function(err, game) {
+//                console.log(g.players[0].user.name);
+            });
+            Game.find({}).populate({
+                path: 'players', populate: {path: 'user role'}
+            }).exec(function(err, g) {
+                g.forEach(function(game) {
+                    console.log(game.players[0]);
+                })
+            })
         });
 
         socket.on('disconnect', function() {

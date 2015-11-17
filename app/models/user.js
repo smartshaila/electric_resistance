@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 
 // create a schema
 var userSchema = new Schema({
+    _id: mongoose.Schema.ObjectId,
     google_id: String,
     google_profile: {},
     name: String,
@@ -20,6 +21,7 @@ userSchema.statics.findOrCreate = function(queryObj, profile, done) {
             done(null, user);
         } else {
             var userObj = new self({
+                _id: mongoose.Types.ObjectId(),
                 google_id: profile.id,
                 google_profile: profile._json,
                 name: profile.displayName,

@@ -8,6 +8,7 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var Game = require('../models/game');
 var Role = require('../models/role');
+var User = require('../models/user');
 
 // Initialize express, socket.io, mongoose, and passport
 var app = express();
@@ -106,15 +107,28 @@ app.get('/game', function(req, res, next) {
 });
 
 //This is to test stuff...
-app.get('/newgame', function() {
-    var g = new Game({});
-    g.setup_game()
+//app.get('/newgame', function() {
+//    var g = new Game({});
+//    g.setup_game()
+//});
+
+app.get('/wipeusers', function(req, res) {
+    User.remove({}, function(err) {
+        console.log('All users removed');
+    });
+    res.redirect('/');
+});
+
+app.get('/wipegames', function(req, res) {
+    Game.remove({}, function(err) {
+        console.log('All games removed');
+    });
+    res.redirect('/');
 });
 
 app.get('/buildroles', function(req, res) {
     Role.remove({}, function(err) {
         console.log('collection removed');
-        console.log(Object.keys(mongoose));
         var roles = [
             {_id: mongoose.Types.ObjectId(), name: 'Assassin', faction: 'evil', default: false},
             {_id: mongoose.Types.ObjectId(), name: 'Morgana', faction: 'evil', default: false},

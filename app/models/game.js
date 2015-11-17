@@ -50,19 +50,34 @@ gameSchema.methods.create_team = function(leader) {
     });
 };
 
-gameSchema.methods.setup_game = function(users, roles) {
-    this.mission_number = 0;
-    this.result = null;
-    helpers.shuffle(roles);
+gameSchema.methods.setup_game = function(user_ids, role_ids) {
+    var self = this;
+    self.mission_number = 0;
+    self.missions = [];
+    self.players = [];
+    self.result = null;
+
+    var faction_counts = helpers.faction_counts(role_ids);
+    helpers.game_reference[user_ids.length].factions.forEach(function(f) {
+        if ((faction_counts[f.faction] || 0) < f.count) {
+            for (var i = 0; i < (f.count - (faction_counts[f.faction] || 0)); i++) {
+                role_ids.push(helpers.default_roles[f.faction]);
+            }
+        }
+    });
+    helpers.shuffle(role_ids);
+
     // Assigning rotated users (to maintain user order) to shuffled roles to create players for game.
-    var start_user = Math.floor(Math.random() * users.length);
-    for (var i = 0; i < users.length; i++) {
-        var current_index = (i + start_user) % users.length;
-        this.players.push({user: users[current_index], role: role[current_index]});
+    var start_user = Math.floor(Math.random() * user_ids.length);
+    for (var i = 0; i < user_ids.length; i++) {
+        var current_index = (i + start_user) % user_ids.length;
+        var player = {user: user_ids[current_index], role: role_ids[current_index]};
+        console.log(player);
+        self.players.push(player);
     }
-    var ref_data = helpers.game_reference[users.length];
+    var ref_data = helpers.game_reference[user_ids.length];
     ref_data.missions.forEach(function(obj){
-        this.missions.push({
+        self.missions.push({
             result: null,
             capacity: obj.capacity,
             fails_needed: obj.fails_needed,
@@ -70,7 +85,7 @@ gameSchema.methods.setup_game = function(users, roles) {
             votes: []
         });
     });
-    this.create_team(this.players[0].user);
+    self.create_team(self.players[0].user);
 };
 
 var Game = mongoose.model('Game', gameSchema);

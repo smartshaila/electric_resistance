@@ -140,11 +140,22 @@ var game_reference = [
 module.exports.game_reference = game_reference;
 
 var role_list = [];
+var default_roles = {};
 Role.find({}, function(err, roles) {
     if (err) throw err;
     role_list = roles;
     module.exports.role_list = role_list;
+    populate_default_roles();
 });
+
+function populate_default_roles() {
+    role_list.forEach(function(r) {
+        if (r.default) {
+            default_roles[r.faction] = r._id;
+        }
+    });
+    module.exports.default_roles = default_roles;
+}
 
 var faction_counts = function(selected_role_ids) {
     return role_list.filter(function(r) {
@@ -153,5 +164,5 @@ var faction_counts = function(selected_role_ids) {
         res[obj.faction] = ((res[obj.faction]) ? res[obj.faction] + 1 : 1);
         return res;
     }, {});
-}
+};
 module.exports.faction_counts = faction_counts;
