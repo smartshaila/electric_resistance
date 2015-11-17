@@ -6,7 +6,6 @@
         <script src="/socket.io/socket.io.js"></script>
         <script src="/angular/angular.min.js"></script>
         <script src="/jquery/dist/jquery.min.js"></script>
-        <script src="/listgroup.js/listgroup.min.js"></script>
         <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
         <script src="/javascripts/angularApp.js"></script>
         <script src="/javascripts/controllers/lobby_controller.js"></script>
@@ -41,8 +40,8 @@
             <div class="panel panel-info">
                 <div class="panel-heading" data-toggle="collapse" href="#role_select_list" aria-expanded="true" aria-controls="role_select_list">Role Selection</div>
                 <div class="panel-body collapse in" id="role_select_list">
-                    <ul class="list-group" data-toggle="items">
-                        <li class="list-group-item {{r.faction | faction_style}}" ng-repeat="r in roles | not_default" ng-click="toggle_role_select(r._id)">
+                    <ul class="list-group">
+                        <li class="list-group-item {{r.faction | faction_style}} {{selected_roles.indexOf(r._id) > -1 ? 'active' : ''}}" ng-repeat="r in roles | not_default" ng-click="toggle_role_select(r._id)">
                             <span class="{{r.faction | faction_icon}}"> </span> {{r.name}}
                         </li>
                     </ul>
