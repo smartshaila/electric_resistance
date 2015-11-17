@@ -7,7 +7,7 @@ app.controller('LobbyController',
 
         // Variable data here
         $scope.users = [];
-        $scope.selected_roles = [];
+        $scope.selected_role_ids = [];
         $scope.me = {};
 
         // Helper functions here
@@ -17,6 +17,15 @@ app.controller('LobbyController',
 
         $scope.toggle_role_select = function(id) {
             console.log(id);
+            var faction_counts = $scope.roles.filter(function(r) {
+                return $scope.selected_role_ids.indexOf(r._id) > -1;
+            });
+            console.log(faction_counts);
+            faction_counts = faction_counts.reduce(function(res, obj){
+                res[obj.faction] = ((res[obj.faction]) ? res[obj.faction] + 1 : 1);
+                return res;
+            }, {});
+            console.log(faction_counts);
             socket.emit('toggle_role_select', {room: $scope.room, _id: id});
         };
 
@@ -26,7 +35,7 @@ app.controller('LobbyController',
         socket.on('update', function (data) {
             console.log('UPDATE');
             $scope.users = data.users;
-            $scope.selected_roles = data.selected_roles;
+            $scope.selected_role_ids = data.selected_role_ids;
         });
         socket.on('user', function(data) {
             $scope.me = data.user;

@@ -18,8 +18,8 @@
     <body ng-app="electric_resistance" ng-controller="LobbyController">
         <div class="container-fluid">
             <div class="panel panel-info">
-                <div class="panel-heading" data-toggle="collapse" href="#users" aria-expanded="false" aria-controls="users">Users (Logged in as {{me.name}})</div>
-                <div class="panel-body collapse" id="users">
+                <div class="panel-heading" data-toggle="collapse" href="#users" aria-expanded="true" aria-controls="users">Users (Logged in as {{me.name}})</div>
+                <div class="panel-body collapse in" id="users">
                     <ul class="list-group">
                         <li class="list-group-item" ng-repeat="u in users">
                             <span class="glyphicon glyphicon-flash {{u.logged_in | connection_icon}}"> </span> {{u.user.name}}
@@ -28,11 +28,11 @@
                 </div>
             </div>
             <div class="panel panel-info">
-                <div class="panel-heading" data-toggle="collapse" href="#roles" aria-expanded="false" aria-controls="roles">Available Roles</div>
-                <div class="panel-body collapse" id="roles">
+                <div class="panel-heading" data-toggle="collapse" href="#faction-reqs" aria-expanded="false" aria-controls="faction_reqs">Faction Requirements for {{users.length}} players</div>
+                <div class="panel-body collapse" id="faction-reqs">
                     <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="r in roles">
-                            {{r.name}}
+                        <li class="list-group-item {{f.faction | faction_style}}" ng-repeat="f in game_reference[users.length].factions">
+                            <span class="{{f.faction | faction_icon}}"> </span> {{f.faction}} <span class="badge">{{f.count}}</span>
                         </li>
                     </ul>
                 </div>

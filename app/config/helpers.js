@@ -15,26 +15,41 @@ module.exports.shuffle = function (array) {
 
 module.exports.game_reference = [
     {
-        role_count: {good: 0, evil: 0},
+        factions: [
+            {faction: 'good', count: 0},
+            {faction: 'evil', count: 0}
+        ],
         missions: [{capacity: 1, fails_needed: 1}]
     },
     {
-        role_count: {good: 1, evil: 0},
+        factions: [
+            {faction: 'good', count: 1},
+            {faction: 'evil', count: 0}
+        ],
         missions: [{capacity: 1, fails_needed: 1}]
     },
     {
-        role_count: {good: 2, evil: 0},
+        factions: [
+            {faction: 'good', count: 2},
+            {faction: 'evil', count: 0}
+        ],
         missions: [{capacity: 1, fails_needed: 1}]
     },
     {
-        role_count: {good: 2, evil: 1},
+        factions: [
+            {faction: 'good', count: 2},
+            {faction: 'evil', count: 1}
+        ],
         missions: [
             {capacity: 1, fails_needed: 1},
             {capacity: 2, fails_needed: 1}
         ]
     },
     {
-        role_count: {good: 3, evil: 1},
+        factions: [
+            {faction: 'good', count: 3},
+            {faction: 'evil', count: 1}
+        ],
         missions: [
             {capacity: 2, fails_needed: 1},
             {capacity: 2, fails_needed: 1},
@@ -42,7 +57,10 @@ module.exports.game_reference = [
         ]
     },
     {
-        role_count: {good: 3, evil: 2},
+        factions: [
+            {faction: 'good', count: 3},
+            {faction: 'evil', count: 2}
+        ],
         missions: [
             {capacity: 2, fails_needed: 1},
             {capacity: 3, fails_needed: 1},
@@ -52,7 +70,10 @@ module.exports.game_reference = [
         ]
     },
     {
-        role_count: {good: 4, evil: 2},
+        factions: [
+            {faction: 'good', count: 4},
+            {faction: 'evil', count: 2}
+        ],
         missions: [
             {capacity: 2, fails_needed: 1},
             {capacity: 3, fails_needed: 1},
@@ -62,7 +83,10 @@ module.exports.game_reference = [
         ]
     },
     {
-        role_count: {good: 4, evil: 3},
+        factions: [
+            {faction: 'good', count: 4},
+            {faction: 'evil', count: 3}
+        ],
         missions: [
             {capacity: 2, fails_needed: 1},
             {capacity: 3, fails_needed: 1},
@@ -72,7 +96,10 @@ module.exports.game_reference = [
         ]
     },
     {
-        role_count: {good: 5, evil: 3},
+        factions: [
+            {faction: 'good', count: 5},
+            {faction: 'evil', count: 3}
+        ],
         missions: [
             {capacity: 3, fails_needed: 1},
             {capacity: 4, fails_needed: 1},
@@ -82,7 +109,10 @@ module.exports.game_reference = [
         ]
     },
     {
-        role_count: {good: 6, evil: 3},
+        factions: [
+            {faction: 'good', count: 6},
+            {faction: 'evil', count: 3}
+        ],
         missions: [
             {capacity: 3, fails_needed: 1},
             {capacity: 4, fails_needed: 1},
@@ -92,7 +122,10 @@ module.exports.game_reference = [
         ]
     },
     {
-        role_count: {good: 6, evil: 4},
+        factions: [
+            {faction: 'good', count: 6},
+            {faction: 'evil', count: 4}
+        ],
         missions: [
             {capacity: 3, fails_needed: 1},
             {capacity: 4, fails_needed: 1},

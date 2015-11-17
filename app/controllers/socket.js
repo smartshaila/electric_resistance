@@ -104,7 +104,7 @@ var game = {
 
 var lobby_users = [];
 var role_list = [];
-var selected_roles = [];
+var selected_role_ids = [];
 
 Role.find({}, function(err, roles) {
     if (err) throw err;
@@ -126,7 +126,7 @@ function update_game(io, room) {
 }
 
 function update_lobby(io, room) {
-    io.sockets.in(room).emit('update', {users: lobby_users, selected_roles: selected_roles});
+    io.sockets.in(room).emit('update', {users: lobby_users, selected_role_ids: selected_role_ids});
 }
 
 module.exports = function (io) {
@@ -137,6 +137,7 @@ module.exports = function (io) {
         socket.on('join_room', function(data) {
             console.log(socket.user.name, 'has joined', data.room.name);
             socket.join(data.room.name);
+            socket.room = data.room;
             if (data.room.type == 'game') {
                 update_game(io, data.room.name);
             } else if (data.room.type == 'lobby') {
@@ -171,17 +172,23 @@ module.exports = function (io) {
         });
 
         socket.on('toggle_role_select', function(data) {
-            var index = selected_roles.indexOf(data._id);
+            var index = selected_role_ids.indexOf(data._id);
             if (index > -1) {
-                selected_roles.splice(index, 1);
+                selected_role_ids.splice(index, 1);
             } else {
-                selected_roles.push(data._id);
+                selected_role_ids.push(data._id);
             }
             console.log(data._id);
             update_lobby(io, data.room.name);
         });
 
         socket.on('disconnect', function() {
+            if (socket.room != null && socket.room.type == 'lobby') {
+                lobby_users = lobby_users.filter(function(u) {
+                    return u.user._id != socket.user._id;
+                });
+                update_lobby(io, socket.room.name);
+            }
             console.log('Disconnected client: ' + socket.user.name);
         });
     });
