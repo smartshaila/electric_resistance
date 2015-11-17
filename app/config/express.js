@@ -7,13 +7,23 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var Game = require('../models/game');
+var Role = require('../models/role');
 
 // Initialize express, socket.io, mongoose, and passport
 var app = express();
 var io = require('socket.io')();
 app.io = io;
 module.exports.io = io;
-var mongoose = require('./mongoose');
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/test');
+
+var db = mongoose.connection;
+db.on('error', console.error);
+db.once('open', function() {
+    console.log("Connected to db");
+});
+
 var passport = require('./passport');
 
 // Initialize controllers
@@ -36,7 +46,7 @@ app.use(express.static(path.join(__dirname, '../../public')));
 app.use(express.static(path.join(__dirname, '../../bower_components')));
 
 // Session configuration
-var sessionStore = new MongoStore({ url: 'mongodb://localhost/test', touchAfter: 24 * 3600 });
+var sessionStore = new MongoStore({ url: 'mongodb://localhost/stuff', touchAfter: 24 * 3600 });
 app.use(session(
     {
         secret: 'session_secret',
@@ -96,11 +106,37 @@ app.get('/game', function(req, res, next) {
 });
 
 //This is to test stuff...
-app.get('/newgame', function(req, res) {
+app.get('/newgame', function() {
     var g = new Game({});
     g.setup_game()
 });
 
+app.get('/buildroles', function() {
+
+    Role.remove({}, function(err) {
+        console.log('collection removed');
+        console.log(Object.keys(mongoose));
+        var roles = [
+            {name: 'Assassin', faction: 'evil'},
+            {name: 'Morgana', faction: 'evil'},
+            {name: 'Mordred', faction: 'evil'},
+            {name: 'Oberon', faction: 'evil'},
+            {name: 'Minion of Mordred', faction: 'evil'},
+            {name: 'Merlin', faction: 'good'},
+            {name: 'Percival', faction: 'good'},
+            {name: 'Loyal Servant of Arthur', faction: 'good'}
+        ];
+
+        roles.forEach(function(obj){
+//            var id = roles.indexOf(obj);
+            var r = new Role({_id: mongoose.Types.ObjectId(), name: obj.name, faction: obj.faction});
+            r.save(function (err){
+                if (err) throw err;
+                console.log(r.name + ' created with id ' + r._id);
+            });
+        });
+    });
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

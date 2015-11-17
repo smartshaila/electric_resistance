@@ -7,4 +7,3 @@ module.exports.shuffle = function (array) {
     }
     return array;
 };
-

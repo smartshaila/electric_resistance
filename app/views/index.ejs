@@ -22,7 +22,17 @@
                 <div class="panel-body collapse" id="users">
                     <ul class="list-group">
                         <li class="list-group-item" ng-repeat="u in users">
-                            <span class="glyphicon glyphicon-flash {{u.logged_in | connection_icon}}"> </span> {{u.name}}
+                            <span class="glyphicon glyphicon-flash {{u.logged_in | connection_icon}}"> </span> {{u.user.name}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel panel-info">
+                <div class="panel-heading" data-toggle="collapse" href="#roles" aria-expanded="false" aria-controls="roles">Roles</div>
+                <div class="panel-body collapse" id="roles">
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="r in roles">
+                            {{r.name}}
                         </li>
                     </ul>
                 </div>

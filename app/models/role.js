@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 
 // create a schema
 var roleSchema = new Schema({
-    _id: Number,
+    _id: mongoose.Schema.ObjectId,
     name: String,
     faction: String,
     revealed_roles: [{type : mongoose.Schema.ObjectId, ref : 'Role'}]

@@ -3,13 +3,16 @@ app.controller('GameController',
         $scope.room = {name: 'Game', type: 'game'};
         var setup_socket = function() {
             socket.emit('join_room', {room: $scope.room});
-        }
+        };
         socket.on('connect', setup_socket);
 //        socket.on('reconnect', setup_socket);
         socket.on('console', function(data) {console.log(data)});
         socket.on('update', function (data) {
             console.log('UPDATE', data);
             $scope.game = data.game;
+        });
+        socket.on('user', function(data) {
+            $scope.me = data.user;
         });
         $scope.current_mission = function() {return $scope.game.missions[$scope.game.mission_number]};
         $scope.current_team = function() {return $scope.current_mission().teams[$scope.current_mission().teams.length - 1]};

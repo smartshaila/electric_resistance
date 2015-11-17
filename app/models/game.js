@@ -134,8 +134,6 @@ gameSchema.methods.setup_game = function(users, roles) {
     this.create_team(this.players[0].user);
 };
 
-
-
 var Game = mongoose.model('Game', gameSchema);
 
 // make this available to our users in our Node applications

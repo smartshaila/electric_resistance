@@ -1,3 +1,5 @@
+var Role = require('../models/role');
+
 var game = {
     'result': null,
     'mission_number': 3,
@@ -100,6 +102,12 @@ var game = {
 };
 
 var lobby_users = [];
+var role_list = [];
+
+Role.find({}, function(err, roles) {
+    if (err) throw err;
+    role_list = roles;
+});
 
 function current_mission() {
     return game.missions[game.mission_number];
@@ -115,8 +123,8 @@ function update_game(io, room) {
     io.sockets.in(room).emit('update', {game: game});
 }
 
-function update_lobby(io, room, user) {
-    io.sockets.in(room).emit('update', {users: lobby_users, me: user});
+function update_lobby(io, room) {
+    io.sockets.in(room).emit('update', {users: lobby_users});
 }
 
 module.exports = function (io) {
@@ -125,12 +133,26 @@ module.exports = function (io) {
         console.log('Connected client: ' + socket.user.name);
         socket.emit('user', {user: socket.user});
         socket.on('join_room', function(data) {
-            console.log(socket.user.name + ' has joined ' + data.room.name);
+            console.log(socket.user.name, 'has joined', data.room.name);
             socket.join(data.room.name);
             if (data.room.type == 'game') {
                 update_game(io, data.room.name);
             } else if (data.room.type == 'lobby') {
-                update_lobby(io, data.room.name, socket.user);
+                lobby_users.push({user: socket.user, logged_in: true});
+                socket.emit('role_list', {roles: role_list});
+                update_lobby(io, data.room.name);
+            }
+        });
+        socket.on('leave_room', function(data) {
+            console.log(socket.user.name, 'has left', data.room.name);
+            socket.leave(data.room.name);
+            if (data.room.type == 'game') {
+
+            } else if (data.room.type == 'lobby') {
+                lobby_users = lobby_users.filter(function(u) {
+                    return u.user._id != socket.user._id;
+                });
+                update_lobby(io, data.room.name);
             }
         });
 //        io.emit('update', {game: game});
