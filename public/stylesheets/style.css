@@ -15,6 +15,11 @@ a {
     color: #c0c0c0;
 }
 
+.list-group-item.active, .list-group-item.active:hover{
+    background-color: #31708f;
+    border-color: #ffffff;
+}
+
 .list-group-item.active.text-danger {
     background-color: #a94442;
     border-color: #ffffff;
