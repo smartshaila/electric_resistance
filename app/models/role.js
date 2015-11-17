@@ -7,6 +7,7 @@ var roleSchema = new Schema({
     _id: mongoose.Schema.ObjectId,
     name: String,
     faction: String,
+    default: Boolean,
     revealed_roles: [{type : mongoose.Schema.ObjectId, ref : 'Role'}]
 });
 

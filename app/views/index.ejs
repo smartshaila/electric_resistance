@@ -28,11 +28,29 @@
                 </div>
             </div>
             <div class="panel panel-info">
-                <div class="panel-heading" data-toggle="collapse" href="#roles" aria-expanded="false" aria-controls="roles">Roles</div>
+                <div class="panel-heading" data-toggle="collapse" href="#roles" aria-expanded="false" aria-controls="roles">Available Roles</div>
                 <div class="panel-body collapse" id="roles">
                     <ul class="list-group">
                         <li class="list-group-item" ng-repeat="r in roles">
                             {{r.name}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel panel-info">
+                <div class="panel-heading" data-toggle="collapse" href="#role_select" aria-expanded="true" aria-controls="role_select">Role Selection</div>
+                <div class="panel-body collapse in" id="team_select">
+                    <label class="btn btn-block btn-primary" ng-repeat="r in roles | not_default">
+                        <input type="checkbox" name="selected_roles[]" value="{{r._id}}" ng-checked="selected_roles.indexOf(r._id) > -1" ng-click="toggle_role_select(r._id)"> {{r.name}}
+                    </label>
+                </div>
+            </div>
+            <div class="panel panel-info">
+                <div class="panel-heading" data-toggle="collapse" href="#roles_selected" aria-expanded="false" aria-controls="roles_selected">Roles</div>
+                <div class="panel-body collapse" id="roles_selected">
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="r in selected_roles">
+                            {{r}}
                         </li>
                     </ul>
                 </div>

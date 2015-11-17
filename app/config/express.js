@@ -117,22 +117,22 @@ app.get('/buildroles', function() {
         console.log('collection removed');
         console.log(Object.keys(mongoose));
         var roles = [
-            {name: 'Assassin', faction: 'evil'},
-            {name: 'Morgana', faction: 'evil'},
-            {name: 'Mordred', faction: 'evil'},
-            {name: 'Oberon', faction: 'evil'},
-            {name: 'Minion of Mordred', faction: 'evil'},
-            {name: 'Merlin', faction: 'good'},
-            {name: 'Percival', faction: 'good'},
-            {name: 'Loyal Servant of Arthur', faction: 'good'}
+            {_id: mongoose.Types.ObjectId(), name: 'Assassin', faction: 'evil', default: false},
+            {_id: mongoose.Types.ObjectId(), name: 'Morgana', faction: 'evil', default: false},
+            {_id: mongoose.Types.ObjectId(), name: 'Mordred', faction: 'evil', default: false},
+            {_id: mongoose.Types.ObjectId(), name: 'Oberon', faction: 'evil', default: false},
+            {_id: mongoose.Types.ObjectId(), name: 'Minion of Mordred', faction: 'evil', default: true},
+            {_id: mongoose.Types.ObjectId(), name: 'Merlin', faction: 'good', default: false},
+            {_id: mongoose.Types.ObjectId(), name: 'Percival', faction: 'good', default: false},
+            {_id: mongoose.Types.ObjectId(), name: 'Loyal Servant of Arthur', faction: 'good', default: true}
         ];
 
         roles.forEach(function(obj){
 //            var id = roles.indexOf(obj);
-            var r = new Role({_id: mongoose.Types.ObjectId(), name: obj.name, faction: obj.faction});
+            var r = new Role(obj);
             r.save(function (err){
                 if (err) throw err;
-                console.log(r.name + ' created with id ' + r._id);
+                console.log(r.name, 'was created with', r._id);
             });
         });
     });

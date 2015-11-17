@@ -103,6 +103,7 @@ var game = {
 
 var lobby_users = [];
 var role_list = [];
+var selected_roles = [];
 
 Role.find({}, function(err, roles) {
     if (err) throw err;
@@ -124,7 +125,7 @@ function update_game(io, room) {
 }
 
 function update_lobby(io, room) {
-    io.sockets.in(room).emit('update', {users: lobby_users});
+    io.sockets.in(room).emit('update', {users: lobby_users, selected_roles: selected_roles});
 }
 
 module.exports = function (io) {
@@ -168,8 +169,19 @@ module.exports = function (io) {
             update_game(io, data.room.name);
         });
 
-//        socket.on('disconnect', function(socket) {
-//            console.log('Disconnected client: ' + socket.user.name);
-//        });
+        socket.on('toggle_role_select', function(data) {
+            var index = selected_roles.indexOf(data._id);
+            if (index > -1) {
+                selected_roles.splice(index, 1);
+            } else {
+                selected_roles.push(data._id);
+            }
+            console.log(data._id);
+            update_lobby(io, data.room.name);
+        });
+
+        socket.on('disconnect', function() {
+            console.log('Disconnected client: ' + socket.user.name);
+        });
     });
 };

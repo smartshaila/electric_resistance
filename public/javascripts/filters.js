@@ -34,7 +34,8 @@ angular.module('resistance_filters', [])
                 return 'offline';
             }
         };
-    }).filter('faction_style', function() {
+    })
+    .filter('faction_style', function() {
         return function(faction) {
             if (faction == 'good'){
                 return 'text-info';
@@ -44,7 +45,8 @@ angular.module('resistance_filters', [])
                 return '';
             }
         };
-    }).filter('faction_icon', function() {
+    })
+    .filter('faction_icon', function() {
         return function(faction) {
           if (faction == 'good'){
               return 'glyphicon glyphicon-tint';
@@ -53,5 +55,19 @@ angular.module('resistance_filters', [])
           } else {
               return 'glyphicon';
           }
+        };
+    })
+    .filter('not_default', function() {
+        return function(roles) {
+            return roles.filter(function(r){
+                return !r.default;
+            });
+        };
+    })
+    .filter('default', function() {
+        return function(roles) {
+            return roles.filter(function(r){
+                return r.default;
+            });
         };
     });
