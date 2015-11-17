@@ -1,4 +1,3 @@
-var Role = require('../models/role');
 var helpers = require('../config/helpers');
 
 var game = {
@@ -103,13 +102,7 @@ var game = {
 };
 
 var lobby_users = [];
-var role_list = [];
 var selected_role_ids = [];
-
-Role.find({}, function(err, roles) {
-    if (err) throw err;
-    role_list = roles;
-});
 
 function current_mission() {
     return game.missions[game.mission_number];
@@ -142,7 +135,7 @@ module.exports = function (io) {
                 update_game(io, data.room.name);
             } else if (data.room.type == 'lobby') {
                 lobby_users.push({user: socket.user, logged_in: true});
-                socket.emit('init_data', {roles: role_list, game_reference: helpers.game_reference});
+                socket.emit('init_data', {roles: helpers.role_list, game_reference: helpers.game_reference});
                 update_lobby(io, data.room.name);
             }
         });
@@ -182,12 +175,7 @@ module.exports = function (io) {
             }
 
             // Get faction count
-            var faction_counts = role_list.filter(function(r) {
-                return selected_role_ids.indexOf(r._id.toString()) > -1;
-            }).reduce(function(res, obj){
-                res[obj.faction] = ((res[obj.faction]) ? res[obj.faction] + 1 : 1);
-                return res;
-            }, {});
+            var faction_counts = helpers.faction_counts(selected_role_ids);
 
             helpers.game_reference[lobby_users.length].factions.forEach(function(f) {
                 if ((faction_counts[f.faction] || 0) > f.count) {

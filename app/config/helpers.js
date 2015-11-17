@@ -1,3 +1,5 @@
+var Role = require('../models/role');
+
 module.exports.shuffle = function (array) {
     for (var i = array.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i+1));
@@ -13,7 +15,7 @@ module.exports.shuffle = function (array) {
 // player counts that are illegal in the
 // Resistance rules. So that's what the first five are.
 
-module.exports.game_reference = [
+var game_reference = [
     {
         factions: [
             {faction: 'good', count: 0},
@@ -135,3 +137,21 @@ module.exports.game_reference = [
         ]
     }
 ];
+module.exports.game_reference = game_reference;
+
+var role_list = [];
+Role.find({}, function(err, roles) {
+    if (err) throw err;
+    role_list = roles;
+    module.exports.role_list = role_list;
+});
+
+var faction_counts = function(selected_role_ids) {
+    return role_list.filter(function(r) {
+        return selected_role_ids.indexOf(r._id.toString()) > -1;
+    }).reduce(function(res, obj){
+        res[obj.faction] = ((res[obj.faction]) ? res[obj.faction] + 1 : 1);
+        return res;
+    }, {});
+}
+module.exports.faction_counts = faction_counts;
