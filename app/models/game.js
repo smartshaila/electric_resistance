@@ -3,68 +3,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var helpers = require('../config/helpers');
 
-// For some reason Nick thought it would be a
-// good idea to have missions defined for
-// player counts that are illegal in the
-// Resistance rules. So that's what the first five are.
-
-var game_reference = [
-    {missions: [{capacity: 1, fails_needed: 1}]},
-    {missions: [{capacity: 1, fails_needed: 1}]},
-    {missions: [{capacity: 1, fails_needed: 1}]},
-    {missions: [
-        {capacity: 1, fails_needed: 1},
-        {capacity: 2, fails_needed: 1}
-    ]},
-    {missions: [
-        {capacity: 2, fails_needed: 1},
-        {capacity: 2, fails_needed: 1},
-        {capacity: 3, fails_needed: 1}
-    ]},
-    {missions: [
-        {capacity: 2, fails_needed: 1},
-        {capacity: 3, fails_needed: 1},
-        {capacity: 2, fails_needed: 1},
-        {capacity: 3, fails_needed: 1},
-        {capacity: 3, fails_needed: 1}
-    ]},
-    {missions: [
-        {capacity: 2, fails_needed: 1},
-        {capacity: 3, fails_needed: 1},
-        {capacity: 4, fails_needed: 1},
-        {capacity: 3, fails_needed: 1},
-        {capacity: 4, fails_needed: 1}
-    ]},
-    {missions: [
-        {capacity: 2, fails_needed: 1},
-        {capacity: 3, fails_needed: 1},
-        {capacity: 3, fails_needed: 1},
-        {capacity: 4, fails_needed: 2},
-        {capacity: 4, fails_needed: 1}
-    ]},
-    {missions: [
-        {capacity: 3, fails_needed: 1},
-        {capacity: 4, fails_needed: 1},
-        {capacity: 4, fails_needed: 1},
-        {capacity: 5, fails_needed: 2},
-        {capacity: 5, fails_needed: 1}
-    ]},
-    {missions: [
-        {capacity: 3, fails_needed: 1},
-        {capacity: 4, fails_needed: 1},
-        {capacity: 4, fails_needed: 1},
-        {capacity: 5, fails_needed: 2},
-        {capacity: 5, fails_needed: 1}
-    ]},
-    {missions: [
-        {capacity: 3, fails_needed: 1},
-        {capacity: 4, fails_needed: 1},
-        {capacity: 4, fails_needed: 1},
-        {capacity: 5, fails_needed: 2},
-        {capacity: 5, fails_needed: 1}
-    ]}
-];
-
 // create a schema
 var gameSchema = new Schema({
     result: Boolean,
@@ -122,7 +60,7 @@ gameSchema.methods.setup_game = function(users, roles) {
         var current_index = (i + start_user) % users.length;
         this.players.push({user: users[current_index], role: role[current_index]});
     }
-    var ref_data = game_reference[users.length];
+    var ref_data = helpers.game_reference[users.length];
     ref_data.missions.forEach(function(obj){
         this.missions.push({
             result: null,

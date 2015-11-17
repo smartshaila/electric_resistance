@@ -111,8 +111,7 @@ app.get('/newgame', function() {
     g.setup_game()
 });
 
-app.get('/buildroles', function() {
-
+app.get('/buildroles', function(req, res) {
     Role.remove({}, function(err) {
         console.log('collection removed');
         console.log(Object.keys(mongoose));
@@ -136,6 +135,7 @@ app.get('/buildroles', function() {
             });
         });
     });
+    res.redirect('/');
 });
 
 // catch 404 and forward to error handler

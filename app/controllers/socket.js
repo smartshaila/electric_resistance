@@ -1,4 +1,5 @@
 var Role = require('../models/role');
+var helpers = require('../config/helpers');
 
 var game = {
     'result': null,
@@ -140,7 +141,7 @@ module.exports = function (io) {
                 update_game(io, data.room.name);
             } else if (data.room.type == 'lobby') {
                 lobby_users.push({user: socket.user, logged_in: true});
-                socket.emit('role_list', {roles: role_list});
+                socket.emit('init_data', {roles: role_list, game_reference: helpers.game_reference});
                 update_lobby(io, data.room.name);
             }
         });
