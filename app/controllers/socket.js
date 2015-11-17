@@ -172,13 +172,29 @@ module.exports = function (io) {
         });
 
         socket.on('toggle_role_select', function(data) {
+            // Make a copy in case it doesn't conform to faction requirements
+            var existing_selected_roles = selected_role_ids.slice(0);
             var index = selected_role_ids.indexOf(data._id);
             if (index > -1) {
                 selected_role_ids.splice(index, 1);
             } else {
                 selected_role_ids.push(data._id);
             }
-            console.log(data._id);
+
+            // Get faction count
+            var faction_counts = role_list.filter(function(r) {
+                return selected_role_ids.indexOf(r._id.toString()) > -1;
+            }).reduce(function(res, obj){
+                res[obj.faction] = ((res[obj.faction]) ? res[obj.faction] + 1 : 1);
+                return res;
+            }, {});
+
+            helpers.game_reference[lobby_users.length].factions.forEach(function(f) {
+                if ((faction_counts[f.faction] || 0) > f.count) {
+                    selected_role_ids = existing_selected_roles.slice(0);
+                }
+            });
+
             update_lobby(io, data.room.name);
         });
 
