@@ -1,38 +1,47 @@
 app.controller('GameController',
-    function ($scope, $rootScope, socket) {
+    function ($scope, $window, socket) {
         $scope.room = {name: 'Game', type: 'game'};
+
         var setup_socket = function() {
             socket.emit('join_room', {room: $scope.room});
         };
+
         socket.on('connect', setup_socket);
-//        socket.on('reconnect', setup_socket);
         socket.on('console', function(data) {console.log(data)});
+
         socket.on('update', function (data) {
             console.log('UPDATE', data);
             $scope.game = data.game;
         });
+
         socket.on('user', function(data) {
             $scope.me = data.user;
         });
+
+        $scope.users = [];
+        $scope.roles = [];
+
+        socket.on('init_data', function(data) {
+            $scope.users = data.users;
+            $scope.roles = data.roles;
+        });
+
         $scope.current_mission = function() {return $scope.game.missions[$scope.game.mission_number]};
         $scope.current_team = function() {return $scope.current_mission().teams[$scope.current_mission().teams.length - 1]};
-        $scope.toggle_team_select = function(name) {
-            socket.emit('toggle_team_select', {room: $scope.room, name: name});
+        $scope.toggle_team_select = function(id) {
+            socket.emit('toggle_team_select', {room: $scope.room, id: id});
         };
-        $scope.players = [
-            {'name': 'Nicholas', 'logged_in': true},
-            {'name': 'Shaila', 'logged_in': false},
-            {'name': 'Krista', 'logged_in': true},
-            {'name': 'Hitanshu', 'logged_in': true},
-            {'name': 'Sneha', 'logged_in': false}
-        ];
-        $scope.roles = [
-            {'name': 'Merlin', 'faction': 'good', 'count': 1},
-            {'name': 'Assassin', 'faction': 'evil', 'count': 1},
-            {'name': 'Percival', 'faction': 'good', 'count': 1},
-            {'name': 'Morgana', 'faction': 'evil', 'count': 1},
-            {'name': 'Loyal Servant of Arthur', 'faction': 'good', 'count': 1}
-        ];
+
+        $scope.selected_user = function(id) {
+            return $scope.current_team().members.filter(function (m) {
+                return m._id == id;
+            }).length > 0;
+        };
+
+        $scope.member_names = function () {
+            return $scope.current_team().members.map(function(m) {return m.name})
+        };
+
         $scope.waiting_on = ['Shaila', 'Nicholas', 'Hitanshu'];
         $scope.waiting_for = 'log in';
         $scope.user = {
@@ -146,5 +155,10 @@ app.controller('GameController',
                 }
             ]
         };
+
+        $window.onbeforeunload = function () {
+            socket.emit('leave_room', {room: $scope.room});
+        };
     }
 );
+

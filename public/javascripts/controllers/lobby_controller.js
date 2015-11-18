@@ -20,7 +20,7 @@ app.controller('LobbyController',
         };
         $scope.create_game = function() {
             socket.emit('create_game', {});
-        }
+        };
 
         // Socket listeners here
         socket.on('connect', setup_socket);

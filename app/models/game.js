@@ -10,7 +10,8 @@ var gameSchema = new Schema({
     mission_number: Number,
     players: [{
         user: { type: Schema.Types.ObjectId, ref: 'User'},
-        role: { type: Schema.Types.ObjectId, ref: 'Role'}
+        role: { type: Schema.Types.ObjectId, ref: 'Role'},
+        logged_in: Boolean
     }],
     missions: [{
         result: Boolean,
@@ -74,7 +75,11 @@ gameSchema.methods.setup_game = function(user_ids, role_ids) {
     var start_user = Math.floor(Math.random() * user_ids.length);
     for (var i = 0; i < user_ids.length; i++) {
         var current_index = (i + start_user) % user_ids.length;
-        var player = {user: user_ids[current_index], role: role_ids[current_index]};
+        var player = {
+            user: user_ids[current_index],
+            role: role_ids[current_index],
+            logged_in: false
+        };
         console.log(player);
         self.players.push(player);
     }
@@ -93,7 +98,7 @@ gameSchema.methods.setup_game = function(user_ids, role_ids) {
 
 gameSchema.statics.findPopulated = function(filter, callback) {
     this.find(filter).deepPopulate('players.user players.role missions.teams.leader missions.teams.members missions.teams.votes.user').exec(callback);
-}
+};
 
 var Game = mongoose.model('Game', gameSchema);
 

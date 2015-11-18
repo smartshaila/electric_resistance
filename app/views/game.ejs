@@ -40,8 +40,8 @@
                     Mission #{{game.mission_number + 1}}
                 </div>
                 <div class="panel-body collapse in" id="mission_info">
-                    <p>Leader: {{current_team().leader}}</p>
-                    <p>Team: {{current_team().members | sentence}}</p>
+                    <p>Leader: {{current_team().leader.name}}</p>
+                    <p>Team: {{member_names() | sentence}}</p>
                     <p>
                         <button type="button" class="btn btn-success btn-lg">Accept</button>
                         <button type="button" class="btn btn-danger btn-lg">Reject</button>
@@ -53,8 +53,8 @@
                 <div class="panel-heading" data-toggle="collapse" href="#players" aria-expanded="false" aria-controls="players">Players</div>
                 <div class="panel-body collapse" id="players">
                     <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="p in players">
-                            <span class="glyphicon glyphicon-flash {{p.logged_in | connection_icon}}"> </span> {{p.name}}
+                        <li class="list-group-item" ng-repeat="u in users">
+                            <span class="glyphicon glyphicon-flash {{u.logged_in | connection_icon}}"> </span> {{u.name}}
                         </li>
                     </ul>
                 </div>
@@ -73,8 +73,8 @@
                 <div class="panel-heading" data-toggle="collapse" href="#team_select" aria-expanded="true" aria-controls="team_select">Team Selection - {{current_team().members.length}}/{{current_mission().capacity}}</div>
                 <div class="panel-body collapse in" id="team_select">
                     <ul class="list-group">
-                        <li class="list-group-item {{current_team().members.indexOf(p.name) > -1 ? 'active' : ''}}" ng-repeat="p in players" ng-click="toggle_team_select(p.name)">
-                             {{p.name}}
+                        <li class="list-group-item {{selected_user(u.id) ? 'active' : ''}}" ng-repeat="u in users" ng-click="toggle_team_select(u.id)">
+                             {{u.name}}
                         </li>
                     </ul>
                 </div>
@@ -82,11 +82,11 @@
             <div class="panel panel-info">
                 <div class="panel-heading" data-toggle="collapse" href="#team_voting" aria-expanded="true" aria-controls="team_voting">Team Voting</div>
                 <div class="panel-body collapse in" id="team_voting">
-                    <p>Leader: {{current_team().leader}}</p>
+                    <p>Leader: {{current_team().leader.name}}</p>
                     <p>Proposed Team</p>
                     <ul class="list-group">
                         <li class="list-group-item" ng-repeat="m in current_team().members">
-                            {{m}}
+                            {{m.name}}
                         </li>
                     </ul>
                     <p>
@@ -101,7 +101,7 @@
                     <p>Mission #{{game.mission_number + 1}} Members</p>
                     <ul class="list-group">
                         <li class="list-group-item" ng-repeat="m in current_team().members">
-                            {{m}}
+                            {{m.name}}
                         </li>
                     </ul>
                     <p>
