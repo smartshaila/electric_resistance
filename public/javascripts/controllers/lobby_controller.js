@@ -19,7 +19,7 @@ app.controller('LobbyController',
             socket.emit('toggle_role_select', {room: $scope.room, _id: id});
         };
         $scope.create_game = function() {
-            socket.emit('create_game', {});
+            socket.emit('create_game', {room: $scope.room});
         };
 
         // Socket listeners here
@@ -36,6 +36,9 @@ app.controller('LobbyController',
         socket.on('init_data', function(data) {
             $scope.roles = data.roles;
             $scope.game_reference = data.game_reference;
+        });
+        socket.on('redirect', function(path) {
+            $window.location.href = path;
         });
         $window.onbeforeunload = function () {
             socket.emit('leave_room', {room: $scope.room});
