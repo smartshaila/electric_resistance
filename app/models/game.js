@@ -1,6 +1,7 @@
 // grab the things we need
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 var helpers = require('../config/helpers');
 
 // create a schema
@@ -26,6 +27,8 @@ var gameSchema = new Schema({
         votes: [Boolean]
     }]
 });
+
+gameSchema.plugin(deepPopulate);
 
 gameSchema.methods.current_mission = function() {
     return this.missions[this.mission_number];
@@ -87,6 +90,10 @@ gameSchema.methods.setup_game = function(user_ids, role_ids) {
     });
     self.create_team(self.players[0].user);
 };
+
+gameSchema.statics.findPopulated = function(filter, callback) {
+    this.find(filter).deepPopulate('players.user players.role missions.teams.leader missions.teams.members missions.teams.votes.user').exec(callback);
+}
 
 var Game = mongoose.model('Game', gameSchema);
 

@@ -193,13 +193,10 @@ module.exports = function (io) {
             g.save(function(err, game) {
 //                console.log(g.players[0].user.name);
             });
-            Game.find({}).populate({
-                path: 'players', populate: {path: 'user role'}
-            }).exec(function(err, g) {
-                g.forEach(function(game) {
-                    console.log(game.players[0]);
-                })
-            })
+            Game.findPopulated({}, function(err, games) {
+                console.log(games.length);
+                console.dir(games[games.length - 1]);
+            });
         });
 
         socket.on('disconnect', function() {
