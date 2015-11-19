@@ -16,6 +16,19 @@ function update_game(io, room) {
 }
 
 function set_game_data() {
+    var role_hash = game.players.reduce(function(res, player) {
+        count = res[player.role._id] ? res[player.role._id].count + 1 : 1;
+        res[player.role._id] = {
+            id: player.role._id,
+            name: player.role.name,
+            faction: player.role.faction,
+            count: count
+        }
+        return res;
+    }, {});
+
+    console.log(role_hash);
+
     return {
         users: game.players.map(function (p) {
             return {
@@ -24,13 +37,8 @@ function set_game_data() {
                 logged_in: p.logged_in
             };
         }),
-        roles: game.players.map(function (p) {
-            return {
-                id: p.role._id,
-                name: p.role.name,
-                faction: p.role.faction,
-                count: 1
-            };
+        roles: Object.keys(role_hash).map(function(k) {
+            return role_hash[k];
         })
     };
 }
