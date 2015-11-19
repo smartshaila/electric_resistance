@@ -20,10 +20,15 @@ app.controller('GameController',
 
         $scope.users = [];
         $scope.roles = [];
+        $scope.role = {};
 
         socket.on('init_data', function(data) {
             $scope.users = data.users;
             $scope.roles = data.roles;
+        });
+
+        socket.on('player_details', function(data){
+            $scope.role = data.role;
         });
 
         $scope.current_mission = function() {return $scope.game.missions[$scope.game.mission_number]};

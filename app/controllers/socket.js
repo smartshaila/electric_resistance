@@ -17,13 +17,13 @@ function update_game(io, room) {
 
 function set_game_data() {
     var role_hash = game.players.reduce(function(res, player) {
-        count = res[player.role._id] ? res[player.role._id].count + 1 : 1;
+        var count = res[player.role._id] ? res[player.role._id].count + 1 : 1;
         res[player.role._id] = {
             id: player.role._id,
             name: player.role.name,
             faction: player.role.faction,
             count: count
-        }
+        };
         return res;
     }, {});
 
@@ -43,6 +43,15 @@ function set_game_data() {
     };
 }
 
+function display_player_details(user_id) {
+    var role = game.players.filter(function(p) {
+        return p.user._id.equals(user_id);
+    })[0].role;
+    return {
+        role: role
+    }
+}
+
 function update_lobby(io, room) {
     io.sockets.in(room).emit('update', {users: lobby_users, selected_role_ids: selected_role_ids});
 }
@@ -58,6 +67,7 @@ module.exports = function (io) {
             socket.join(data.room.name);
             socket.room = data.room;
             if (data.room.type == 'game') {
+                console.log(game.players);
                 var index = game.players.map(function (p) {
                     return p.user._id.toString();
                 }).indexOf(socket.user._id.toString());
@@ -65,8 +75,8 @@ module.exports = function (io) {
                 if (index > -1) {
                     game.players[index].logged_in = true;
                 }
-                var game_data = set_game_data();
-                socket.emit('init_data', game_data);
+                socket.emit('init_data', set_game_data());
+                socket.emit('player_details', display_player_details(socket.user._id));
                 update_game(io, data.room.name);
             } else if (data.room.type == 'lobby') {
                 lobby_users.push({user: socket.user, logged_in: true});
@@ -136,12 +146,10 @@ module.exports = function (io) {
             var g = new Game({});
             g.setup_game(lobby_users.map(function(u){return u.user._id}), selected_role_ids);
             g.save(function(err, new_game) {
-                game = new_game;
-                io.sockets.in(data.room.name).emit('redirect', '/game');
-            });
-            Game.findPopulated({}, function(err, games) {
-                console.log(games.length);
-                console.dir(games[games.length - 1]);
+                new_game.addPopulations(function (err, updated_game){
+                    game = updated_game;
+                    io.sockets.in(data.room.name).emit('redirect', '/game');
+                });
             });
         });
 

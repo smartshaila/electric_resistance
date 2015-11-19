@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
 var helpers = require('../config/helpers');
+var populate_string = 'players.user players.role players.role.revealed_roles missions.teams.leader missions.teams.members missions.teams.votes.user';
 
 // create a schema
 var gameSchema = new Schema({
@@ -97,7 +98,11 @@ gameSchema.methods.setup_game = function(user_ids, role_ids) {
 };
 
 gameSchema.statics.findPopulated = function(filter, callback) {
-    this.find(filter).deepPopulate('players.user players.role missions.teams.leader missions.teams.members missions.teams.votes.user').exec(callback);
+    this.find(filter).deepPopulate(populate_string).exec(callback);
+};
+
+gameSchema.methods.addPopulations = function(cb) {
+    this.deepPopulate(populate_string, cb);
 };
 
 var Game = mongoose.model('Game', gameSchema);
