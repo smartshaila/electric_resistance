@@ -45,15 +45,6 @@ function set_game_data() {
     };
 }
 
-function display_player_details(user_id) {
-    var role = game.players.filter(function(p) {
-        return p.user._id.equals(user_id);
-    })[0].role;
-    return {
-        role: role
-    }
-}
-
 function update_lobby(io, room) {
     io.sockets.in(room).emit('update', {
         users: lobby_users,
@@ -83,7 +74,7 @@ module.exports = function (io) {
                     game.players[index].logged_in = true;
                 }
                 socket.emit('init_data', set_game_data());
-                socket.emit('player_details', display_player_details(socket.user._id));
+                socket.emit('revealed_info', game.revealed_info(socket.user._id));
                 update_game(io, data.room.name);
             } else if (data.room.type == 'lobby') {
                 lobby_users.push({

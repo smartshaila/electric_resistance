@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
 var helpers = require('../config/helpers');
 var populate_string = 'players.user players.role players.role.revealed_roles missions.teams.leader missions.teams.members missions.teams.votes.user';
+var __ = require('underscore');
 
 // create a schema
 var gameSchema = new Schema({
@@ -54,6 +55,25 @@ gameSchema.methods.create_team = function(leader) {
         votes: []
     });
 };
+
+gameSchema.methods.revealed_info = function(user_id) {
+    var player = __.find(this.players, function(p) {return p.user._id.equals(user_id)});
+    if (player) {
+        var role = player.role;
+        var revealed_role_ids = __.pluck(role.revealed_roles, '_id');
+        return {
+            role: role,
+            revealed_players: this.players.filter(function(p) {
+                return __.contains(revealed_role_ids, p.role._id);
+            }).map(function(p) {
+                return {
+                    user: p.user,
+                    faction: p.role.faction
+                };
+            })
+        }
+    }
+}
 
 gameSchema.methods.setup_game = function(user_ids, role_ids) {
     var self = this;

@@ -27,8 +27,9 @@ app.controller('GameController',
             $scope.roles = data.roles;
         });
 
-        socket.on('player_details', function(data){
-            $scope.role = data.role;
+        socket.on('revealed_info', function(data) {
+            console.log('REVEALED_INFO', data);
+            $scope.player = data;
         });
 
         $scope.current_mission = function() {return $scope.game.missions[$scope.game.mission_number]};
