@@ -129,15 +129,27 @@ app.get('/wipegames', function(req, res) {
 app.get('/buildroles', function(req, res) {
     Role.remove({}, function(err) {
         console.log('collection removed');
+
+        //Setting role ids ahead of time so that I can reference them in revealed roles
+
+        var assassin_id = mongoose.Types.ObjectId();
+        var morgana_id = mongoose.Types.ObjectId();
+        var mordred_id = mongoose.Types.ObjectId();
+        var oberon_id = mongoose.Types.ObjectId();
+        var minion_id = mongoose.Types.ObjectId();
+        var merlin_id = mongoose.Types.ObjectId();
+        var percival_id = mongoose.Types.ObjectId();
+        var loyal_id = mongoose.Types.ObjectId();
+
         var roles = [
-            {_id: mongoose.Types.ObjectId(), name: 'Assassin', faction: 'evil', default: false},
-            {_id: mongoose.Types.ObjectId(), name: 'Morgana', faction: 'evil', default: false},
-            {_id: mongoose.Types.ObjectId(), name: 'Mordred', faction: 'evil', default: false},
-            {_id: mongoose.Types.ObjectId(), name: 'Oberon', faction: 'evil', default: false},
-            {_id: mongoose.Types.ObjectId(), name: 'Minion of Mordred', faction: 'evil', default: true},
-            {_id: mongoose.Types.ObjectId(), name: 'Merlin', faction: 'good', default: false},
-            {_id: mongoose.Types.ObjectId(), name: 'Percival', faction: 'good', default: false},
-            {_id: mongoose.Types.ObjectId(), name: 'Loyal Servant of Arthur', faction: 'good', default: true}
+            {_id: assassin_id, name: 'Assassin', faction: 'evil', default: false, revealed_roles: [assassin_id, morgana_id, mordred_id, minion_id]},
+            {_id: morgana_id, name: 'Morgana', faction: 'evil', default: false, revealed_roles: [assassin_id, morgana_id, mordred_id, minion_id]},
+            {_id: mordred_id, name: 'Mordred', faction: 'evil', default: false, revealed_roles: [assassin_id, morgana_id, mordred_id, minion_id]},
+            {_id: oberon_id, name: 'Oberon', faction: 'evil', default: false, revealed_roles: []},
+            {_id: minion_id, name: 'Minion of Mordred', faction: 'evil', default: true, revealed_roles: [assassin_id, morgana_id, mordred_id, minion_id]},
+            {_id: merlin_id, name: 'Merlin', faction: 'good', default: false, revealed_roles: [assassin_id, morgana_id, minion_id, oberon_id]},
+            {_id: percival_id, name: 'Percival', faction: 'good', default: false, revealed_roles: [merlin_id, morgana_id], hidden_faction: true},
+            {_id: loyal_id, name: 'Loyal Servant of Arthur', faction: 'good', default: true, revealed_roles: []}
         ];
 
         roles.forEach(function(obj){

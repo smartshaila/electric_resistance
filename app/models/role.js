@@ -8,7 +8,8 @@ var roleSchema = new Schema({
     name: String,
     faction: String,
     default: Boolean,
-    revealed_roles: [{type : mongoose.Schema.ObjectId, ref : 'Role'}]
+    revealed_roles: [{type : mongoose.Schema.ObjectId, ref : 'Role'}],
+    hidden_faction: Boolean
 });
 
 // the schema is useless so far
