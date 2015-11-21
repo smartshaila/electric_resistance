@@ -42,7 +42,7 @@ angular.module('resistance_filters', [])
             } else if (faction == 'evil'){
                 return 'text-danger';
             } else {
-                return '';
+                return 'text-warning';
             }
         };
     })
@@ -53,7 +53,7 @@ angular.module('resistance_filters', [])
           } else if (faction == 'evil'){
               return 'glyphicon glyphicon-fire';
           } else {
-              return 'glyphicon';
+              return 'glyphicon glyphicon-question-sign';
           }
         };
     })

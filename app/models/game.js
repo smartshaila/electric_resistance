@@ -203,7 +203,7 @@ gameSchema.methods.revealed_info = function(user_id) {
             }).map(function(p) {
                 return {
                     user: p.user,
-                    faction: p.role.faction
+                    faction: role.hidden_faction ? null : p.role.faction
                 };
             })
         }
