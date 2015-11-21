@@ -44,6 +44,7 @@ var game_reference = [
         ],
         missions: [
             {capacity: 1, fails_needed: 1},
+            {capacity: 2, fails_needed: 1},
             {capacity: 2, fails_needed: 1}
         ]
     },
