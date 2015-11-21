@@ -207,7 +207,7 @@ gameSchema.methods.revealed_info = function(user_id) {
         return {
             role: role,
             revealed_players: this.players.filter(function(p) {
-                return __.contains(revealed_role_ids, p.role._id);
+                return __.some(revealed_role_ids, function(id) {return id.equals(p.role._id)});
             }).map(function(p) {
                 return {
                     user: p.user,
