@@ -70,4 +70,19 @@ angular.module('resistance_filters', [])
                 return r.default;
             });
         };
+    })
+    .filter('vote_filter', function() {
+        return function(votes, result) {
+            return votes.filter(function(v){
+                return v.vote == result;
+            });
+        };
+    })
+    .filter('vote_count', function() {
+        return function(votes, result) {
+            return votes.filter(function(v){
+                return v.vote == result;
+            }).length;
+        };
     });
+

@@ -6,6 +6,7 @@
         <script src="/socket.io/socket.io.js"></script>
         <script src="/angular/angular.min.js"></script>
         <script src="/jquery/dist/jquery.min.js"></script>
+        <script src="/underscore/underscore-min.js"></script>
         <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
         <script src="/javascripts/angularApp.js"></script>
         <script src="/javascripts/controllers/game_controller.js"></script>
@@ -42,42 +43,44 @@
                 <div class="panel-body collapse in" id="mission_info">
                     <p>Leader: {{current_team().leader.name}}</p>
                     <p>Team: {{member_names() | sentence}}</p>
-                    <p>
+                    <div>
                         <button type="button" class="btn btn-success btn-lg" ng-click="toggle_team_vote(true)">Accept</button>
                         <button type="button" class="btn btn-danger btn-lg" ng-click="toggle_team_vote(false)">Reject</button>
-                    </p>
+                    </div>
+                    <div>
+                        <ul class="list-group" ng-repeat="result in [true, false]">
+                            <li class="btn btn-default {{result | result_icon}}">{{current_team().votes | vote_count:result}}</li>
+                            <li class="list-group-item" ng-repeat="v in current_team().votes | filter:{vote: result}">
+                                {{v.user.name}}
+                            </li>
+                        </ul>
+                    </div>
                     <p>Rejected Teams: {{current_mission().teams.length - 1}}</p>
                 </div>
             </div>
             <div class="panel panel-info">
                 <div class="panel-heading" data-toggle="collapse" href="#players" aria-expanded="false" aria-controls="players">Players</div>
-                <div class="panel-body collapse" id="players">
-                    <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="u in users">
-                            <span class="glyphicon glyphicon-flash {{u.logged_in | connection_icon}}"> </span> {{u.name}}
-                        </li>
-                    </ul>
-                </div>
+                <ul class="list-group collapse" id="players">
+                    <li class="list-group-item" ng-repeat="u in users">
+                        <span class="glyphicon glyphicon-flash {{u.logged_in | connection_icon}}"> </span> {{u.name}}
+                    </li>
+                </ul>
             </div>
             <div class="panel panel-info">
-                <div class="panel-heading" data-toggle="collapse" href="#roles" aria-expanded="false" aria-controls="roles">Roles</div>
-                <div class="panel-body collapse" id="roles">
-                    <ul class="list-group">
-                        <li class="list-group-item {{r.faction | faction_style}}" ng-repeat="r in roles">
-                            <span class="{{r.faction | faction_icon}}"> </span> {{r.name}} <span class="badge">{{r.count}}</span>
-                        </li>
-                    </ul>
-                </div>
+                <div class="panel-heading" data-toggle="collapse" href="#roles" aria-expanded="true" aria-controls="roles">Roles</div>
+                <ul class="list-group collapse in" id="roles">
+                    <li class="list-group-item {{r.faction | faction_style}}" ng-repeat="r in roles">
+                        <span class="{{r.faction | faction_icon}}"> </span> {{r.name}} <span class="badge">{{r.count}}</span>
+                    </li>
+                </ul>
             </div>
             <div class="panel panel-info">
                 <div class="panel-heading" data-toggle="collapse" href="#team_select" aria-expanded="true" aria-controls="team_select">Team Selection - {{current_team().members.length}}/{{current_mission().capacity}}</div>
-                <div class="panel-body collapse in" id="team_select">
-                    <ul class="list-group">
-                        <li class="list-group-item {{selected_user(u._id) ? 'active' : ''}}" ng-repeat="u in users" ng-click="toggle_team_select(u._id)">
-                             {{u.name}}
-                        </li>
-                    </ul>
-                </div>
+                <ul class="list-group collaspe in" id="team_select">
+                    <li class="list-group-item {{selected_user(u._id) ? 'active' : ''}}" ng-repeat="u in users" ng-click="toggle_team_select(u._id)">
+                        {{u.name}}
+                    </li>
+                </ul>
             </div>
             <div class="panel panel-info">
                 <div class="panel-heading" data-toggle="collapse" href="#team_voting" aria-expanded="true" aria-controls="team_voting">Team Voting</div>
