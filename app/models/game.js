@@ -46,7 +46,7 @@ gameSchema.methods.current_team = function() {
 };
 
 gameSchema.methods.next_user = function(user) {
-    var current_player = this.players.findIndex(function(obj) {
+    var current_player = __.findIndex(this.players, function(obj) {
         return obj.user._id.equals(user._id);
     });
     return this.players[(current_player + 1) % this.players.length].user;
@@ -73,19 +73,15 @@ gameSchema.methods.reset_team_votes = function() {
 
 gameSchema.methods.approve_team = function() {
     this.current_mission().votes = this.current_team().members.map(function(u) {
-        console.log('MEMBER:', u);
         return {
             user: u,
             vote: null
         };
     });
-    console.log('VOTES:', this.current_mission().votes);
 };
 
 gameSchema.methods.reject_team = function() {
     var next_leader = this.next_user(this.current_team().leader);
-    console.log('Current:', this.current_team().leader.name);
-    console.log('Next:', next_leader.name);
     this.create_team(next_leader);
 };
 
@@ -130,10 +126,7 @@ gameSchema.methods.toggle_team_vote = function(user_id, vote) {
 }
 
 gameSchema.methods.toggle_mission_vote = function(user_id, vote) {
-    console.log('USER:', user_id);
-    console.log('VOTE:', vote);
     var current_vote = __.find(this.current_mission().votes, function(v) {return v.user._id.equals(user_id)});
-    console.log('CURRENT:', current_vote);
     if (current_vote) {
         if (current_vote.vote == vote) {
             current_vote.vote = null;
@@ -141,7 +134,6 @@ gameSchema.methods.toggle_mission_vote = function(user_id, vote) {
             current_vote.vote = vote;
         }
     }
-    console.log('ALL:', this.current_mission().votes);
 
     if (!__.some(this.current_mission().votes, function(v) {return v.vote == null})) {
         if (__.some(this.current_mission().votes, function(v) {return v.vote == false})) {
