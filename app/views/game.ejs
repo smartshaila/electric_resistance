@@ -116,7 +116,7 @@
                     <p>You are {{player.role.name}}</p>
                     <ul class="list-group">
                         <li class="list-group-item {{r.faction | faction_style}}" ng-repeat="r in player.revealed_players">
-                            <span class="{{r.faction | faction_icon}}"> </span> {{r.name}}
+                            <span class="{{r.faction | faction_icon}}"> </span> {{r.user.name}}
                         </li>
                     </ul>
                 </div>
