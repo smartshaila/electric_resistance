@@ -20,8 +20,8 @@ function update_game(io, room) {
     });
 }
 
-function set_game_data() {
-    var role_hash = game.players.reduce(function (res, player) {
+function update_role_data(socket) {
+    socket.emit('role_data', __.values(game.players.reduce(function (res, player) {
         var count = res[player.role._id] ? res[player.role._id].count + 1 : 1;
         res[player.role._id] = {
             _id: player.role._id,
@@ -30,20 +30,17 @@ function set_game_data() {
             count: count
         };
         return res;
-    }, {});
+    }, {})));
+}
 
-    return {
-        users: game.players.map(function (p) {
-            return {
-                _id: p.user._id,
-                name: p.user.name,
-                logged_in: p.logged_in
-            };
-        }),
-        roles: Object.keys(role_hash).map(function (k) {
-            return role_hash[k];
-        })
-    };
+function update_user_data(io, room) {
+    io.sockets.in(room).emit('user_data', game.players.map(function (p) {
+        return {
+            _id: p.user._id,
+            name: p.user.name,
+            logged_in: p.logged_in
+        };
+    }));
 }
 
 function update_lobby(io, room) {
@@ -73,7 +70,8 @@ module.exports = function (io) {
                 if (index > -1) {
                     game.players[index].logged_in = true;
                 }
-                socket.emit('init_data', set_game_data());
+                update_role_data(socket);
+                update_user_data(io, data.room.name);
                 socket.emit('revealed_info', game.revealed_info(socket.user._id));
                 update_game(io, data.room.name);
             } else if (data.room.type == 'lobby') {
@@ -99,8 +97,7 @@ module.exports = function (io) {
                 if (index > -1) {
                     game.players[index].logged_in = false;
                 }
-                var game_data = set_game_data();
-                io.sockets.in(data.room.name).emit('init_data', game_data);
+                update_user_data(io, data.room.name);
             } else if (data.room.type == 'lobby') {
                 lobby_users = lobby_users.filter(function (u) {
                     return u.user._id != socket.user._id;

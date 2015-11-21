@@ -46,9 +46,12 @@ app.controller('GameController', function ($scope, $window, socket) {
         console.log($scope.player.user.name);
     });
 
-    socket.on('init_data', function(data) {
-        $scope.users = data.users;
-        $scope.roles = data.roles;
+    socket.on('role_data', function(data) {
+        $scope.roles = data;
+    });
+
+    socket.on('user_data', function(data) {
+        $scope.users = data;
     });
 
     socket.on('revealed_info', function(data) {
