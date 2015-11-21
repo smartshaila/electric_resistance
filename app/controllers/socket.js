@@ -129,7 +129,7 @@ module.exports = function (io) {
             game.toggle_mission_vote(data.user_id, data.vote);
             game.addPopulations(function() {
                 update_game(io, data.room.name);
-            })
+            });
             update_game(io, data.room.name);
         });
 

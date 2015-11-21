@@ -123,7 +123,7 @@ gameSchema.methods.toggle_team_vote = function(user_id, vote) {
             }
         }
     }
-}
+};
 
 gameSchema.methods.toggle_mission_vote = function(user_id, vote) {
     var current_vote = __.find(this.current_mission().votes, function(v) {return v.user._id.equals(user_id)});
@@ -147,7 +147,7 @@ gameSchema.methods.toggle_mission_vote = function(user_id, vote) {
             this.create_team(next_leader);
         }
     }
-}
+};
 
 // Might be faster than inline methods?
 var get_user_name = function(obj) {return obj.user.name};
