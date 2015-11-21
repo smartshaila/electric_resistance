@@ -1,5 +1,6 @@
 var helpers = require('../config/helpers');
 var Game = require('../models/game');
+var __ = require('underscore');
 
 var game = {};
 
@@ -11,9 +12,11 @@ var lobby_users = [];
 var selected_role_ids = [];
 
 function update_game(io, room) {
-    console.log('Update Game for ', room);
+    console.log('Update Game for', room);
+    console.log(game.current_action());
     io.sockets.in(room).emit('update', {
-        game: game
+        game: game,
+        current_action: game.current_action()
     });
 }
 
@@ -21,7 +24,7 @@ function set_game_data() {
     var role_hash = game.players.reduce(function (res, player) {
         var count = res[player.role._id] ? res[player.role._id].count + 1 : 1;
         res[player.role._id] = {
-            id: player.role._id,
+            _id: player.role._id,
             name: player.role.name,
             faction: player.role.faction,
             count: count
@@ -29,12 +32,10 @@ function set_game_data() {
         return res;
     }, {});
 
-    console.log(role_hash);
-
     return {
         users: game.players.map(function (p) {
             return {
-                id: p.user._id,
+                _id: p.user._id,
                 name: p.user.name,
                 logged_in: p.logged_in
             };
@@ -65,7 +66,6 @@ module.exports = function (io) {
             socket.join(data.room.name);
             socket.room = data.room;
             if (data.room.type == 'game') {
-                console.log(game.players);
                 var index = game.players.map(function (p) {
                     return p.user._id.toString();
                 }).indexOf(socket.user._id.toString());
@@ -110,23 +110,27 @@ module.exports = function (io) {
         });
 
         socket.on('toggle_team_select', function (data) {
-            var existing_team = game.current_team().members.slice(0);
-            var index = game.current_team().members.map(function (m) {
-                return m._id.toString();
-            }).indexOf(data.id);
-            if (index > -1) {
-                game.current_team().members.splice(index, 1);
-            } else {
-                game.current_team().members.push(data.id);
+            if (socket.user._id.equals(game.current_team().leader._id)) {
+                game.toggle_team_select(data._id);
+                game.deepPopulate('missions.teams.members', function () {
+                    update_game(io, data.room.name);
+                });
             }
+        });
 
-            if (game.current_team().members.length > game.current_mission().capacity) {
-                game.current_team().members = existing_team;
-            }
-
-            game.deepPopulate('missions.teams.members', function (err, obj) {
+        socket.on('toggle_team_vote', function (data) {
+            game.toggle_team_vote(data.user_id, data.vote);
+            game.deepPopulate('missions.votes.user', function() {
                 update_game(io, data.room.name);
             });
+        });
+
+        socket.on('toggle_mission_vote', function (data) {
+            game.toggle_mission_vote(data.user_id, data.vote);
+            game.addPopulations(function() {
+                update_game(io, data.room.name);
+            })
+            update_game(io, data.room.name);
         });
 
         socket.on('toggle_role_select', function (data) {

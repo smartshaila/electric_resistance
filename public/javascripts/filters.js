@@ -5,9 +5,9 @@
 angular.module('resistance_filters', [])
     .filter('result_icon', function() {
         return function(input) {
-            if (input == 'success') {
+            if (input) {
                 return 'glyphicon glyphicon-ok btn-primary';
-            } else if (input == 'fail') {
+            } else if (input == false) {
                 return 'glyphicon glyphicon-remove btn-danger';
             } else {
                 return 'glyphicon';
