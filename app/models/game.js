@@ -266,8 +266,28 @@ gameSchema.methods.addPopulations = function(cb) {
 };
 
 gameSchema.methods.display_safe = function() {
-    return {
+    var self = this;
 
+    return {
+        result: self.result,
+        mission_number: self.mission_number,
+        missions: self.missions.map(function(m){
+            var mission_votes = m.result == null ? [] : __.pluck(m.votes, 'vote');
+            return {
+                result: m.result,
+                capacity: m.capacity,
+                fails_needed: m.fails_needed,
+                teams: m.teams.map(function(t){
+                    var team_votes = __.some(t.votes, function(v) {return v.vote == null}) ? [] : t.votes;
+                    return {
+                        leader: t.leader,
+                        members: t.members,
+                        votes: team_votes
+                    };
+                }),
+                votes: mission_votes
+            };
+        })
     };
 };
 

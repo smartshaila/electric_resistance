@@ -15,7 +15,7 @@ function update_game(io, room) {
     console.log('Update Game for', room);
     console.log(game.current_action());
     io.sockets.in(room).emit('update', {
-        game: game,
+        game: game.display_safe(),
         current_action: game.current_action()
     });
 }
