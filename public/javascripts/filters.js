@@ -49,7 +49,7 @@ angular.module('resistance_filters', [])
     .filter('faction_icon', function() {
         return function(faction) {
           if (faction == 'good'){
-              return 'glyphicon glyphicon-tint';
+              return 'glyphicon glyphicon-knight';
           } else if (faction == 'evil'){
               return 'glyphicon glyphicon-fire';
           } else {
