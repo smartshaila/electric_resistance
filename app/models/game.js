@@ -154,7 +154,8 @@ var get_user_name = function(obj) {return obj.user.name};
 
 gameSchema.methods.current_action = function() {
     var res = {
-        action: '',
+        action: 'none',
+        action_text: '',
         remaining: []
     };
 
@@ -172,21 +173,36 @@ gameSchema.methods.current_action = function() {
     var mission_vote = __.groupBy(this.current_mission().votes, function(v) {return v.vote != null});
 
     if (logged_in[false] != null) {
-        res.action = 'log in';
-        res.remaining = logged_in[false].map(get_user_name);
+        res = {
+            action: 'login',
+            action_text: 'log in',
+            remaining: logged_in[false].map(get_user_name)
+        };
     } else if (additions > 0) {
-        res.action = 'select ' + additions + ' more team member' + (additions > 1 ? 's' : '');
-        res.remaining = [this.current_team().leader.name];
+        res = {
+            action: 'team_select',
+            action_text: 'select ' + additions + ' more team member' + (additions > 1 ? 's' : ''),
+            remaining: [this.current_team().leader.name]
+        };
     } else if (team_vote[false] != null) {
-        res.action = 'vote on the proposed team';
-        res.remaining = team_vote[false].map(get_user_name);
+        res = {
+            action: 'team_vote',
+            action_text: 'vote on the proposed team',
+            remaining: team_vote[false].map(get_user_name)
+        };
     } else if (mission_vote[false] != null) {
-        res.action = 'vote on the mission';
-        res.remaining = mission_vote[false].map(get_user_name);
+        res = {
+            action: 'mission_vote',
+            action_text: 'vote on the mission',
+            remaining: mission_vote[false].map(get_user_name)
+        };
     } else if (this.result == null) {
         // Ensure whether there's any further logic required here
-        res.action = '[do something to end the game]';
-        res.remaining = ['someone...'];
+        res = {
+            action: 'unknown',
+            action_text: '[do something to end the game]',
+            remaining: ['someone']
+        };
     }
     return res;
 };

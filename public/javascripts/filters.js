@@ -84,5 +84,11 @@ angular.module('resistance_filters', [])
                 return v.vote == result;
             }).length;
         };
-    });
+    })
+    .filter('active_page', function() {
+        return function(current_page, this_page) {
+            return current_page == this_page ? 'active' : '';
+        }
+    })
+    ;
 
