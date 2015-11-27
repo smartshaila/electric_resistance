@@ -90,5 +90,45 @@ angular.module('resistance_filters', [])
             return current_page == this_page ? 'active' : '';
         }
     })
+    .filter('show_panel', function() {
+        return function(panel, scope) {
+            if (panel == 'mission_info') {
+                if (scope.current_page == 'home') {
+                    return '';
+                } else {
+                    return 'hidden-xs hidden-sm'
+                }
+            } else if (panel == 'game_info') {
+                if (scope.current_page == 'home') {
+                    return '';
+                } else {
+                    return 'hidden'
+                }
+            } else if (panel == 'team_select') {
+                if (scope.current_page == 'vote' && (scope.current_action.action == 'team_select' || scope.current_action.action == 'team_vote') && scope.current_team().leader._id == scope.player.user._id) {
+                    return '';
+                } else {
+                    return 'hidden';
+                }
+            } else if (panel == 'team_vote') {
+                if (scope.current_page == 'vote' && scope.current_action.action == 'team_vote' && scope.current_team().leader._id != scope.player.user._id) {
+                    return '';
+                } else {
+                    return 'hidden';
+                }
+            } else if (panel == 'mission_vote') {
+                // MISSION LOGIC HERE
+                return 'hidden';
+            } else if (panel == 'revealed_info') {
+                if (scope.current_page == 'info') {
+                    return '';
+                } else {
+                    return 'hidden';
+                }
+            } else {
+                return '';
+            }
+        }
+    })
     ;
 
