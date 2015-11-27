@@ -18,14 +18,14 @@
 
     <body ng-app="electric_resistance" ng-controller="GameController">
         <nav class="navbar navbar-default navbar-fixed-bottom">
-<!--            <div class="container">-->
-                <ul class="nav navbar-nav col-xs-9">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav col-xs-12 col-md-9">
                     <li class="{{current_page | active_page:'home'}} col-xs-4 text-center"><a href="#" ng-click="set_page('home')"><span class="glyphicon glyphicon-home"></span><br />Home</a></li>
                     <li class="{{current_page | active_page:'vote'}} col-xs-4 text-center"><a href="#" ng-click="set_page('vote')"><span class="glyphicon glyphicon-blackboard"></span><br />Vote</a></li>
                     <li class="{{current_page | active_page:'info'}} col-xs-4 text-center"><a href="#" ng-click="set_page('info')"><span class="glyphicon glyphicon-search"></span><br />Info</a></li>
                 </ul>
-                <p class="navbar-text navbar-right col-xs-3">Signed in as <a href="/logout" class="navbar-link">{{player.user.name}}</a></p>
-<!--            </div>-->
+                <p class="navbar-text col-med-3 hidden-xs hidden-sm">Signed in as <a href="/logout" class="navbar-link">{{player.user.name}}</a></p>
+            </div>
         </nav>
         <div class="container-fluid">
             <div class="row">
