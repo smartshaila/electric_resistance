@@ -39,7 +39,7 @@
                 <div class="col-md-6">
                     <div class="form-group text-center {{'mission_info' | show_panel:this}}">
                         <div class="btn-group" role="group" aria-label="mission_info">
-                            <button type="button" class="btn btn-default btn-lg {{m.result | result_icon}}" ng-repeat="m in game.missions">{{(m.result != null) ? '' : m.capacity}}<sup style="{{(m.fails_needed > 1) ? '' : 'display:none'}}" ng-click="display_mission($index)">{{m.fails_needed}}</sup></button>
+                            <button type="button" class="btn btn-default btn-lg {{m.result | result_icon}}" ng-repeat="m in game.missions"  ng-click="display_mission($index)">{{(m.result != null) ? '' : m.capacity}}<sup style="{{(m.fails_needed > 1) ? '' : 'display:none'}}">{{m.fails_needed}}</sup></button>
                         </div>
                     </div>
                     <div class="panel panel-warning {{'mission_info' | show_panel:this}}">
