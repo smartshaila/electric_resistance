@@ -25,7 +25,12 @@ app.controller('GameController', function ($scope, $window, socket) {
             votes: []
         }]
     };
-    $scope.current_action = {action: '', remaining: []};
+    $scope.current_action = {
+        action: 'none',
+        action_text: '',
+        remaining: []
+    };
+    $scope.current_page = 'home';
 
     var setup_socket = function() {
         socket.emit('join_room', {room: $scope.room});
@@ -60,6 +65,9 @@ app.controller('GameController', function ($scope, $window, socket) {
         $scope.player.revealed_players = data.revealed_players;
     });
 
+    $scope.set_page = function(page) {
+        $scope.current_page = page;
+    }
     $scope.toggle_team_select = function(_id) {
         socket.emit('toggle_team_select', {room: $scope.room, _id: _id});
     };

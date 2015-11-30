@@ -1,5 +1,5 @@
 body {
-    padding: 10px;
+    padding: 10px 10px 70px 10px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -33,4 +33,8 @@ a {
 .nogutter {
     padding-right: 0;
     padding-left: 0;
+}
+
+.navbar-nav {
+    margin: 0px 0px;
 }
