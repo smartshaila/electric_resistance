@@ -105,19 +105,31 @@ angular.module('resistance_filters', [])
                     return 'hidden'
                 }
             } else if (panel == 'team_select') {
-                if (scope.current_page == 'vote' && (scope.current_action.action == 'team_select' || scope.current_action.action == 'team_vote') && scope.current_team().leader._id == scope.player.user._id) {
+                if (scope.current_page == 'vote'
+                    && (scope.current_action.action == 'team_select' || scope.current_action.action == 'team_vote')
+                    && scope.display_mission_index == -1
+                    && scope.display_team_index == -1
+                    && scope.current_team().leader._id == scope.player.user._id) {
                     return '';
                 } else {
                     return 'hidden';
                 }
             } else if (panel == 'team_vote') {
-                if (scope.current_page == 'vote' && scope.current_action.action == 'team_vote' && scope.current_team().leader._id != scope.player.user._id) {
+                if (scope.current_page == 'vote'
+                    && scope.current_action.action == 'team_vote'
+                    && scope.display_mission_index == -1
+                    && scope.display_team_index == -1
+                    && scope.current_team().leader._id != scope.player.user._id) {
                     return '';
                 } else {
                     return 'hidden';
                 }
             } else if (panel == 'mission_vote') {
-                if (scope.current_page == 'vote' && scope.current_action.action == 'mission_vote' && _.any(scope.current_team().members, function(user) {return user._id == scope.player.user._id})) {
+                if (scope.current_page == 'vote'
+                    && scope.current_action.action == 'mission_vote'
+                    && scope.display_mission_index == -1
+                    && scope.display_team_index == -1
+                    && _.any(scope.current_team().members, function(user) {return user._id == scope.player.user._id})) {
                     return '';
                 } else {
                     return 'hidden';
