@@ -117,8 +117,11 @@ angular.module('resistance_filters', [])
                     return 'hidden';
                 }
             } else if (panel == 'mission_vote') {
-                // MISSION LOGIC HERE
-                return 'hidden';
+                if (scope.current_page == 'vote' && scope.current_action.action == 'mission_vote' && _.any(scope.current_team().members, function(user) {return user._id == scope.player.user._id})) {
+                    return '';
+                } else {
+                    return 'hidden';
+                }
             } else if (panel == 'revealed_info') {
                 if (scope.current_page == 'info') {
                     return '';
