@@ -37,7 +37,7 @@
                 <div class="col-md-6">
                     <div class="form-group text-center {{'mission_info' | show_panel:this}}">
                         <div class="btn-group" role="group" aria-label="mission_info">
-                            <button type="button" class="btn btn-default btn-lg {{m.result | result_icon}}" ng-repeat="m in game.missions">{{(m.result != null) ? '' : m.capacity}}<sup style="{{(m.fails_needed > 1) ? '' : 'display:none'}}">{{m.fails_needed}}</sup></button>
+                            <button type="button" class="btn btn-default btn-lg {{m.result | result_icon}}" ng-repeat="m in game.missions">{{(m.result != null) ? '' : m.capacity}}<sup style="{{(m.fails_needed > 1) ? '' : 'display:none'}}" ng-click="display_mission($index)">{{m.fails_needed}}</sup></button>
                         </div>
                     </div>
                     <div class="panel panel-info {{'mission_info' | show_panel:this}}">
@@ -55,11 +55,6 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <!--<div class="panel-heading navbar navbar-default" data-toggle="collapse" href="#team_vote_display" aria-expanded="true" aria-controls="team_vote_display">-->
-                                <!--<button type="button" class="btn btn-default btn-lg {{result | result_icon}}" ng-repeat="result in [true, false]">-->
-                                <!--{{current_team().votes | vote_count: result}}-->
-                                <!--</button>-->
-                                <!--</div>-->
                                 <ul class="col-xs-6 list-group collapse in nogutter" id="team_vote_display" ng-repeat="result in [true, false]">
                                     <li class="list-group-item" ng-repeat="v in current_team().votes | filter:{vote: result}">
                                         {{v.user.name}}
@@ -71,8 +66,8 @@
                 </div>
                 <div class="col-md-6">
                     <div class="panel panel-info {{'game_info' | show_panel:this}}">
-                        <div class="panel-heading" data-toggle="collapse" href="#players" aria-expanded="false" aria-controls="players">Players</div>
-                        <ul class="list-group collapse" id="players">
+                        <div class="panel-heading" data-toggle="collapse" href="#players" aria-expanded="true" aria-controls="players">Players</div>
+                        <ul class="list-group collapse in" id="players">
                             <li class="list-group-item" ng-repeat="u in users">
                                 <span class="glyphicon glyphicon-flash {{u.logged_in | connection_icon}}"> </span> {{u.name}}
                             </li>
@@ -123,8 +118,8 @@
                         </div>
                     </div>
                     <div class="panel panel-info {{'revealed_info' | show_panel:this}}">
-                        <div class="panel-heading" data-toggle="collapse" href="#info" aria-expanded="true" aria-controls="info">Revealed Info</div>
-                        <div class="panel-body collapse in" id="info">
+                        <div class="panel-heading" data-toggle="collapse" href="#info" aria-expanded="false" aria-controls="info">Revealed Info</div>
+                        <div class="panel-body collapse" id="info">
                             <p>You are {{player.role.name}}</p>
                             <ul class="list-group">
                                 <li class="list-group-item {{r.faction | faction_style}}" ng-repeat="r in player.revealed_players">

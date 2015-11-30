@@ -31,6 +31,8 @@ app.controller('GameController', function ($scope, $window, socket) {
         remaining: []
     };
     $scope.current_page = 'home';
+    $scope.display_mission_index = -1;
+    $scope.display_team_index = -1;
 
     var setup_socket = function() {
         socket.emit('join_room', {room: $scope.room});
@@ -78,22 +80,28 @@ app.controller('GameController', function ($scope, $window, socket) {
         socket.emit('toggle_mission_vote', {room: $scope.room, user_id: $scope.player.user._id, vote: vote});
     };
 
-    $scope.current_mission = function() {return $scope.game.missions[$scope.game.mission_number]};
-    $scope.current_team = function() {return $scope.current_mission().teams[$scope.current_mission().teams.length - 1]};
+    $scope.current_mission = function() {
+        var mission_number = ($scope.display_mission_index == -1) ? $scope.game.mission_number : $scope.display_mission_index;
+        return $scope.game.missions[mission_number];
+    };
+    $scope.display_mission = function(mission_index) {
+        $scope.display_mission_index = (mission_index >= $scope.game.mission_number) ? -1 : mission_index;
+    }
+    $scope.current_team = function() {
+        var team_number = ($scope.display_team_index == -1) ? ($scope.current_mission().teams.length - 1) : $scope.display_team_index;
+        return $scope.current_mission().teams[team_number];
+    };
+    $scope.display_team = function(team_index) {
+        $scope.display_team_index = ($scope.display_mission_index == -1 && team_index == $scope.current_mission().teams.length - 1) ? -1 : team_index;
+    }
     $scope.selected_user = function(_id) {
         return $scope.current_team().members.filter(function (m) {
             return m._id.toString() == _id;
         }).length > 0;
     };
     $scope.member_names = function () {
-        return $scope.current_team().members.map(function(m) {return m.name})
+        return $scope.current_team().members.map(function(m) {return m.name});
     };
-//    $scope.grouped_votes = function () {
-//        var starting_votes = {true: [], false: []};
-//        return _.groupBy($scope.current_team().votes, function(v){
-//            return v.vote;
-//        });
-//    };
 
     $window.onbeforeunload = function () {
         socket.emit('leave_room', {room: $scope.room});
