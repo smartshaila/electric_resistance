@@ -16,7 +16,8 @@ function update_game(io, room) {
     console.log(game.current_action());
     io.sockets.in(room).emit('update', {
         game: game.display_safe(),
-        current_action: game.current_action()
+        current_action: game.current_action(),
+        valid_lady_targets: game.valid_lady_targets()
     });
 }
 

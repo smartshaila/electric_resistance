@@ -47,7 +47,7 @@ gameSchema.methods.current_mission = function() {
 
 gameSchema.methods.prev_mission = function() {
     return this.mission_number == 0 ? this.missions[0] : this.missions[this.mission_number - 1];
-}
+};
 
 gameSchema.methods.current_team = function() {
     return this.current_mission().teams[this.current_mission().teams.length - 1];
@@ -59,13 +59,6 @@ gameSchema.methods.next_user = function(user) {
     });
     return this.players[(current_player + 1) % this.players.length].user;
 };
-
-gameSchema.methods.prev_user = function(user) {
-    var current_player = __.findIndex(this.players, function(obj) {
-        return obj.user._id.equals(user._id);
-    });
-    return this.players[(current_player + this.players.length - 1) % this.players.length].user;
-}
 
 gameSchema.methods.create_team = function(leader) {
     this.current_mission().teams.push({
@@ -170,13 +163,13 @@ gameSchema.methods.toggle_mission_vote = function(user_id, vote) {
 gameSchema.methods.select_lady_target = function(user_id) {
     this.current_mission().lady.target = user_id;
     this.next_mission().lady.source = user_id;
-}
+};
 
-gameSchema.methods.valid_lady_targets = function(user_id) {
-    var user = __.find(this.players, function(p) {return p.user._id.equals(user_id)});
+gameSchema.methods.valid_lady_targets = function() {
+    var user = current_mission().lady.source;
     var previous_lady = prev_mission().lady.source;
     return __.without(this.users, user, previous_lady)
-}
+};
 
 // Might be faster than inline methods?
 var get_user_name = function(obj) {return obj.user.name};

@@ -46,6 +46,7 @@ app.controller('GameController', function ($scope, $window, socket) {
         console.log('UPDATE', data);
         $scope.game = data.game;
         $scope.current_action = data.current_action;
+        $scope.lady_targets = data.valid_lady_targets;
     });
 
     socket.on('user', function(data) {
