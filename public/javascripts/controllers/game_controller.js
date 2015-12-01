@@ -30,6 +30,7 @@ app.controller('GameController', function ($scope, $window, socket) {
         action_text: '',
         remaining: []
     };
+    $scope.lady_targets = [];
     $scope.current_page = 'home';
     $scope.display_mission_index = -1;
     $scope.display_team_index = -1;

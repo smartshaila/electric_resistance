@@ -75,6 +75,7 @@
                                     <button type="button" class="btn btn-default" ng-click="set_display_team('+1')">&raquo;</button>
                                 </div>
                             </div>
+                            <p class="col-xs-12">{{current_mission().lady.source.name}} used the Lady on {{current_mission().lady.target.name}}</p>
                         </div>
                     </div>
                 </div>
@@ -106,6 +107,14 @@
                             <button type="button" class="btn btn-primary btn-lg" ng-click="toggle_team_vote(true)">Accept</button>
                             <button type="button" class="btn btn-danger btn-lg" ng-click="toggle_team_vote(false)">Reject</button>
                         </div>
+                    </div>
+                    <div class="panel panel-warning {{'lady' | show_panel:this}}">
+                        <div class="panel-heading">Lady of the Lake</div>
+                        <ul class="list-group">
+                            <li class="list-group-item {{selected_user(t._id) ? 'active' : ''}}" ng-repeat="t in lady_targets" ng-click="toggle_team_select(t._id)">
+                                {{t.name}}
+                            </li>
+                        </ul>
                     </div>
                     <div class="panel panel-warning {{'team_vote' | show_panel:this}}">
                         <div class="panel-heading">Team Proposed by {{current_team().leader.name}}</div>
