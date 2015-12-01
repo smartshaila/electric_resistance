@@ -22,9 +22,9 @@
         <nav class="navbar navbar-default navbar-fixed-bottom">
             <div class="container-fluid">
                 <ul class="nav navbar-nav col-xs-12 col-md-9">
-                    <li class="{{current_page | active_page:'home'}} col-xs-4 text-center"><a href="#" ng-click="set_page('home')"><span class="glyphicon glyphicon-home"></span><br />Home</a></li>
-                    <li class="{{current_page | active_page:'vote'}} col-xs-4 text-center"><a href="#" ng-click="set_page('vote')"><span class="glyphicon glyphicon-blackboard"></span><br />Vote</a></li>
-                    <li class="{{current_page | active_page:'info'}} col-xs-4 text-center"><a href="#" ng-click="set_page('info')"><span class="glyphicon glyphicon-search"></span><br />Info</a></li>
+                    <li class="{{'home' | selected:current_page}} col-xs-4 text-center"><a href="#" ng-click="set_page('home')"><span class="glyphicon glyphicon-home"></span><br />Home</a></li>
+                    <li class="{{'vote' | selected:current_page}} col-xs-4 text-center"><a href="#" ng-click="set_page('vote')"><span class="glyphicon glyphicon-blackboard"></span><br />Vote</a></li>
+                    <li class="{{'info' | selected:current_page}} col-xs-4 text-center"><a href="#" ng-click="set_page('info')"><span class="glyphicon glyphicon-search"></span><br />Info</a></li>
                 </ul>
                 <p class="navbar-text col-med-3 hidden-xs hidden-sm">Signed in as <a href="/logout" class="navbar-link">{{player.user.name}}</a></p>
             </div>
@@ -39,7 +39,7 @@
                 <div class="col-md-6">
                     <div class="form-group text-center {{'mission_info' | show_panel:this}}">
                         <div class="btn-group" role="group" aria-label="mission_info">
-                            <button type="button" class="btn btn-default btn-lg {{m.result | result_icon}}" ng-repeat="m in game.missions"  ng-click="display_mission($index)">{{(m.result != null) ? '' : m.capacity}}<sup style="{{(m.fails_needed > 1) ? '' : 'display:none'}}">{{m.fails_needed}}</sup></button>
+                            <button type="button" class="btn btn-default btn-lg {{m.result | result_icon}} {{$index | selected:display_mission_index}}" ng-repeat="m in game.missions"  ng-click="display_mission($index)">{{(m.result != null) ? '' : m.capacity}}<sup style="{{(m.fails_needed > 1) ? '' : 'display:none'}}">{{m.fails_needed}}</sup></button>
                         </div>
                     </div>
                     <div class="panel panel-warning {{'mission_info' | show_panel:this}}">
@@ -57,8 +57,8 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <div id="team_vote_display">
-                                    <ul class="col-xs-6 list-group collapse in nogutter" ng-repeat="result in [true, false]">
+                                <div id="team_vote_display" class="collapse in">
+                                    <ul class="col-xs-6 list-group nogutter" ng-repeat="result in [true, false]">
                                         <li class="list-group-item" ng-repeat="v in current_team().votes | filter:{vote: result}">
                                             {{v.user.name}}
                                         </li>

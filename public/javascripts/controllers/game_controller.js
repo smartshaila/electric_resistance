@@ -6,7 +6,7 @@ app.controller('GameController', function ($scope, $window, socket) {
     // Variable data here:
     $scope.player = {
         user: {name: 'Guest'},
-        role: {name: 'not playing'},
+        role: {name: 'not playing', faction: ''},
         revealed_players: []
     };
     $scope.users = [];

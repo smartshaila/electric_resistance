@@ -85,11 +85,6 @@ angular.module('resistance_filters', [])
             }).length;
         };
     })
-    .filter('active_page', function() {
-        return function(current_page, this_page) {
-            return current_page == this_page ? 'active' : '';
-        }
-    })
     .filter('show_panel', function() {
         return function(panel, scope) {
             if (panel == 'mission_info') {
@@ -143,6 +138,11 @@ angular.module('resistance_filters', [])
             } else {
                 return '';
             }
+        }
+    })
+    .filter('selected', function() {
+        return function(obj, reference_obj) {
+            return obj == reference_obj ? 'active' : '';
         }
     })
     ;
