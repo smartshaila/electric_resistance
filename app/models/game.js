@@ -169,7 +169,7 @@ gameSchema.methods.valid_lady_targets = function() {
     var user = this.current_mission().lady.source;
     var previous_lady = this.prev_mission().lady.source;
     return this.players.filter(function(p){
-        return !(p.user._id.equals(user._id) || p.user._id.equals(previous_lady._id));
+        return !((user && p.user._id.equals(user._id)) || (previous_lady && p.user._id.equals(previous_lady._id)));
     });
 };
 
