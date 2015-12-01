@@ -131,7 +131,10 @@ gameSchema.methods.toggle_mission_vote = function(user_id, vote) {
         if (current_vote.vote == vote) {
             current_vote.vote = null;
         } else {
-            current_vote.vote = vote;
+            var player_faction = __.find(this.players, function(p) {return p.user._id.equals(user_id)}).role.faction;
+            if (vote || player_faction == 'evil') {
+                current_vote.vote = vote;
+            }
         }
     }
 
