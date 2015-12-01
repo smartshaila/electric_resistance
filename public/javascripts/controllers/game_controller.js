@@ -30,7 +30,7 @@ app.controller('GameController', function ($scope, $window, socket) {
         action_text: '',
         remaining: []
     };
-    $scope.lady_targets = [];
+    $scope.valid_lady_targets = [];
     $scope.current_page = 'home';
     $scope.display_mission_index = -1;
     $scope.display_team_index = -1;
@@ -46,7 +46,7 @@ app.controller('GameController', function ($scope, $window, socket) {
         console.log('UPDATE', data);
         $scope.game = data.game;
         $scope.current_action = data.current_action;
-        $scope.lady_targets = data.valid_lady_targets;
+        $scope.valid_lady_targets = data.valid_lady_targets;
     });
 
     socket.on('user', function(data) {
