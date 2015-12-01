@@ -57,11 +57,13 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <ul class="col-xs-6 list-group collapse in nogutter" id="team_vote_display" ng-repeat="result in [true, false]">
-                                    <li class="list-group-item" ng-repeat="v in current_team().votes | filter:{vote: result}">
-                                        {{v.user.name}}
-                                    </li>
-                                </ul>
+                                <div id="team_vote_display">
+                                    <ul class="col-xs-6 list-group collapse in nogutter" ng-repeat="result in [true, false]">
+                                        <li class="list-group-item" ng-repeat="v in current_team().votes | filter:{vote: result}">
+                                            {{v.user.name}}
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
