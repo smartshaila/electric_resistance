@@ -116,7 +116,7 @@
                         </ul>
                         <div class="panel-body btn-group">
                             <button type="button" class="btn btn-primary btn-lg" ng-click="toggle_mission_vote(true)">Pass</button>
-                            <button type="button" class="btn btn-danger btn-lg" ng-click="toggle_mission_vote(false)">Fail</button>
+                            <button type="button" class="btn btn-danger btn-lg {{player.role.faction != 'evil' ? 'disabled' : ''}}" ng-click="toggle_mission_vote(false)">Fail</button>
                         </div>
                     </div>
                     <div class="panel panel-warning {{'revealed_info' | show_panel:this}}">
