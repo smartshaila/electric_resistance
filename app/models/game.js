@@ -336,6 +336,7 @@ gameSchema.methods.display_safe = function() {
                 result: m.result,
                 capacity: m.capacity,
                 fails_needed: m.fails_needed,
+                lady: m.lady,
                 teams: m.teams.map(function(t){
                     var team_votes = __.some(t.votes, function(v) {return v.vote == null}) ? [] : t.votes;
                     return {
