@@ -166,8 +166,8 @@ gameSchema.methods.select_lady_target = function(user_id) {
 };
 
 gameSchema.methods.valid_lady_targets = function() {
-    var user = current_mission().lady.source;
-    var previous_lady = prev_mission().lady.source;
+    var user = this.current_mission().lady.source;
+    var previous_lady = this.prev_mission().lady.source;
     return __.without(this.users, user, previous_lady)
 };
 
