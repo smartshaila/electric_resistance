@@ -32,6 +32,10 @@ function update_role_data(socket) {
     }, {})));
 }
 
+function update_revealed_data(socket) {
+    socket.emit('revealed_info', game.revealed_info(socket.user._id));
+}
+
 function update_user_data(io, room) {
     io.sockets.in(room).emit('user_data', game.players.map(function (p) {
         return {
@@ -71,7 +75,7 @@ module.exports = function (io) {
                 }
                 update_role_data(socket);
                 update_user_data(io, data.room.name);
-                socket.emit('revealed_info', game.revealed_info(socket.user._id));
+                update_revealed_data(socket);
                 update_game(io, data.room.name);
             } else if (data.room.type == 'lobby') {
                 lobby_users.push({
