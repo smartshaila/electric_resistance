@@ -249,10 +249,15 @@ gameSchema.methods.revealed_info = function(user_id) {
     if (player) {
         var role = player.role;
         var revealed_role_ids = __.pluck(role.revealed_roles, '_id');
-        var lady_users = __.pluck(
+        console.log(__.pluck(
             __.pluck(this.missions, 'lady')
             .filter(function(l) {
                 return l.source && l.source._id.equals(player.user._id)
+            }), 'target'))
+        var lady_users = __.pluck(
+            __.pluck(this.missions, 'lady')
+            .filter(function(l) {
+                return l.source && l.target && l.source._id.equals(player.user._id)
             }), 'target')
         .map(function(u) {
             var u_player = __.find(this.players, function(p) {return p._id.equals(u._id)});
