@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
 var helpers = require('../config/helpers');
-var populate_string = 'players.user players.role players.role.revealed_roles missions.votes.user missions.teams.leader missions.teams.members missions.teams.votes.user';
+var populate_string = 'players.user players.role players.role.revealed_roles missions.votes.user missions.teams.leader missions.teams.members missions.teams.votes.user missions.lady.source.user missions.lady.target.user';
 var __ = require('underscore');
 
 // create a schema
@@ -20,6 +20,10 @@ var gameSchema = new Schema({
         result: Boolean,
         capacity: Number,
         fails_needed: Number,
+        lady: {
+            source: { type: Schema.Types.ObjectId, ref: 'User' },
+            target: { type: Schema.Types.ObjectId, ref: 'User' }
+        }
         teams: [{
             leader: { type: Schema.Types.ObjectId, ref: 'User' },
             members: [{ type: Schema.Types.ObjectId, ref: 'User' }],
@@ -41,6 +45,10 @@ gameSchema.methods.current_mission = function() {
     return this.missions[this.mission_number];
 };
 
+gameSchema.methods.prev_mission = function() {
+    return this.mission_number == 0 ? this.missions[0] : this.missions[this.mission_number - 1];
+}
+
 gameSchema.methods.current_team = function() {
     return this.current_mission().teams[this.current_mission().teams.length - 1];
 };
@@ -51,6 +59,13 @@ gameSchema.methods.next_user = function(user) {
     });
     return this.players[(current_player + 1) % this.players.length].user;
 };
+
+gameSchema.methods.prev_user = function(user) {
+    var current_player = __.findIndex(this.players, function(obj) {
+        return obj.user._id.equals(user._id);
+    });
+    return this.players[(current_player + this.players.length - 1) % this.players.length].user;
+}
 
 gameSchema.methods.create_team = function(leader) {
     this.current_mission().teams.push({
@@ -152,6 +167,17 @@ gameSchema.methods.toggle_mission_vote = function(user_id, vote) {
     }
 };
 
+gameSchema.methods.select_lady_target = function(user_id) {
+    this.current_mission().lady.target = user_id;
+    this.next_mission().lady.source = user_id;
+}
+
+gameSchema.methods.valid_lady_targets = function(user_id) {
+    var user = __.find(this.players, function(p) {return p.user._id.equals(user_id)});
+    var previous_lady = prev_mission().lady.source;
+    return __.without(this.users, user, previous_lady)
+}
+
 // Might be faster than inline methods?
 var get_user_name = function(obj) {return obj.user.name};
 
@@ -171,6 +197,7 @@ gameSchema.methods.current_action = function() {
     }
 
     var logged_in = __.groupBy(this.players, function(p) {return p.logged_in});
+    var lady_needed = this.current_mission().lady.source != null && this.current_mission().lady.target == null;
     var additions = this.current_mission().capacity - this.current_team().members.length;
     var team_vote = __.groupBy(this.current_team().votes, function(v) {return v.vote != null});
     var mission_vote = __.groupBy(this.current_mission().votes, function(v) {return v.vote != null});
@@ -180,6 +207,12 @@ gameSchema.methods.current_action = function() {
             action: 'login',
             action_text: 'log in',
             remaining: logged_in[false].map(get_user_name)
+        };
+    } else if (lady_needed) {
+        res = {
+            action: 'lady',
+            action_text: 'Lady someone',
+            remaining: [this.current_mission().lady.source.user.name]
         };
     } else if (additions > 0) {
         res = {
@@ -263,12 +296,19 @@ gameSchema.methods.setup_game = function(user_ids, role_ids) {
         };
         self.players.push(player);
     }
+    var start_lady = prev_user(self.players[0].user);
+    var lady_set = false;
     var ref_data = helpers.game_reference[user_ids.length];
-    ref_data.missions.forEach(function(obj){
+    ref_data.missions.forEach(function(obj) {
+        var lady_value = (obj.use_lady && !lady_set) ? start_lady : null;
+        if (lady_value) {
+            lady_set = true;
+        }
         self.missions.push({
             result: null,
             capacity: obj.capacity,
             fails_needed: obj.fails_needed,
+            lady: {source: lady_value, target: null},
             teams: [],
             votes: []
         });

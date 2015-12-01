@@ -21,21 +21,21 @@ var game_reference = [
             {faction: 'good', count: 0},
             {faction: 'evil', count: 0}
         ],
-        missions: [{capacity: 1, fails_needed: 1}]
+        missions: [{capacity: 1, fails_needed: 1, use_lady: false}]
     },
     {
         factions: [
             {faction: 'good', count: 1},
             {faction: 'evil', count: 0}
         ],
-        missions: [{capacity: 1, fails_needed: 1}]
+        missions: [{capacity: 1, fails_needed: 1, use_lady: false}]
     },
     {
         factions: [
             {faction: 'good', count: 2},
             {faction: 'evil', count: 0}
         ],
-        missions: [{capacity: 1, fails_needed: 1}]
+        missions: [{capacity: 1, fails_needed: 1, use_lady: false}]
     },
     {
         factions: [
@@ -43,9 +43,9 @@ var game_reference = [
             {faction: 'evil', count: 1}
         ],
         missions: [
-            {capacity: 1, fails_needed: 1},
-            {capacity: 2, fails_needed: 1},
-            {capacity: 2, fails_needed: 1}
+            {capacity: 1, fails_needed: 1, use_lady: false},
+            {capacity: 2, fails_needed: 1, use_lady: false},
+            {capacity: 2, fails_needed: 1, use_lady: true}
         ]
     },
     {
@@ -54,9 +54,9 @@ var game_reference = [
             {faction: 'evil', count: 1}
         ],
         missions: [
-            {capacity: 2, fails_needed: 1},
-            {capacity: 2, fails_needed: 1},
-            {capacity: 3, fails_needed: 1}
+            {capacity: 2, fails_needed: 1, use_lady: false},
+            {capacity: 2, fails_needed: 1, use_lady: false},
+            {capacity: 3, fails_needed: 1, use_lady: true}
         ]
     },
     {
@@ -65,11 +65,11 @@ var game_reference = [
             {faction: 'evil', count: 2}
         ],
         missions: [
-            {capacity: 2, fails_needed: 1},
-            {capacity: 3, fails_needed: 1},
-            {capacity: 2, fails_needed: 1},
-            {capacity: 3, fails_needed: 1},
-            {capacity: 3, fails_needed: 1}
+            {capacity: 2, fails_needed: 1, use_lady: false},
+            {capacity: 3, fails_needed: 1, use_lady: false},
+            {capacity: 2, fails_needed: 1, use_lady: true},
+            {capacity: 3, fails_needed: 1, use_lady: true},
+            {capacity: 3, fails_needed: 1, use_lady: true}
         ]
     },
     {
@@ -78,11 +78,11 @@ var game_reference = [
             {faction: 'evil', count: 2}
         ],
         missions: [
-            {capacity: 2, fails_needed: 1},
-            {capacity: 3, fails_needed: 1},
-            {capacity: 4, fails_needed: 1},
-            {capacity: 3, fails_needed: 1},
-            {capacity: 4, fails_needed: 1}
+            {capacity: 2, fails_needed: 1, use_lady: false},
+            {capacity: 3, fails_needed: 1, use_lady: false},
+            {capacity: 4, fails_needed: 1, use_lady: true},
+            {capacity: 3, fails_needed: 1, use_lady: true},
+            {capacity: 4, fails_needed: 1, use_lady: true}
         ]
     },
     {
@@ -91,11 +91,11 @@ var game_reference = [
             {faction: 'evil', count: 3}
         ],
         missions: [
-            {capacity: 2, fails_needed: 1},
-            {capacity: 3, fails_needed: 1},
-            {capacity: 3, fails_needed: 1},
-            {capacity: 4, fails_needed: 2},
-            {capacity: 4, fails_needed: 1}
+            {capacity: 2, fails_needed: 1, use_lady: false},
+            {capacity: 3, fails_needed: 1, use_lady: false},
+            {capacity: 3, fails_needed: 1, use_lady: true},
+            {capacity: 4, fails_needed: 2, use_lady: true},
+            {capacity: 4, fails_needed: 1, use_lady: true}
         ]
     },
     {
@@ -104,11 +104,11 @@ var game_reference = [
             {faction: 'evil', count: 3}
         ],
         missions: [
-            {capacity: 3, fails_needed: 1},
-            {capacity: 4, fails_needed: 1},
-            {capacity: 4, fails_needed: 1},
-            {capacity: 5, fails_needed: 2},
-            {capacity: 5, fails_needed: 1}
+            {capacity: 3, fails_needed: 1, use_lady: false},
+            {capacity: 4, fails_needed: 1, use_lady: false},
+            {capacity: 4, fails_needed: 1, use_lady: true},
+            {capacity: 5, fails_needed: 2, use_lady: true},
+            {capacity: 5, fails_needed: 1, use_lady: true}
         ]
     },
     {
@@ -117,11 +117,11 @@ var game_reference = [
             {faction: 'evil', count: 3}
         ],
         missions: [
-            {capacity: 3, fails_needed: 1},
-            {capacity: 4, fails_needed: 1},
-            {capacity: 4, fails_needed: 1},
-            {capacity: 5, fails_needed: 2},
-            {capacity: 5, fails_needed: 1}
+            {capacity: 3, fails_needed: 1, use_lady: false},
+            {capacity: 4, fails_needed: 1, use_lady: false},
+            {capacity: 4, fails_needed: 1, use_lady: true},
+            {capacity: 5, fails_needed: 2, use_lady: true},
+            {capacity: 5, fails_needed: 1, use_lady: true}
         ]
     },
     {
@@ -130,11 +130,11 @@ var game_reference = [
             {faction: 'evil', count: 4}
         ],
         missions: [
-            {capacity: 3, fails_needed: 1},
-            {capacity: 4, fails_needed: 1},
-            {capacity: 4, fails_needed: 1},
-            {capacity: 5, fails_needed: 2},
-            {capacity: 5, fails_needed: 1}
+            {capacity: 3, fails_needed: 1, use_lady: false},
+            {capacity: 4, fails_needed: 1, use_lady: false},
+            {capacity: 4, fails_needed: 1, use_lady: true},
+            {capacity: 5, fails_needed: 2, use_lady: true},
+            {capacity: 5, fails_needed: 1, use_lady: true}
         ]
     }
 ];
