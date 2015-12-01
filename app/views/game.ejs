@@ -50,9 +50,9 @@
                             <span class="label label-danger pull-right glyphicon {{display_team_index | accepted_team}} {{current_mission().votes | failed_mission}}"><span class="glyphicon glyphicon-remove"></span> {{current_mission().votes | mission_vote_count: false}}</span>
                         </div>
                         <div class="panel-body collapse in" id="mission_info">
-                            <p>Leader: {{current_team().leader.name}}</p>
-                            <p>Team: {{member_names() | sentence}}</p>
-                            <div class="panel">
+                            <p class="col-xs-12">Leader: {{current_team().leader.name}}</p>
+                            <p class="col-xs-12">Team: {{member_names() | sentence}}</p>
+                            <div class="panel col-xs-12">
                                 <table class="panel-heading table" data-toggle="collapse" href="#team_vote_display" aria-expanded="true" aria-controls="team_vote_display">
                                     <tr>
                                         <td class="col-xs-6 col-md-3 disabled {{result | result_icon}}" ng-repeat="result in [true, false]">
@@ -67,22 +67,22 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <nav>
-                                    <ul class="pagination">
-                                        <li>
-                                            <a href="#" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        <li ng-repeat="team in current_mission().teams" class="{{display_team() | selected:$index}}"><a ng-click="set_display_team($index)" href="#">{{$index + 1}}</a></li>
-                                        <li>
-                                            <a href="#" aria-label="Next">
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
                             </div>
+                            <nav class="col-xs-12 text-center">
+                                <ul class="pagination">
+                                    <li>
+                                        <a href="#" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li ng-repeat="team in current_mission().teams" class="{{display_team() | selected:$index}}"><a ng-click="set_display_team($index)" href="#">{{$index + 1}}</a></li>
+                                    <li>
+                                        <a href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
                     </div>
                 </div>
