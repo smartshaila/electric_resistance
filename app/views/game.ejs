@@ -39,12 +39,15 @@
                 <div class="col-md-6">
                     <div class="form-group text-center {{'mission_info' | show_panel:this}}">
                         <div class="btn-group" role="group" aria-label="mission_info">
-                            <button type="button" class="btn btn-default btn-lg {{m.result | result_icon}} {{$index | selected:display_mission_index}}" ng-repeat="m in game.missions"  ng-click="display_mission($index)">{{(m.result != null) ? '' : m.capacity}}<sup style="{{(m.fails_needed > 1) ? '' : 'display:none'}}">{{m.fails_needed}}</sup></button>
+                            <button type="button" class="btn btn-default btn-lg {{m.result | result_icon}} {{$index | selected:display_mission()}}" ng-repeat="m in game.missions"  ng-click="set_display_mission($index)">{{(m.result != null) ? '' : m.capacity}}<sup style="{{(m.fails_needed > 1) ? '' : 'display:none'}}">{{m.fails_needed}}</sup></button>
                         </div>
                     </div>
                     <div class="panel panel-warning {{'mission_info' | show_panel:this}}">
                         <div class="panel-heading" data-toggle="collapse" href="#mission_info" aria-expanded="true" aria-controls="mission_info">
-                            Mission #{{game.mission_number + 1}}
+                            Mission #{{display_mission() + 1}}
+                            <span class="label label-warning pull-right glyphicon {{display_team_index | rejected_team}}">Rejected</span>
+                            <span class="label label-primary pull-right glyphicon {{current_mission().votes | passed_mission}}"><span class="glyphicon glyphicon-ok"></span></span>
+                            <span class="label label-danger pull-right glyphicon {{current_mission().votes | failed_mission}}"><span class="glyphicon glyphicon-remove"></span> {{current_mission().votes | vote_count: false}}</span>
                         </div>
                         <div class="panel-body collapse in" id="mission_info">
                             <p>Leader: {{current_team().leader.name}}</p>

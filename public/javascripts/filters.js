@@ -145,5 +145,20 @@ angular.module('resistance_filters', [])
             return obj == reference_obj ? 'active' : '';
         }
     })
+    .filter('rejected_team', function() {
+        return function(index) {
+            return index == -1 ? 'hidden' : '';
+        }
+    })
+    .filter('passed_mission', function() {
+        return function(votes) {
+            return (votes.length > 0 && !_.contains(votes, false)) ? '' : 'hidden';
+        }
+    })
+    .filter('failed_mission', function() {
+        return function(votes) {
+            return (votes.length > 0 && _.contains(votes, false)) ? '' : 'hidden';
+        }
+    })
     ;
 

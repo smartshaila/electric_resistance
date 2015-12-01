@@ -84,9 +84,12 @@ app.controller('GameController', function ($scope, $window, socket) {
         var mission_number = ($scope.display_mission_index == -1) ? $scope.game.mission_number : $scope.display_mission_index;
         return $scope.game.missions[mission_number];
     };
-    $scope.display_mission = function(mission_index) {
+    $scope.set_display_mission = function(mission_index) {
         $scope.display_team_index = -1;
         $scope.display_mission_index = (mission_index >= $scope.game.mission_number) ? -1 : mission_index;
+    };
+    $scope.display_mission = function() {
+        return $scope.display_mission_index == -1 ? $scope.game.mission_number : $scope.display_mission_index;
     };
     $scope.current_team = function() {
         var team_number = ($scope.display_team_index == -1) ? ($scope.current_mission().teams.length - 1) : $scope.display_team_index;
