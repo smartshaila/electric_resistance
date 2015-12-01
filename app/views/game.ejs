@@ -111,7 +111,7 @@
                     <div class="panel panel-warning {{'lady' | show_panel:this}}">
                         <div class="panel-heading">Lady of the Lake</div>
                         <ul class="list-group">
-                            <li class="list-group-item" ng-repeat="t in lady_targets" ng-click="toggle_team_select(t._id)">
+                            <li class="list-group-item" ng-repeat="t in valid_lady_targets" ng-click="toggle_team_select(t._id)">
                                 {{t.name}}
                             </li>
                         </ul>
