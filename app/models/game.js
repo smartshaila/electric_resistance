@@ -296,7 +296,7 @@ gameSchema.methods.setup_game = function(user_ids, role_ids) {
         };
         self.players.push(player);
     }
-    var start_lady = this.prev_user(self.players[0].user);
+    var start_lady = self.players[self.players.length - 1].user;
     var lady_set = false;
     var ref_data = helpers.game_reference[user_ids.length];
     ref_data.missions.forEach(function(obj) {
