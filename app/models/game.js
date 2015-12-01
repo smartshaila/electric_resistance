@@ -249,16 +249,29 @@ gameSchema.methods.revealed_info = function(user_id) {
     if (player) {
         var role = player.role;
         var revealed_role_ids = __.pluck(role.revealed_roles, '_id');
+        var lady_users = __.pluck(
+            __.pluck(this.missions, 'lady')
+            .filter(function(l) {
+                return l.source && l.source._id.equals(player.user._id)
+            }), 'target')
+        .map(function(u) {
+            var u_player = __.find(this.players, function(p) {return p._id.equals(u._id)});
+            return {
+                user: u,
+                faction: u_player.role.faction
+            };
+        });
+        var revealed_players = this.players.filter(function(p) {
+            return __.some(revealed_role_ids, function(id) {return id.equals(p.role._id)});
+        }).map(function(p) {
+            return {
+                user: p.user,
+                faction: role.hidden_faction ? null : p.role.faction
+            };
+        });
         return {
             role: role,
-            revealed_players: this.players.filter(function(p) {
-                return __.some(revealed_role_ids, function(id) {return id.equals(p.role._id)});
-            }).map(function(p) {
-                return {
-                    user: p.user,
-                    faction: role.hidden_faction ? null : p.role.faction
-                };
-            })
+            revealed_players: __.union(lady_users, revealed_players)
         }
     } else {
         return {
