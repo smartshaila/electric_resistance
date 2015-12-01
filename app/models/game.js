@@ -168,9 +168,9 @@ gameSchema.methods.select_lady_target = function(user_id) {
 gameSchema.methods.valid_lady_targets = function() {
     var user = this.current_mission().lady.source;
     var previous_lady = this.prev_mission().lady.source;
-    return this.players.filter(function(p){
+    return __.pluck(this.players.filter(function(p){
         return !((user && p.user._id.equals(user._id)) || (previous_lady && p.user._id.equals(previous_lady._id)));
-    });
+    }), 'user');
 };
 
 // Might be faster than inline methods?
