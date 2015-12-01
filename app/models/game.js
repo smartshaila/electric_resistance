@@ -23,7 +23,7 @@ var gameSchema = new Schema({
         lady: {
             source: { type: Schema.Types.ObjectId, ref: 'User' },
             target: { type: Schema.Types.ObjectId, ref: 'User' }
-        }
+        },
         teams: [{
             leader: { type: Schema.Types.ObjectId, ref: 'User' },
             members: [{ type: Schema.Types.ObjectId, ref: 'User' }],
