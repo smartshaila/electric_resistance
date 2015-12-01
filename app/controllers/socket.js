@@ -12,8 +12,6 @@ var lobby_users = [];
 var selected_role_ids = [];
 
 function update_game(io, room) {
-    console.log('Update Game for', room);
-    console.log(game.current_action());
     io.sockets.in(room).emit('update', {
         game: game.display_safe(),
         current_action: game.current_action(),
@@ -154,9 +152,6 @@ module.exports = function (io) {
         });
 
         socket.on('select_lady_target', function(data) {
-            console.log(game.current_mission().lady.source);
-            console.log(socket.user._id);
-            console.log(socket.user._id.equals(game.current_mission().lady.source._id));
             if (game.current_mission().lady.source && socket.user._id.equals(game.current_mission().lady.source._id)) {
                 game.select_lady_target(data._id);
             }
