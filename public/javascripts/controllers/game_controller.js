@@ -95,8 +95,11 @@ app.controller('GameController', function ($scope, $window, socket) {
         var team_number = ($scope.display_team_index == -1) ? ($scope.current_mission().teams.length - 1) : $scope.display_team_index;
         return $scope.current_mission().teams[team_number];
     };
-    $scope.display_team = function(team_index) {
+    $scope.set_display_team = function(team_index) {
         $scope.display_team_index = ($scope.display_mission_index == -1 && team_index == $scope.current_mission().teams.length - 1) ? -1 : team_index;
+    };
+    $scope.display_team = function() {
+        return $scope.display_team_index == -1 ? ($scope.current_mission().teams.length - 1) : $scope.display_team_index;
     };
     $scope.selected_user = function(_id) {
         return $scope.current_team().members.filter(function (m) {
