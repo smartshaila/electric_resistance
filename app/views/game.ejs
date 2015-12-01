@@ -68,21 +68,13 @@
                                     </ul>
                                 </div>
                             </div>
-                            <nav class="col-xs-12 text-center">
-                                <ul class="pagination">
-                                    <li>
-                                        <a href="#" aria-label="Previous">
-                                            <span aria-hidden="true">&laquo;</span>
-                                        </a>
-                                    </li>
-                                    <li ng-repeat="team in current_mission().teams" class="{{display_team() | selected:$index}}"><a ng-click="set_display_team($index)" href="#">{{$index + 1}}</a></li>
-                                    <li>
-                                        <a href="#" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
+                            <div class="form-group col-xs-12 text-center">
+                                <div class="btn-group" role="group" aria-label="mission_info">
+                                    <button type="button" class="btn btn-default" ng-click="set_display_team('-1')">&laquo;</button>
+                                    <button type="button" class="btn btn-default {{display_team() | selected:$index}}" ng-repeat="team in current_mission().teams"  ng-click="set_display_team($index)">{{$index + 1}}</button>
+                                    <button type="button" class="btn btn-default" ng-click="set_display_team('+1')">&raquo;</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
