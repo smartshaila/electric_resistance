@@ -47,7 +47,7 @@
                             Mission #{{display_mission() + 1}}
                             <span class="label label-warning pull-right glyphicon {{display_team_index | rejected_team}}">Rejected</span>
                             <span class="label label-primary pull-right glyphicon {{current_mission().votes | passed_mission}}"><span class="glyphicon glyphicon-ok"></span></span>
-                            <span class="label label-danger pull-right glyphicon {{current_mission().votes | failed_mission}}"><span class="glyphicon glyphicon-remove"></span> {{current_mission().votes | vote_count: false}}</span>
+                            <span class="label label-danger pull-right glyphicon {{current_mission().votes | failed_mission}}"><span class="glyphicon glyphicon-remove"></span> {{current_mission().votes | mission_vote_count: false}}</span>
                         </div>
                         <div class="panel-body collapse in" id="mission_info">
                             <p>Leader: {{current_team().leader.name}}</p>

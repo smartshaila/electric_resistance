@@ -85,6 +85,13 @@ angular.module('resistance_filters', [])
             }).length;
         };
     })
+    .filter('mission_vote_count', function() {
+        return function(votes, result) {
+            return votes.filter(function(v){
+                return v == result;
+            }).length;
+        };
+    })
     .filter('show_panel', function() {
         return function(panel, scope) {
             if (panel == 'mission_info') {
