@@ -245,18 +245,19 @@ gameSchema.methods.current_action = function() {
 };
 
 gameSchema.methods.revealed_info = function(user_id) {
-    var player = __.find(this.players, function(p) {return p.user._id.equals(user_id)});
+    var self = this;
+    var player = __.find(self.players, function(p) {return p.user._id.equals(user_id)});
     if (player) {
         var role = player.role;
         var revealed_role_ids = __.pluck(role.revealed_roles, '_id');
         var lady_users = __.pluck(
-            __.pluck(this.missions, 'lady')
+            __.pluck(self.missions, 'lady')
             .filter(function(l) {
                 return l.source && l.target && l.source._id.equals(player.user._id)
             }), 'target')
         .map(function(u) {
             console.log('U:', u._id);
-            var u_player = __.find(this.players, function(p) {
+            var u_player = __.find(self.players, function(p) {
                 console.log(p);
                 return p.user._id.equals(u._id)
             });
