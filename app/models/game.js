@@ -255,7 +255,9 @@ gameSchema.methods.revealed_info = function(user_id) {
                 return l.source && l.target && l.source._id.equals(player.user._id)
             }), 'target')
         .map(function(u) {
+            console.log(u);
             var u_player = __.find(this.players, function(p) {return p.user._id.equals(u._id)});
+            console.log(u_player);
             return {
                 user: u,
                 faction: u_player.role.faction
