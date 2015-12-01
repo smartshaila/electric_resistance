@@ -172,5 +172,10 @@ angular.module('resistance_filters', [])
             return (votes.length > 0 && _.contains(votes, false)) ? '' : 'hidden';
         }
     })
+    .filter('alert_include', function() {
+        return function(remaining, name) {
+            return _.contains(remaining, name) ? 'alert-danger' : 'alert-warning';
+        }
+    })
     ;
 

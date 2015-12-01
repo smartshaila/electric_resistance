@@ -31,7 +31,7 @@
         </nav>
         <div class="container-fluid">
             <div class="row">
-                <div class="alert alert-warning" role="alert">
+                <div class="alert {{current_action.remaining | alert_include: player.user.name}}" role="alert">
                     Waiting for {{current_action.remaining | sentence}} to {{current_action.action_text}}.
                 </div>
             </div>
