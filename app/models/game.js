@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
 var helpers = require('../config/helpers');
-var populate_string = 'players.user players.role players.role.revealed_roles missions.votes.user missions.teams.leader missions.teams.members missions.teams.votes.user missions.lady.source.user missions.lady.target.user';
+var populate_string = 'players.user players.role players.role.revealed_roles missions.votes.user missions.teams.leader missions.teams.members missions.teams.votes.user missions.lady.source missions.lady.target';
 var __ = require('underscore');
 
 // create a schema

@@ -153,6 +153,15 @@ module.exports = function (io) {
             update_lobby(io, data.room.name);
         });
 
+        socket.on('select_lady_target', function(data) {
+            if (game.current_mission().lady.source && socket.user._id.equals(game.current_mission().lady.source._id)) {
+                game.select_lady_target(data._id);
+            }
+            game.deepPopulate('missions.lady.source missions.lady.target', function() {
+                update_game(io, data.room.name);
+            });
+        });
+
         socket.on('create_game', function (data) {
             var g = new Game({});
             g.setup_game(lobby_users.map(function(u){return u.user._id}), selected_role_ids);
