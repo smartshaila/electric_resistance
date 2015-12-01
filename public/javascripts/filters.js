@@ -116,6 +116,17 @@ angular.module('resistance_filters', [])
                 } else {
                     return 'hidden';
                 }
+            } else if (panel == 'lady') {
+                if (scope.current_page == 'vote'
+                    && scope.current_action.action == 'lady'
+                    && scope.display_mission_index == -1
+                    && scope.display_team_index == -1
+                    && scope.current_mission().lady.source
+                    && scope.current_mission().lady.source._id == scope.player.user._id) {
+                    return '';
+                } else {
+                    return 'hidden';
+                }
             } else if (panel == 'team_vote') {
                 if (scope.current_page == 'vote'
                     && scope.current_action.action == 'team_vote'
