@@ -212,7 +212,7 @@ gameSchema.methods.current_action = function() {
         res = {
             action: 'lady',
             action_text: 'Lady someone',
-            remaining: [this.current_mission().lady.source.user.name]
+            remaining: [this.current_mission().lady.source.name]
         };
     } else if (additions > 0) {
         res = {
