@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
 var helpers = require('../config/helpers');
-var populate_string = 'players.user players.role players.role.revealed_roles missions.votes.user missions.teams.leader missions.teams.members missions.teams.votes.user missions.lady.source.user missions.lady.target.user';
+var populate_string = 'players.user players.role players.role.revealed_roles missions.votes.user missions.teams.leader missions.teams.members missions.teams.votes.user missions.lady.source missions.lady.target';
 var __ = require('underscore');
 
 // create a schema
@@ -48,6 +48,10 @@ gameSchema.methods.current_mission = function() {
 gameSchema.methods.prev_mission = function() {
     return this.mission_number == 0 ? this.missions[0] : this.missions[this.mission_number - 1];
 };
+
+gameSchema.methods.next_mission = function() {
+    return (this.mission_number == this.missions.length - 1) ? this.missions[this.mission_number + 1] : null;
+}
 
 gameSchema.methods.current_team = function() {
     return this.current_mission().teams[this.current_mission().teams.length - 1];
@@ -162,7 +166,9 @@ gameSchema.methods.toggle_mission_vote = function(user_id, vote) {
 
 gameSchema.methods.select_lady_target = function(user_id) {
     this.current_mission().lady.target = user_id;
-    this.next_mission().lady.source = user_id;
+    if (this.next_mission()) {
+        this.next_mission().lady.source = user_id;
+    }
 };
 
 gameSchema.methods.valid_lady_targets = function() {
@@ -239,20 +245,39 @@ gameSchema.methods.current_action = function() {
 };
 
 gameSchema.methods.revealed_info = function(user_id) {
-    var player = __.find(this.players, function(p) {return p.user._id.equals(user_id)});
+    var self = this;
+    var player = __.find(self.players, function(p) {return p.user._id.equals(user_id)});
     if (player) {
         var role = player.role;
         var revealed_role_ids = __.pluck(role.revealed_roles, '_id');
+        var lady_users = __.pluck(
+            __.pluck(self.missions, 'lady')
+            .filter(function(l) {
+                return l.source && l.target && l.source._id.equals(player.user._id)
+            }), 'target')
+        .map(function(u) {
+            console.log('U:', u._id);
+            var u_player = __.find(self.players, function(p) {
+                console.log(p);
+                return p.user._id.equals(u._id)
+            });
+            console.log(u_player);
+            return {
+                user: u,
+                faction: u_player.role.faction
+            };
+        });
+        var revealed_players = this.players.filter(function(p) {
+            return __.some(revealed_role_ids, function(id) {return id.equals(p.role._id)});
+        }).map(function(p) {
+            return {
+                user: p.user,
+                faction: role.hidden_faction ? null : p.role.faction
+            };
+        });
         return {
             role: role,
-            revealed_players: this.players.filter(function(p) {
-                return __.some(revealed_role_ids, function(id) {return id.equals(p.role._id)});
-            }).map(function(p) {
-                return {
-                    user: p.user,
-                    faction: role.hidden_faction ? null : p.role.faction
-                };
-            })
+            revealed_players: __.union(lady_users, revealed_players)
         }
     } else {
         return {

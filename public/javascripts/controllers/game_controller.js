@@ -82,6 +82,9 @@ app.controller('GameController', function ($scope, $window, socket) {
     $scope.toggle_mission_vote = function(vote) {
         socket.emit('toggle_mission_vote', {room: $scope.room, user_id: $scope.player.user._id, vote: vote});
     };
+    $scope.select_lady_target = function(_id) {
+        socket.emit('select_lady_target', {room: $scope.room, _id: _id});
+    }
 
     $scope.current_mission = function() {
         var mission_number = ($scope.display_mission_index == -1) ? $scope.game.mission_number : $scope.display_mission_index;

@@ -12,8 +12,6 @@ var lobby_users = [];
 var selected_role_ids = [];
 
 function update_game(io, room) {
-    console.log('Update Game for', room);
-    console.log(game.current_action());
     io.sockets.in(room).emit('update', {
         game: game.display_safe(),
         current_action: game.current_action(),
@@ -32,6 +30,10 @@ function update_role_data(socket) {
         };
         return res;
     }, {})));
+}
+
+function update_revealed_data(socket) {
+    socket.emit('revealed_info', game.revealed_info(socket.user._id));
 }
 
 function update_user_data(io, room) {
@@ -73,7 +75,7 @@ module.exports = function (io) {
                 }
                 update_role_data(socket);
                 update_user_data(io, data.room.name);
-                socket.emit('revealed_info', game.revealed_info(socket.user._id));
+                update_revealed_data(socket);
                 update_game(io, data.room.name);
             } else if (data.room.type == 'lobby') {
                 lobby_users.push({
@@ -151,6 +153,15 @@ module.exports = function (io) {
             });
 
             update_lobby(io, data.room.name);
+        });
+
+        socket.on('select_lady_target', function(data) {
+            if (game.current_mission().lady.source && socket.user._id.equals(game.current_mission().lady.source._id)) {
+                game.select_lady_target(data._id);
+            }
+            game.deepPopulate('missions.lady.source missions.lady.target', function() {
+                update_game(io, data.room.name);
+            });
         });
 
         socket.on('create_game', function (data) {
