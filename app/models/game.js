@@ -50,8 +50,8 @@ gameSchema.methods.prev_mission = function() {
 };
 
 gameSchema.methods.next_mission = function() {
-    return (this.mission_number == this.missions.length - 1) ? this.missions[this.mission_number + 1] : null;
-}
+    return (this.mission_number == this.missions.length - 1) ? null : this.missions[this.mission_number + 1];
+};
 
 gameSchema.methods.current_team = function() {
     return this.current_mission().teams[this.current_mission().teams.length - 1];
@@ -166,6 +166,7 @@ gameSchema.methods.toggle_mission_vote = function(user_id, vote) {
 
 gameSchema.methods.select_lady_target = function(user_id) {
     this.current_mission().lady.target = user_id;
+    console.log(this.next_mission());
     if (this.next_mission()) {
         this.next_mission().lady.source = user_id;
     }

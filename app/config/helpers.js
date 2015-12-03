@@ -28,14 +28,20 @@ var game_reference = [
             {faction: 'good', count: 1},
             {faction: 'evil', count: 0}
         ],
-        missions: [{capacity: 1, fails_needed: 1, use_lady: false}]
+        missions: [
+            {capacity: 1, fails_needed: 1, use_lady: false}
+        ]
     },
     {
         factions: [
             {faction: 'good', count: 2},
             {faction: 'evil', count: 0}
         ],
-        missions: [{capacity: 1, fails_needed: 1, use_lady: false}]
+        missions: [
+            {capacity: 1, fails_needed: 1, use_lady: false},
+            {capacity: 1, fails_needed: 1, use_lady: false},
+            {capacity: 1, fails_needed: 1, use_lady: true}
+        ]
     },
     {
         factions: [
@@ -44,7 +50,7 @@ var game_reference = [
         ],
         missions: [
             {capacity: 1, fails_needed: 1, use_lady: false},
-            {capacity: 2, fails_needed: 1, use_lady: false},
+            {capacity: 2, fails_needed: 1, use_lady: true},
             {capacity: 2, fails_needed: 1, use_lady: true}
         ]
     },

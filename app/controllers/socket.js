@@ -163,6 +163,7 @@ module.exports = function (io) {
                 game.select_lady_target(data._id);
             }
             game.deepPopulate('missions.lady.source missions.lady.target', function() {
+                update_revealed_data(socket);
                 update_game(io, data.room.name);
                 update_revealed_data(socket);
             });
