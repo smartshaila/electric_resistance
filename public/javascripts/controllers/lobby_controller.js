@@ -6,6 +6,7 @@ app.controller('LobbyController', function ($scope, $window, socket) {
 
     // Variable data here
     $scope.users = [];
+    $scope.players = [];
     $scope.selected_role_ids = [];
     $scope.me = {};
 
@@ -26,6 +27,7 @@ app.controller('LobbyController', function ($scope, $window, socket) {
     socket.on('console', function(data) {console.log(data)});
     socket.on('update', function (data) {
         $scope.users = data.users;
+        $scope.players = data.players;
         $scope.selected_role_ids = data.selected_role_ids;
         console.log($scope.selected_role_ids);
     });
@@ -39,6 +41,11 @@ app.controller('LobbyController', function ($scope, $window, socket) {
     socket.on('redirect', function(path) {
         $window.location.href = path;
     });
+
+    $scope.add_player = function(_id) {
+        socket.emit('add_player', {room: $scope.room, _id: _id});
+    };
+
     $window.onbeforeunload = function () {
         socket.emit('leave_room', {room: $scope.room});
     };

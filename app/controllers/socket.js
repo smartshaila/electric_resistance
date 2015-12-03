@@ -9,6 +9,7 @@ Game.findPopulated({}, function (err, games) {
 });
 
 var lobby_users = [];
+var lobby_players = [];
 var selected_role_ids = [];
 
 function update_game(io, room) {
@@ -49,6 +50,7 @@ function update_user_data(io, room) {
 function update_lobby(io, room) {
     io.sockets.in(room).emit('update', {
         users: lobby_users,
+        players: lobby_players,
         selected_role_ids: selected_role_ids
     });
 }
@@ -66,22 +68,24 @@ module.exports = function (io) {
             socket.join(data.room.name);
             socket.room = data.room;
             if (data.room.type == 'game') {
-                var index = game.players.map(function (p) {
-                    return p.user._id.toString();
-                }).indexOf(socket.user._id.toString());
-
-                if (index > -1) {
-                    game.players[index].logged_in = true;
+                var player = __.find(game.players, function(p) {return p.user._id.equals(socket.user._id)});
+                if (player) {
+                    player.logged_in = true;
                 }
                 update_role_data(socket);
                 update_user_data(io, data.room.name);
                 update_revealed_data(socket);
                 update_game(io, data.room.name);
             } else if (data.room.type == 'lobby') {
-                lobby_users.push({
-                    user: socket.user,
-                    logged_in: true
-                });
+                var player = __.find(lobby_players, function(p) {return p.user._id.equals(socket.user._id)});
+                if (player) {
+                    player.logged_in = true;
+                } else {
+                    lobby_users.push({
+                        user: socket.user,
+                        logged_in: true
+                    });
+                }
                 socket.emit('init_data', {
                     roles: helpers.role_list,
                     game_reference: helpers.game_reference
@@ -94,17 +98,20 @@ module.exports = function (io) {
             console.log(socket.user.name, 'has left', data.room.name);
             socket.leave(data.room.name);
             if (data.room.type == 'game') {
-                var index = game.players.map(function (p) {
-                    return p.user._id.toString();
-                }).indexOf(socket.user._id.toString());
-                if (index > -1) {
-                    game.players[index].logged_in = false;
+                var player = __.find(game.players, function(p) {return p.user._id.equals(socket.user._id)});
+                if (player) {
+                    player.logged_in = false;
                 }
                 update_user_data(io, data.room.name);
             } else if (data.room.type == 'lobby') {
-                lobby_users = lobby_users.filter(function (u) {
-                    return u.user._id != socket.user._id;
-                });
+                var player = __.find(lobby_players, function(p) {return p.user._id.equals(socket.user._id)});
+                if (player) {
+                    player.logged_in = false;
+                } else {
+                    lobby_users = lobby_users.filter(function (u) {
+                        return !u.user._id.equals(socket.user._id);
+                    });
+                }
                 update_lobby(io, data.room.name);
             }
         });
@@ -158,7 +165,16 @@ module.exports = function (io) {
             update_lobby(io, data.room.name);
         });
 
-        socket.on('select_lady_target', function(data) {
+        socket.on('add_player', function (data) {
+            var player = __.find(lobby_users, function(u) {return u.user._id.equals(data._id)});
+            lobby_players.push(player);
+            lobby_users = lobby_users.filter(function(u) {
+                return u.user._id.equals(data._id);
+            });
+            update_lobby(io, data.room.name);
+        });
+
+        socket.on('select_lady_target', function (data) {
             if (game.current_mission().lady.source && socket.user._id.equals(game.current_mission().lady.source._id)) {
                 game.select_lady_target(data._id);
             }
