@@ -121,6 +121,8 @@ module.exports = function (io) {
         socket.on('toggle_team_vote', function (data) {
             game.toggle_team_vote(data.user_id, data.vote);
             game.deepPopulate('missions.votes.user', function() {
+                user_vote = __.find(game.current_team().votes, function(v) {return v.user._id.equals(socket.user._id)});
+                socket.emit('team_vote_result', user_vote);
                 update_game(io, data.room.name);
             });
         });
@@ -128,9 +130,10 @@ module.exports = function (io) {
         socket.on('toggle_mission_vote', function (data) {
             game.toggle_mission_vote(data.user_id, data.vote);
             game.addPopulations(function() {
+                user_vote = __.find(game.current_mission().votes, function(v) {return v.user._id.equals(socket.user._id)});
+                socket.emit('mission_vote_result', user_vote);
                 update_game(io, data.room.name);
             });
-            update_game(io, data.room.name);
         });
 
         socket.on('toggle_role_select', function (data) {
@@ -161,6 +164,7 @@ module.exports = function (io) {
             }
             game.deepPopulate('missions.lady.source missions.lady.target', function() {
                 update_game(io, data.room.name);
+                update_revealed_data(socket);
             });
         });
 

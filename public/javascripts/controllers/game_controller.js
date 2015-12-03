@@ -34,6 +34,8 @@ app.controller('GameController', function ($scope, $window, socket) {
     $scope.current_page = 'home';
     $scope.display_mission_index = -1;
     $scope.display_team_index = -1;
+    $scope.team_vote_result = null;
+    $scope.mission_vote_result = null;
 
     var setup_socket = function() {
         socket.emit('join_room', {room: $scope.room});
@@ -44,6 +46,11 @@ app.controller('GameController', function ($scope, $window, socket) {
 
     socket.on('update', function (data) {
         console.log('UPDATE', data);
+        if ($scope.current_action.action != data.current_action.action) {
+            // PHASE CHANGE
+            $scope.team_vote_result = null;
+            $scope.mission_vote_result = null;
+        }
         $scope.game = data.game;
         $scope.current_action = data.current_action;
         $scope.valid_lady_targets = data.valid_lady_targets;
@@ -67,6 +74,15 @@ app.controller('GameController', function ($scope, $window, socket) {
         console.log('REVEALED_INFO', data);
         $scope.player.role = data.role;
         $scope.player.revealed_players = data.revealed_players;
+    });
+
+    socket.on('team_vote_result', function(data) {
+        console.log('TEAM VOTE RESULT', data);
+        $scope.team_vote_result = data.vote;
+    });
+    socket.on('mission_vote_result', function(data) {
+        console.log('MISSION VOTE RESULT', data);
+        $scope.mission_vote_result = data.vote;
     });
 
     $scope.set_page = function(page) {

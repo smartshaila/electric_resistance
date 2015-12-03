@@ -96,6 +96,14 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="panel panel-warning {{'lady' | show_panel:this}}">
+                        <div class="panel-heading">Lady of the Lake</div>
+                        <ul class="list-group">
+                            <li class="list-group-item" ng-repeat="t in valid_lady_targets" ng-click="select_lady_target(t._id)">
+                                {{t.name}}
+                            </li>
+                        </ul>
+                    </div>
                     <div class="panel panel-warning {{'team_select' | show_panel:this}}">
                         <div class="panel-heading">Team Selection - {{current_team().members.length}}/{{current_mission().capacity}}</div>
                         <ul class="list-group">
@@ -104,17 +112,9 @@
                             </li>
                         </ul>
                         <div class="panel-body btn-group">
-                            <button type="button" class="btn btn-primary btn-lg" ng-click="toggle_team_vote(true)">Accept</button>
-                            <button type="button" class="btn btn-danger btn-lg" ng-click="toggle_team_vote(false)">Reject</button>
+                            <button type="button" class="btn btn-primary btn-lg {{team_vote_result | selected:true}}" ng-click="toggle_team_vote(true)">Accept</button>
+                            <button type="button" class="btn btn-danger btn-lg {{team_vote_result | selected:false}}" ng-click="toggle_team_vote(false)">Reject</button>
                         </div>
-                    </div>
-                    <div class="panel panel-warning {{'lady' | show_panel:this}}">
-                        <div class="panel-heading">Lady of the Lake</div>
-                        <ul class="list-group">
-                            <li class="list-group-item" ng-repeat="t in valid_lady_targets" ng-click="select_lady_target(t._id)">
-                                {{t.name}}
-                            </li>
-                        </ul>
                     </div>
                     <div class="panel panel-warning {{'team_vote' | show_panel:this}}">
                         <div class="panel-heading">Team Proposed by {{current_team().leader.name}}</div>
@@ -124,8 +124,8 @@
                             </li>
                         </ul>
                         <div class="panel-body btn-group">
-                            <button type="button" class="btn btn-primary btn-lg" ng-click="toggle_team_vote(true)">Accept</button>
-                            <button type="button" class="btn btn-danger btn-lg" ng-click="toggle_team_vote(false)">Reject</button>
+                            <button type="button" class="btn btn-primary btn-lg {{team_vote_result | selected:true}}" ng-click="toggle_team_vote(true)">Accept</button>
+                            <button type="button" class="btn btn-danger btn-lg {{team_vote_result | selected:false}}" ng-click="toggle_team_vote(false)">Reject</button>
                         </div>
                     </div>
                     <div class="panel panel-warning {{'mission_vote' | show_panel:this}}">
@@ -136,8 +136,8 @@
                             </li>
                         </ul>
                         <div class="panel-body btn-group">
-                            <button type="button" class="btn btn-primary btn-lg" ng-click="toggle_mission_vote(true)">Pass</button>
-                            <button type="button" class="btn btn-danger btn-lg {{player.role.faction != 'evil' ? 'disabled' : ''}}" ng-click="toggle_mission_vote(false)">Fail</button>
+                            <button type="button" class="btn btn-primary btn-lg {{mission_vote_result | selected:true}}" ng-click="toggle_mission_vote(true)">Pass</button>
+                            <button type="button" class="btn btn-danger btn-lg {{mission_vote_result | selected:false}} {{player.role.faction != 'evil' ? 'disabled' : ''}}" ng-click="toggle_mission_vote(false)">Fail</button>
                         </div>
                     </div>
                     <div class="panel panel-warning {{'revealed_info' | show_panel:this}}">
