@@ -156,7 +156,7 @@ module.exports = function (io) {
             // Get faction count
             var faction_counts = helpers.faction_counts(selected_role_ids);
 
-            helpers.game_reference[lobby_users.length].factions.forEach(function (f) {
+            helpers.game_reference[lobby_players.length].factions.forEach(function (f) {
                 if ((faction_counts[f.faction] || 0) > f.count) {
                     selected_role_ids = existing_selected_roles.slice(0);
                 }
