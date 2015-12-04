@@ -17,49 +17,65 @@
 
     <body ng-app="electric_resistance" ng-controller="LobbyController">
         <div class="container-fluid">
-            <div class="panel panel-info">
-                <div class="panel-heading" data-toggle="collapse" href="#users" aria-expanded="true" aria-controls="users">Users (Logged in as {{me.name}})</div>
-                <div class="panel-body collapse in" id="users">
-                    <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="u in users" ng-click="add_player(u.user._id)">
-                            <span class="glyphicon glyphicon-flash {{u.logged_in | connection_icon}}"> </span> {{u.user.name}}
-                        </li>
-                    </ul>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading" data-toggle="collapse" href="#users" aria-expanded="true" aria-controls="users">Users (Logged in as {{me.name}})</div>
+                        <div class="panel-body collapse in" id="users">
+                            <ul class="list-group">
+                                <li class="list-group-item" ng-repeat="u in users" ng-click="add_player(u.user._id)">
+                                    <span class="glyphicon glyphicon-flash {{u.logged_in | connection_icon}}"> </span> {{u.user.name}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading" data-toggle="collapse" href="#players" aria-expanded="true" aria-controls="players">Players</div>
+                        <div class="panel-body collapse in" id="players">
+                            <ul class="list-group">
+                                <li class="list-group-item" ng-repeat="p in players" ng-click="remove_player(p.user._id)">
+                                    <span class="glyphicon glyphicon-flash {{p.logged_in | connection_icon}}"> </span>
+                                    {{p.user.name}}
+                                    <span class="badge">{{$index + 1}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="panel panel-info">
-                <div class="panel-heading" data-toggle="collapse" href="#players" aria-expanded="true" aria-controls="players">Players</div>
-                <div class="panel-body collapse in" id="players">
-                    <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="p in players" ng-click="remove_player(p.user._id)">
-                            <span class="glyphicon glyphicon-flash {{p.logged_in | connection_icon}}"> </span>
-                            {{p.user.name}}
-                            <span class="badge">{{$index + 1}}</span>
-                        </li>
-                    </ul>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading" data-toggle="collapse" href="#faction-reqs" aria-expanded="true" aria-controls="faction_reqs">Faction Requirements for {{players.length}} players</div>
+                        <div class="panel-body collapse in" id="faction-reqs">
+                            <ul class="list-group">
+                                <li class="list-group-item {{f.faction | faction_style}}" ng-repeat="f in game_reference[players.length].factions">
+                                    <span class="{{f.faction | faction_icon}}"> </span> {{f.faction}} <span class="badge">{{f.count}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading" data-toggle="collapse" href="#role_select_list" aria-expanded="true" aria-controls="role_select_list">Role Selection</div>
+                        <div class="panel-body collapse in" id="role_select_list">
+                            <ul class="list-group">
+                                <li class="list-group-item {{r.faction | faction_style}} {{selected_role_ids.indexOf(r._id) > -1 ? 'active' : ''}}" ng-repeat="r in roles | not_default" ng-click="toggle_role_select(r._id)">
+                                    <span class="{{r.faction | faction_icon}}"> </span> {{r.name}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="panel panel-info">
-                <div class="panel-heading" data-toggle="collapse" href="#faction-reqs" aria-expanded="true" aria-controls="faction_reqs">Faction Requirements for {{players.length}} players</div>
-                <div class="panel-body collapse in" id="faction-reqs">
-                    <ul class="list-group">
-                        <li class="list-group-item {{f.faction | faction_style}}" ng-repeat="f in game_reference[players.length].factions">
-                            <span class="{{f.faction | faction_icon}}"> </span> {{f.faction}} <span class="badge">{{f.count}}</span>
-                        </li>
-                    </ul>
+            <div class="row">
+                <div class="col-xs-12 col-md-6 pull-right">
+                    <button type="button" class="btn btn-default btn-lg col-xs-12" ng-click="create_game()">Create Game</button>
                 </div>
             </div>
-            <div class="panel panel-info">
-                <div class="panel-heading" data-toggle="collapse" href="#role_select_list" aria-expanded="true" aria-controls="role_select_list">Role Selection</div>
-                <div class="panel-body collapse in" id="role_select_list">
-                    <ul class="list-group">
-                        <li class="list-group-item {{r.faction | faction_style}} {{selected_role_ids.indexOf(r._id) > -1 ? 'active' : ''}}" ng-repeat="r in roles | not_default" ng-click="toggle_role_select(r._id)">
-                            <span class="{{r.faction | faction_icon}}"> </span> {{r.name}}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <button type="button" class="btn btn-default btn-lg" ng-click="create_game()">Create Game</button>
         </div>
     </body>
 </html>
