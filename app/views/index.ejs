@@ -40,8 +40,8 @@
                 </div>
             </div>
             <div class="panel panel-info">
-                <div class="panel-heading" data-toggle="collapse" href="#faction-reqs" aria-expanded="false" aria-controls="faction_reqs">Faction Requirements for {{users.length}} players</div>
-                <div class="panel-body collapse" id="faction-reqs">
+                <div class="panel-heading" data-toggle="collapse" href="#faction-reqs" aria-expanded="true" aria-controls="faction_reqs">Faction Requirements for {{users.length}} players</div>
+                <div class="panel-body collapse in" id="faction-reqs">
                     <ul class="list-group">
                         <li class="list-group-item {{f.faction | faction_style}}" ng-repeat="f in game_reference[users.length].factions">
                             <span class="{{f.faction | faction_icon}}"> </span> {{f.faction}} <span class="badge">{{f.count}}</span>
@@ -59,17 +59,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="panel panel-info">
-                <div class="panel-heading" data-toggle="collapse" href="#roles_selected" aria-expanded="false" aria-controls="roles_selected">Roles</div>
-                <div class="panel-body collapse" id="roles_selected">
-                    <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="r in selected_role_ids">
-                            {{r}}
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            <button type="button" class="btn btn-default btn-lg" ng-click="create_game()">Create Game</button>
         </div>
-        <button ng-click="create_game()">MAKE GAME</button>
     </body>
 </html>
