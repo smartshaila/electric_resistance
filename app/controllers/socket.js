@@ -169,7 +169,16 @@ module.exports = function (io) {
             var player = __.find(lobby_users, function(u) {return u.user._id.equals(data._id)});
             lobby_players.push(player);
             lobby_users = lobby_users.filter(function(u) {
-                return u.user._id.equals(data._id);
+                return !u.user._id.equals(data._id);
+            });
+            update_lobby(io, data.room.name);
+        });
+
+        socket.on('remove_player', function(data) {
+            var player = __.find(lobby_players, function(u) {return u.user._id.equals(data._id)});
+            lobby_users.push(player);
+            lobby_players = lobby_players.filter(function(u) {
+                return !u.user._id.equals(data._id);
             });
             update_lobby(io, data.room.name);
         });
@@ -187,7 +196,9 @@ module.exports = function (io) {
 
         socket.on('create_game', function (data) {
             var g = new Game({});
-            g.setup_game(lobby_users.map(function(u){return u.user._id}), selected_role_ids);
+            g.setup_game(lobby_players.map(function(u){return u.user._id}), selected_role_ids);
+            lobby_players = [];
+            selected_role_ids = [];
             g.save(function(err, new_game) {
                 new_game.addPopulations(function (err, updated_game){
                     game = updated_game;

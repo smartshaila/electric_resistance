@@ -21,7 +21,7 @@
                 <div class="panel-heading" data-toggle="collapse" href="#users" aria-expanded="true" aria-controls="users">Users (Logged in as {{me.name}})</div>
                 <div class="panel-body collapse in" id="users">
                     <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="u in users" ng-click="add_player(u._id)">
+                        <li class="list-group-item" ng-repeat="u in users" ng-click="add_player(u.user._id)">
                             <span class="glyphicon glyphicon-flash {{u.logged_in | connection_icon}}"> </span> {{u.user.name}}
                         </li>
                     </ul>
@@ -31,8 +31,10 @@
                 <div class="panel-heading" data-toggle="collapse" href="#players" aria-expanded="true" aria-controls="players">Players</div>
                 <div class="panel-body collapse in" id="players">
                     <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="p in players">
-                            <span class="glyphicon glyphicon-flash {{p.logged_in | connection_icon}}"> </span> {{p.user.name}}
+                        <li class="list-group-item" ng-repeat="p in players" ng-click="remove_player(p.user._id)">
+                            <span class="glyphicon glyphicon-flash {{p.logged_in | connection_icon}}"> </span>
+                            {{p.user.name}}
+                            <span class="badge">{{$index + 1}}</span>
                         </li>
                     </ul>
                 </div>

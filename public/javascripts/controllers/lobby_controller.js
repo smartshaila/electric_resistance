@@ -46,6 +46,10 @@ app.controller('LobbyController', function ($scope, $window, socket) {
         socket.emit('add_player', {room: $scope.room, _id: _id});
     };
 
+    $scope.remove_player = function(_id) {
+        socket.emit('remove_player', {room: $scope.room, _id: _id});
+    };
+
     $window.onbeforeunload = function () {
         socket.emit('leave_room', {room: $scope.room});
     };
