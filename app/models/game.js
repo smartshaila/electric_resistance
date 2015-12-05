@@ -268,7 +268,7 @@ gameSchema.methods.revealed_info = function(user_id) {
                 faction: u_player.role.faction
             };
         });
-        var revealed_players = this.players.filter(function(p) {
+        var revealed_players = self.players.filter(function(p) {
             return __.some(revealed_role_ids, function(id) {return id.equals(p.role._id)});
         }).map(function(p) {
             return {
@@ -276,14 +276,17 @@ gameSchema.methods.revealed_info = function(user_id) {
                 faction: role.hidden_faction ? null : p.role.faction
             };
         });
+        var assassin_targets = __.difference(__.pluck(self.players, 'user'), __.pluck(revealed_players, 'user'));
         return {
             role: role,
-            revealed_players: __.union(lady_users, revealed_players)
+            revealed_players: __.union(lady_users, revealed_players),
+            assassin_targets: assassin_targets
         }
     } else {
         return {
             role: {name: 'not playing'},
-            revealed_players: []
+            revealed_players: [],
+            assassin_targets: []
         };
     }
 };

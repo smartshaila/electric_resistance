@@ -89,7 +89,7 @@
                         </ul>
                     </div>
                     <div class="panel panel-warning {{'game_info' | show_panel:this}}">
-                        <div class="panel-heading" data-toggle="collapse" ng-click="void(0)" href="#roles" aria-expanded="true" aria-controls="roles">Roles</div>
+                        <div class="panel-heading" data-toggle="collapse" href="#roles" aria-expanded="true" aria-controls="roles">Roles</div>
                         <ul class="list-group collapse in" id="roles">
                             <li class="list-group-item {{r.faction | faction_style}}" ng-repeat="r in roles">
                                 <span class="{{r.faction | faction_icon}}"> </span> {{r.name}} <span class="badge">{{r.count}}</span>
@@ -141,7 +141,7 @@
                         </div>
                     </div>
                     <div class="panel panel-warning {{'revealed_info' | show_panel:this}}">
-                        <div class="panel-heading" data-toggle="collapse" href="#info" ng-click="void(0)" aria-expanded="false" aria-controls="info">Revealed Info</div>
+                        <div class="panel-heading" data-toggle="collapse" href="#info" aria-expanded="false" aria-controls="info">Revealed Info</div>
                         <div class="panel-body collapse" id="info">
                             <p>You are {{player.role.name}}</p>
                             <ul class="list-group">
@@ -149,6 +149,16 @@
                                     <span class="{{r.faction | faction_icon}}"> </span> {{r.user.name}}
                                 </li>
                             </ul>
+                            <div class="panel panel-warning {{'assassinate' | show_panel:this}}">
+                                <div class="panel-heading" data-toggle="collapse" href="#assassinate" aria-expanded="false" aria-controls="assassinate">Assassinate</div>
+                                <div class="panel-body" id="assassinate">
+                                    <ul class="list-group">
+                                        <li class="list-group-item" ng-repeat="t in player.assassin_targets" ng-click="assassinate(t._id)">
+                                            {{t.name}}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

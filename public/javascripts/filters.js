@@ -153,6 +153,12 @@ angular.module('resistance_filters', [])
                 } else {
                     return 'hidden';
                 }
+            } else if (panel == 'assassinate') {
+                if (scope.player.role.name == 'Assassin') {
+                    return '';
+                } else {
+                    return 'hidden';
+                }
             } else {
                 return '';
             }

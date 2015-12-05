@@ -74,6 +74,7 @@ app.controller('GameController', function ($scope, $window, socket) {
         console.log('REVEALED_INFO', data);
         $scope.player.role = data.role;
         $scope.player.revealed_players = data.revealed_players;
+        $scope.player.assassin_targets = data.assassin_targets;
     });
 
     socket.on('team_vote_result', function(data) {
@@ -100,6 +101,9 @@ app.controller('GameController', function ($scope, $window, socket) {
     };
     $scope.select_lady_target = function(_id) {
         socket.emit('select_lady_target', {room: $scope.room, _id: _id});
+    };
+    $scope.assassinate = function(_id) {
+
     };
 
     $scope.current_mission = function() {
