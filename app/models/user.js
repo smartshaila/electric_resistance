@@ -6,12 +6,14 @@ var Schema = mongoose.Schema;
 var userSchema = new Schema({
     _id: mongoose.Schema.ObjectId,
     google_id: String,
+    facebook_id: String,
     google_profile: {},
     name: String,
     created: Date
 });
 
 userSchema.statics.findOrCreate = function(queryObj, profile, done) {
+    console.log(profile);
     var self = this;
     this.findOne(queryObj, function(err, user) {
         if (err) {

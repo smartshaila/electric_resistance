@@ -81,9 +81,24 @@ app.get('/auth/google', passport.authenticate('google', {
 app.get('/auth/google/callback',
     passport.authenticate('google', {failureRedirect: '/'}),
     function (req, res) {
-        res.redirect('/');
+        console.log('Params', req.params);
+        console.log('Query', req.query);
+        res.redirect('/lobby');
     }
 );
+
+// Facebook Authentication
+app.get('/auth/facebook', passport.authenticate('facebook'));
+
+app.get('/auth/facebook/callback',
+    passport.authenticate('facebook', {failureRedirect: '/'}),
+    function (req, res) {
+        console.log('Params', req.params);
+        console.log('Query', req.query);
+        res.redirect('/lobby');
+    }
+);
+
 
 // Redirect for all non-authentication requests to the auth page
 app.use(passport.ensureAuthenticated);
@@ -100,6 +115,10 @@ app.get('/logout', function(req, res) {
 
 app.get('/', function(req, res, next) {
     res.render('index');
+});
+
+app.get('/lobby', function(req, res, next) {
+    res.render('lobby');
 });
 
 app.get('/game', function(req, res, next) {
