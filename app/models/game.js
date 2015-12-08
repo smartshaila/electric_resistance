@@ -151,15 +151,17 @@ gameSchema.methods.toggle_mission_vote = function(user_id, vote) {
     }
 
     if (!__.some(this.current_mission().votes, function(v) {return v.vote == null})) {
-        if (__.some(this.current_mission().votes, function(v) {return v.vote == false})) {
-            this.current_mission().result = false;
-        } else {
-            this.current_mission().result = true;
+        this.current_mission().result = !__.some(this.current_mission().votes, function(v) {return v.vote == false});
+        var mission_counts = __.countBy(this.missions, function(m) {return m.result});
+        if ((mission_counts[true] > this.missions.length / 2) || (mission_counts[false] > this.missions.length / 2)) {
+            this.missions = this.missions.filter(function(m) {return m.result != null});
         }
         if (this.mission_number + 1 < this.missions.length) {
             var next_leader = this.next_user(this.current_team().leader);
             this.mission_number += 1;
             this.create_team(next_leader);
+        } else if ((mission_counts[false] || 0) > (mission_counts[true] || 0)) {
+            this.result = false;
         }
     }
 };
@@ -203,7 +205,7 @@ gameSchema.methods.current_action = function() {
     var additions = this.current_mission().capacity - this.current_team().members.length;
     var team_vote = __.groupBy(this.current_team().votes, function(v) {return v.vote != null});
     var mission_vote = __.groupBy(this.current_mission().votes, function(v) {return v.vote != null});
-    var failed_missions = this.missions.filter(function(m) {return m.result}).length > (this.missions.length / 2);
+    var failed_missions = this.missions.filter(function(m) {return m.result == false}).length > (this.missions.length / 2);
 
     if (this.result == true) {
         res = {
@@ -250,9 +252,9 @@ gameSchema.methods.current_action = function() {
     } else if (this.result == null) {
         // Ensure whether there's any further logic required here
         res = {
-            action: 'unknown',
-            action_text: '[do something to end the game]',
-            remaining: ['someone']
+            action: 'assassinate',
+            action_text: 'to attempt to assassinate Merlin',
+            remaining: ['the Assassin']
         };
     }
     return res;
@@ -270,12 +272,9 @@ gameSchema.methods.revealed_info = function(user_id) {
                 return l.source && l.target && l.source._id.equals(player.user._id)
             }), 'target')
         .map(function(u) {
-            console.log('U:', u._id);
             var u_player = __.find(self.players, function(p) {
-                console.log(p);
                 return p.user._id.equals(u._id)
             });
-            console.log(u_player);
             return {
                 user: u,
                 faction: u_player.role.faction
