@@ -191,7 +191,16 @@ angular.module('resistance_filters', [])
     })
     .filter('alert_include', function() {
         return function(remaining, name) {
-            return _.contains(remaining, name) ? 'alert-danger' : 'alert-warning';
+            if (remaining.length > 0) {
+                return _.contains(remaining, name) ? 'alert-danger' : 'alert-warning';
+            } else {
+                return 'hidden';
+            }
+        }
+    })
+    .filter('game_end', function() {
+        return function(status) {
+            return status == 'game_end' ? '' : 'hidden';
         }
     })
     ;

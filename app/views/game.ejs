@@ -26,13 +26,16 @@
                     <li class="{{'vote' | selected:current_page}} col-xs-4 text-center"><a href="#" ng-click="set_page('vote')"><span class="glyphicon glyphicon-blackboard"></span><br />Vote</a></li>
                     <li class="{{'info' | selected:current_page}} col-xs-4 text-center"><a href="#" ng-click="set_page('info')"><span class="glyphicon glyphicon-search"></span><br />Info</a></li>
                 </ul>
-                <p class="navbar-text col-med-3 hidden-xs hidden-sm">Signed in as <a href="/logout" class="navbar-link">{{player.user.name}}</a></p>
+                <p class="navbar-text col-med-3 hidden-xs hidden-sm">Signed in as {{player.user.name}} - <a href="/lobby" class="navbar-link">Logout</a></p>
             </div>
         </nav>
         <div class="container-fluid">
             <div class="row">
                 <div class="alert {{current_action.remaining | alert_include: player.user.name}}" role="alert">
                     Waiting for {{current_action.remaining | sentence}} to {{current_action.action_text}}.
+                </div>
+                <div class="alert alert-warning {{current_action.action | game_end}}" role="alert">
+                    {{current_action.action_text}}
                 </div>
             </div>
             <div class="row">

@@ -203,8 +203,21 @@ gameSchema.methods.current_action = function() {
     var additions = this.current_mission().capacity - this.current_team().members.length;
     var team_vote = __.groupBy(this.current_team().votes, function(v) {return v.vote != null});
     var mission_vote = __.groupBy(this.current_mission().votes, function(v) {return v.vote != null});
+    var failed_missions = this.missions.filter(function(m) {return m.result}).length > (this.missions.length / 2);
 
-    if (logged_in[false] != null) {
+    if (this.result == true) {
+        res = {
+            action: 'game_end',
+            action_text: 'Good wins through missions',
+            remaining: []
+        };
+    } else if (this.result == false) {
+        res = {
+            action: 'game_end',
+            action_text: 'Evil wins through ' + (failed_missions ? 'missions' : 'assassination'),
+            remaining: []
+        };
+    } else if (logged_in[false] != null) {
         res = {
             action: 'login',
             action_text: 'log in',
