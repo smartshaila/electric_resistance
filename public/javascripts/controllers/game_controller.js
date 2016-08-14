@@ -88,8 +88,7 @@ app.controller('GameController', function ($scope, $window, socket) {
 
     $scope.set_page = function(page) {
         $scope.current_page = page;
-        $scope.display_mission_index = -1;
-        $scope.display_team_index = -1;
+        $scope.set_display_mission(-1);
     };
 
     $scope.toggle_team_select = function(_id) {
