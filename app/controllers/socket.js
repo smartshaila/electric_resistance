@@ -194,6 +194,13 @@ module.exports = function (io) {
             });
         });
 
+        socket.on('assassinate', function(data) {
+            var player = __.find(game.players, function(p) {return p.user._id.equals(data._id)});
+            console.log('Assassinating:', player);
+            game.result = (player.role.name != 'Merlin');
+            update_game(io, data.room.name);
+        });
+
         socket.on('create_game', function (data) {
             var g = new Game({});
             g.setup_game(lobby_players.map(function(u){return u.user._id}), selected_role_ids);

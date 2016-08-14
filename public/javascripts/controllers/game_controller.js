@@ -104,7 +104,7 @@ app.controller('GameController', function ($scope, $window, socket) {
         socket.emit('select_lady_target', {room: $scope.room, _id: _id});
     };
     $scope.assassinate = function(_id) {
-
+        socket.emit('assassinate', {room: $scope.room, _id: _id});
     };
 
     $scope.current_mission = function() {
