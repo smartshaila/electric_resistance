@@ -13,6 +13,7 @@ var lobby_players = [];
 var selected_role_ids = [];
 
 function update_game(io, room) {
+    game.save();
     io.sockets.in(room).emit('update', {
         game: game.display_safe(),
         current_action: game.current_action(),
