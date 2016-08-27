@@ -78,7 +78,7 @@
                                     <button type="button" class="btn btn-default" ng-click="set_display_team('+1')">&raquo;</button>
                                 </div>
                             </div>
-                            <p class="col-xs-12">{{current_mission().lady.source.name}} used the Lady on {{current_mission().lady.target.name}}</p>
+                            <p class="col-xs-12 {{'' | show_lady_text:this}}">{{current_mission().lady.source.name}} used the Lady on {{current_mission().lady.target.name}}</p>
                         </div>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
                         <div class="panel-heading" data-toggle="collapse" href="#players" aria-expanded="true" aria-controls="players">Players</div>
                         <ul class="list-group collapse in" id="players">
                             <li class="list-group-item" ng-repeat="u in users">
-                                <span class="glyphicon glyphicon-flash {{u.logged_in | connection_icon}}"> </span> {{u.name}}
+                                <span class="glyphicon glyphicon-flash {{u.logged_in | connection_icon}}"> </span> {{u.name}} <span class="{{u | leader_icon:this}}"> </span> <span class="{{u | lady_icon:this}} pull-right"> </span>
                             </li>
                         </ul>
                     </div>

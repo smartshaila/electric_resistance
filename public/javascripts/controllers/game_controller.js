@@ -22,7 +22,11 @@ app.controller('GameController', function ($scope, $window, socket) {
                 members: [],
                 votes: []
             }],
-            votes: []
+            votes: [],
+            lady: {
+                source: null,
+                target: null
+            }
         }]
     };
     $scope.current_action = {
@@ -134,6 +138,19 @@ app.controller('GameController', function ($scope, $window, socket) {
     };
     $scope.display_team = function() {
         return $scope.display_team_index == -1 ? ($scope.current_mission().teams.length - 1) : $scope.display_team_index;
+    };
+
+    $scope.current_lady = function() {
+       return $scope.game.missions.filter(function(mission) {
+            return mission.lady.source && !mission.lady.target;
+        }).map(function(mission) {
+            return mission.lady.source;
+        })[0];
+    };
+
+    $scope.current_leader = function() {
+        var teams = $scope.game.missions[$scope.game.mission_number].teams;
+        return teams[teams.length-1].leader;
     };
 
     $scope.selected_user = function(_id) {

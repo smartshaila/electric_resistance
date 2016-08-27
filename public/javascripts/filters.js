@@ -92,19 +92,46 @@ angular.module('resistance_filters', [])
             }).length;
         };
     })
+    .filter('show_lady_text', function() {
+        return function(ignore, scope) {
+            if (scope.current_mission().lady.target == null) {
+                return 'hidden';
+            } else {
+                return '';
+            }
+        }
+    })
+    .filter('lady_icon', function() {
+        return function(user, scope) {
+            if (scope.current_lady() && (user._id == scope.current_lady()._id)) {
+                return 'glyphicon glyphicon-eye-open';
+            } else {
+                return '';
+            }
+        }
+    })
+    .filter('leader_icon', function() {
+        return function(user, scope) {
+            if (scope.current_leader()._id == user._id) {
+                return 'glyphicon glyphicon-star';
+            } else {
+                return '';
+            }
+        }
+    })
     .filter('show_panel', function() {
         return function(panel, scope) {
             if (panel == 'mission_info') {
                 if (scope.current_page == 'home') {
                     return '';
                 } else {
-                    return 'hidden-xs hidden-sm'
+                    return 'hidden-xs hidden-sm';
                 }
             } else if (panel == 'game_info') {
                 if (scope.current_page == 'home') {
                     return '';
                 } else {
-                    return 'hidden'
+                    return 'hidden';
                 }
             } else if (panel == 'team_select') {
                 if (scope.current_page == 'vote'
