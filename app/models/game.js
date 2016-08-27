@@ -156,12 +156,17 @@ gameSchema.methods.toggle_mission_vote = function(user_id, vote) {
         if ((mission_counts[true] > this.missions.length / 2) || (mission_counts[false] > this.missions.length / 2)) {
             this.missions = this.missions.filter(function(m) {return m.result != null});
         }
+
+        var roles = this.players.map(function(player) {return player.role.name});
+
         if (this.mission_number + 1 < this.missions.length) {
             var next_leader = this.next_user(this.current_team().leader);
             this.mission_number += 1;
             this.create_team(next_leader);
         } else if ((mission_counts[false] || 0) > (mission_counts[true] || 0)) {
             this.result = false;
+        } else if (!__.contains(roles, 'Assassin') && (mission_counts[false] || 0) < (mission_counts[true] || 0)) {
+            this.result = true;
         }
     }
 };
