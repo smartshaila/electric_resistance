@@ -119,6 +119,16 @@ angular.module('resistance_filters', [])
             }
         }
     })
+    .filter('show_team_member', function() {
+        return function(user, scope) {
+            var team = scope.current_team().members.map(function(member) {return member._id});
+            if (_.contains(team, user._id)) {
+                return 'glyphicon glyphicon-user'
+            } else {
+                return '';
+            }
+        }
+    })
     .filter('show_panel', function() {
         return function(panel, scope) {
             if (panel == 'mission_info') {

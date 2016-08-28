@@ -66,7 +66,7 @@
                                 <div id="team_vote_display" class="collapse in">
                                     <ul class="col-xs-6 list-group nogutter" ng-repeat="result in [true, false]">
                                         <li class="list-group-item" ng-repeat="v in current_team().votes | filter:{vote: result}">
-                                            {{v.user.name}}
+                                            {{v.user.name}} <span class="{{v.user | show_team_member:this}}"> </span>
                                         </li>
                                     </ul>
                                 </div>
