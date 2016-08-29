@@ -181,10 +181,18 @@ gameSchema.methods.select_lady_target = function(user_id) {
 
 gameSchema.methods.valid_lady_targets = function() {
     var user = this.current_mission().lady.source;
-    var previous_lady = this.prev_mission().lady.source;
-    return __.pluck(this.players.filter(function(p){
-        return !((user && p.user._id.equals(user._id)) || (previous_lady && p.user._id.equals(previous_lady._id)));
-    }), 'user');
+    var valid_missions = this.missions.filter(function(mission) {return mission.lady.source});
+    var past_ladies = valid_missions.map(function(mission) {return mission.lady.source._id.toString()});
+    var valid_players = this.players.filter(function(p){
+        return !__.contains(past_ladies, p.user._id.toString());
+    });
+    return __.pluck(valid_players, 'user');
+
+ // Logic for wrong lady rules implementation
+ //   var previous_lady = this.prev_mission().lady.source;
+ //   return __.pluck(this.players.filter(function(p){
+ //       return !((user && p.user._id.equals(user._id)) || (previous_lady && p.user._id.equals(previous_lady._id)));
+ //   }), 'user');
 };
 
 // Might be faster than inline methods?
