@@ -44,6 +44,16 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading" data-toggle="collapse" href="#game-options" aria-expanded="true" aria-controls="game-options">Select Game Options</div>
+                        <div class="panel-body collapse in" id="game-options">
+                            <ul class="list-group">
+                                <li class="list-group-item {{game_options.lady_enabled ? 'active' : ''}}" ng-click="toggle_lady_enabled()">Enable Lady</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-6">

@@ -316,7 +316,7 @@ gameSchema.methods.revealed_info = function(user_id) {
     }
 };
 
-gameSchema.methods.setup_game = function(user_ids, role_ids) {
+gameSchema.methods.setup_game = function(user_ids, role_ids, game_options) {
     var self = this;
     self.action_sleep = false;
     self.mission_number = 0;
@@ -349,7 +349,7 @@ gameSchema.methods.setup_game = function(user_ids, role_ids) {
     var lady_set = false;
     var ref_data = helpers.game_reference[user_ids.length];
     ref_data.missions.forEach(function(obj) {
-        var lady_value = (obj.use_lady && !lady_set) ? start_lady : null;
+        var lady_value = (game_options.lady_enabled && obj.use_lady && !lady_set) ? start_lady : null;
         if (lady_value) {
             lady_set = true;
         }
