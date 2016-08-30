@@ -11,6 +11,7 @@ Game.findPopulated({}, function (err, games) {
 var lobby_users = [];
 var lobby_players = [];
 var selected_role_ids = [];
+var game_options = {lady_enabled: true};
 
 function update_game(io, room) {
     game.save();
@@ -52,7 +53,8 @@ function update_lobby(io, room) {
     io.sockets.in(room).emit('update', {
         users: lobby_users,
         players: lobby_players,
-        selected_role_ids: selected_role_ids
+        selected_role_ids: selected_role_ids,
+        game_options: game_options
     });
 }
 
@@ -166,6 +168,11 @@ module.exports = function (io) {
             update_lobby(io, data.room.name);
         });
 
+        socket.on('set_game_options', function (data) {
+            game_options = data.game_options;
+            update_lobby(io, data.room.name);
+        });
+
         socket.on('add_player', function (data) {
             var player = __.find(lobby_users, function(u) {return u.user._id.equals(data._id)});
             lobby_players.push(player);
@@ -204,9 +211,10 @@ module.exports = function (io) {
 
         socket.on('create_game', function (data) {
             var g = new Game({});
-            g.setup_game(lobby_players.map(function(u){return u.user._id}), selected_role_ids);
+            g.setup_game(lobby_players.map(function(u){return u.user._id}), selected_role_ids, game_options);
             lobby_players = [];
             selected_role_ids = [];
+            game_options = { lady_enabled: true };
             g.save(function(err, new_game) {
                 new_game.addPopulations(function (err, updated_game){
                     game = updated_game;

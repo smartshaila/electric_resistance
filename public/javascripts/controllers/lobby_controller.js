@@ -8,6 +8,7 @@ app.controller('LobbyController', function ($scope, $window, socket) {
     $scope.users = [];
     $scope.players = [];
     $scope.selected_role_ids = [];
+    $scope.game_options = {lady_enabled: true};
     $scope.me = {};
 
     // Helper functions here
@@ -17,7 +18,14 @@ app.controller('LobbyController', function ($scope, $window, socket) {
 
     $scope.toggle_role_select = function(id) {
         socket.emit('toggle_role_select', {room: $scope.room, _id: id});
+        console.log(id);
     };
+
+    $scope.toggle_lady_enabled = function() {
+        $scope.game_options.lady_enabled = !$scope.game_options.lady_enabled;
+        socket.emit('set_game_options', {room: $scope.room, game_options: $scope.game_options});
+    };
+
     $scope.create_game = function() {
         socket.emit('create_game', {room: $scope.room});
     };
@@ -29,6 +37,7 @@ app.controller('LobbyController', function ($scope, $window, socket) {
         $scope.users = data.users;
         $scope.players = data.players;
         $scope.selected_role_ids = data.selected_role_ids;
+        $scope.game_options = data.game_options;
         console.log($scope.selected_role_ids);
     });
     socket.on('user', function(data) {
