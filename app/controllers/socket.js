@@ -3,10 +3,15 @@ var Game = require('../models/game');
 var __ = require('underscore');
 
 var game = {};
+var all_games = [];
 
 Game.findPopulated({}, function (err, games) {
     game = games[games.length - 1];
 });
+
+Game.findPopulated({}, function (err, games) {
+    all_games = games;
+})
 
 var lobby_users = [];
 var lobby_players = [];
@@ -36,6 +41,13 @@ function update_role_data(socket) {
 
 function update_revealed_data(socket) {
     socket.emit('revealed_info', game.revealed_info(socket.user._id));
+}
+
+function update_hall_data(io, room) {
+    io.sockets.in(room).emit('update', {
+        games: all_games,
+        lobbies: []
+    });
 }
 
 function update_user_data(io, room) {
@@ -92,6 +104,8 @@ module.exports = function (io) {
                     game_reference: helpers.game_reference
                 });
                 update_lobby(io, data.room.name);
+            } else if (data.room.type == 'hall') {
+                update_hall_data(io, data.room.name);
             }
         });
 

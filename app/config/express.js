@@ -117,6 +117,10 @@ app.get('/', function(req, res, next) {
     res.render('index');
 });
 
+app.get('/hall', function(req, res, next) {
+    res.render('hall');
+});
+
 app.get('/lobby', function(req, res, next) {
     res.render('lobby');
 });

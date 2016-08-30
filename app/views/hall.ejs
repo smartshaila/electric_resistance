@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Electric Resistance - Game Hall</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/angular/angular.min.js"></script>
+        <script src="/jquery/dist/jquery.min.js"></script>
+        <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="/javascripts/angularApp.js"></script>
+        <script src="/javascripts/controllers/hall_controller.js"></script>
+        <script src="/javascripts/filters.js"></script>
+        <script src="/javascripts/socket.js"></script>
+        <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css">
+        <link rel='stylesheet' href="/stylesheets/style.css" />
+    </head>
+
+    <body ng-app="electric_resistance" ng-controller="HallController">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Electric Resistance</a>
+                </div>
+            </div>
+        </nav>
+        <div class="panel panel-info">
+            <div class="panel-heading" data-toggle="collapse" href="#game_list" aria-expanded="true" aria-controls="game_list">All Games</div>
+            <div class="panel-body collapse in" id="game_list">
+                <ul class="list-group">
+                    <li class="list-group-item {{game.result === null ? '' : 'disabled'}}" ng-repeat="game in games" ng-click="game_select(game._id)">
+                        <span ng-repeat="player in game.players">{{player.user.name}}, </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>
