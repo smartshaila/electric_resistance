@@ -14,8 +14,12 @@ app.controller('HallController', function ($scope, $window, socket) {
     };
 
     $scope.create_lobby = function() {
-        $window.location.href = '/lobby/' + $scope.lobby_name;
+        $scope.join_lobby($scope.lobby_name);
     };
+
+    $scope.join_lobby = function(lobby_name) {
+        $window.location.href = '/lobby/' + lobby_name;
+    }
 
     // Socket listeners here
     socket.on('connect', setup_socket);

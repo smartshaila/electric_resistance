@@ -1,6 +1,6 @@
 app.controller('LobbyController', function ($scope, $window, socket) {
     // Static/reference data here
-    $scope.room = {name: 'Lobby', type: 'lobby'};
+    $scope.room = {name: lobby_name || 'Lobby', type: 'lobby'};
     $scope.roles = [];
     $scope.game_reference = [];
 

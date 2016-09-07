@@ -4,12 +4,18 @@ var __ = require('underscore');
 
 var game = {};
 var all_games = [];
-var all_lobbies = { 'shaila': {
+var all_lobbies = { 'Shaila Lobby': {
     users: [],
     players: [],
     selected_roles: [],
     game_options: {}
 }};
+var lobby_template = {
+    users: [],
+    players: [],
+    selected_roles: [],
+    game_options: {lady_enabled: false}
+}
 
 Game.findPopulated({}, function (err, games) {
     game = games[games.length - 1];
@@ -69,10 +75,10 @@ function update_user_data(io, room) {
 
 function update_lobby(io, room) {
     io.sockets.in(room).emit('update', {
-        users: lobby_users,
-        players: lobby_players,
-        selected_role_ids: selected_role_ids,
-        game_options: game_options
+        users: all_lobbies[room].users,
+        players: all_lobbies[room].players,
+        selected_role_ids: all_lobbies[room].selected_role_ids,
+        game_options: all_lobbies[room].game_options
     });
 }
 
@@ -98,11 +104,14 @@ module.exports = function (io) {
                 update_revealed_data(socket);
                 update_game(io, data.room.name);
             } else if (data.room.type == 'lobby') {
-                var player = __.find(lobby_players, function(p) {return p.user._id.equals(socket.user._id)});
+                if (!all_lobbies[data.room.name]) {
+                    all_lobbies[data.room.name] = __.clone(lobby_template);
+                }
+                var player = __.find(all_lobbies[data.room.name].players, function(p) {return p.user._id.equals(socket.user._id)});
                 if (player) {
                     player.logged_in = true;
                 } else {
-                    lobby_users.push({
+                    all_lobbies[data.room.name].users.push({
                         user: socket.user,
                         logged_in: true
                     });
@@ -112,6 +121,7 @@ module.exports = function (io) {
                     game_reference: helpers.game_reference
                 });
                 update_lobby(io, data.room.name);
+                update_hall_data(io, 'Hall');
             } else if (data.room.type == 'hall') {
                 update_hall_data(io, data.room.name);
             }
@@ -245,10 +255,15 @@ module.exports = function (io) {
 
         socket.on('disconnect', function () {
             if (socket.room != null && socket.room.type == 'lobby') {
-                lobby_users = lobby_users.filter(function (u) {
+                all_lobbies[socket.room.name].users = all_lobbies[socket.room.name].users.filter(function (u) {
                     return u.user._id != socket.user._id;
                 });
-                update_lobby(io, socket.room.name);
+                if (all_lobbies[socket.room.name].users.length + all_lobbies[socket.room.name].players.length == 0) {
+                    delete all_lobbies[socket.room.name];
+                    update_hall_data(io, 'Hall');
+                } else {
+                    update_lobby(io, socket.room.name);
+                }
             }
             console.log('Disconnected client: ' + socket.user.name);
         });

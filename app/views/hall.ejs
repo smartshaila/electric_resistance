@@ -33,8 +33,8 @@
                     </span>
                 </div>
                 <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="lobby in lobbies" ng-click="lobby_select(lobby._id)">
-                        <span>{{lobby}}</span>
+                    <li class="list-group-item" ng-repeat="(name, lobby) in lobbies" ng-click="join_lobby(name)">
+                        <span>{{name}} - {{lobby}}</span>
                     </li>
                 </ul>
             </div>
