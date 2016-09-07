@@ -6,10 +6,15 @@ app.controller('HallController', function ($scope, $window, socket) {
     $scope.games = [];
     $scope.lobbies = [];
     $scope.me = {};
+    $scope.lobby_name = '';
 
     // Helper functions here
     var setup_socket = function() {
         socket.emit('join_room', {room: $scope.room});
+    };
+
+    $scope.create_lobby = function() {
+        $window.location.href = '/lobby/' + $scope.lobby_name;
     };
 
     // Socket listeners here
@@ -30,3 +35,4 @@ app.controller('HallController', function ($scope, $window, socket) {
         socket.emit('leave_room', {room: $scope.room});
     };
 });
+

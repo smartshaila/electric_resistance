@@ -4,6 +4,12 @@ var __ = require('underscore');
 
 var game = {};
 var all_games = [];
+var all_lobbies = { 'shaila': {
+    users: [],
+    players: [],
+    selected_roles: [],
+    game_options: {}
+}};
 
 Game.findPopulated({}, function (err, games) {
     game = games[games.length - 1];
@@ -11,7 +17,7 @@ Game.findPopulated({}, function (err, games) {
 
 Game.findPopulated({}, function (err, games) {
     all_games = games;
-})
+});
 
 var lobby_users = [];
 var lobby_players = [];
@@ -47,7 +53,7 @@ function update_revealed_data(socket) {
 function update_hall_data(io, room) {
     io.sockets.in(room).emit('update', {
         games: all_games,
-        lobbies: []
+        lobbies: all_lobbies
     });
 }
 

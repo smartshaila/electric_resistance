@@ -121,8 +121,12 @@ app.get('/hall', function(req, res, next) {
     res.render('hall');
 });
 
-app.get('/lobby', function(req, res, next) {
-    res.render('lobby');
+//app.get('/lobby', function(req, res, next) {
+//    res.render('lobby');
+//});
+
+app.get('/lobby/:name', function(req , res){
+    res.render('lobby', {name: req.params.name});
 });
 
 app.get('/game', function(req, res, next) {
