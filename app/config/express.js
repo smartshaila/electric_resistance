@@ -113,11 +113,11 @@ app.get('/logout', function(req, res) {
     res.redirect('/');
 });
 
-app.get('/', function(req, res, next) {
+app.get('/', function(req, res) {
     res.render('index');
 });
 
-app.get('/hall', function(req, res, next) {
+app.get('/hall', function(req, res) {
     res.render('hall');
 });
 
@@ -126,11 +126,11 @@ app.get('/hall', function(req, res, next) {
 //});
 
 app.get('/lobby/:name', function(req , res){
-    res.render('lobby', {name: req.params.name});
+    res.render('lobby', {room_name: req.params.name});
 });
 
-app.get('/game', function(req, res, next) {
-    res.render('game');
+app.get('/game/:id', function(req, res) {
+    res.render('game', {room_name: req.params.id});
 });
 
 //This is to test stuff...

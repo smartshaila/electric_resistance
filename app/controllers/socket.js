@@ -3,17 +3,12 @@ var Game = require('../models/game');
 var __ = require('underscore');
 
 var game = {};
-var all_games = [];
-var all_lobbies = { 'Shaila Lobby': {
-    users: [],
-    players: [],
-    selected_roles: [],
-    game_options: {}
-}};
+var all_games = {};
+var all_lobbies = {};
 var lobby_template = {
     users: [],
     players: [],
-    selected_roles: [],
+    selected_role_ids: [],
     game_options: {lady_enabled: false}
 }
 
@@ -22,25 +17,29 @@ Game.findPopulated({}, function (err, games) {
 });
 
 Game.findPopulated({}, function (err, games) {
-    all_games = games;
+    all_games = games.reduce(function(obj, game) {
+        obj[game._id.toString()] = game;
+        return obj;
+    }, {});
+    console.log(all_games);
 });
 
-var lobby_users = [];
-var lobby_players = [];
-var selected_role_ids = [];
-var game_options = {lady_enabled: true};
+//var lobby_users = [];
+//var lobby_players = [];
+//var selected_role_ids = [];
+//var game_options = {lady_enabled: true};
 
 function update_game(io, room) {
-    game.save();
+    all_games[room].save();
     io.sockets.in(room).emit('update', {
-        game: game.display_safe(),
-        current_action: game.current_action(),
-        valid_lady_targets: game.valid_lady_targets()
+        game: all_games[room].display_safe(),
+        current_action: all_games[room].current_action(),
+        valid_lady_targets: all_games[room].valid_lady_targets()
     });
 }
 
 function update_role_data(socket) {
-    socket.emit('role_data', __.values(game.players.reduce(function (res, player) {
+    socket.emit('role_data', __.values(all_games[socket.room.name].players.reduce(function (res, player) {
         var count = res[player.role._id] ? res[player.role._id].count + 1 : 1;
         res[player.role._id] = {
             _id: player.role._id,
@@ -53,7 +52,7 @@ function update_role_data(socket) {
 }
 
 function update_revealed_data(socket) {
-    socket.emit('revealed_info', game.revealed_info(socket.user._id));
+    socket.emit('revealed_info', all_games[socket.room.name].revealed_info(socket.user._id));
 }
 
 function update_hall_data(io, room) {
@@ -64,7 +63,7 @@ function update_hall_data(io, room) {
 }
 
 function update_user_data(io, room) {
-    io.sockets.in(room).emit('user_data', game.players.map(function (p) {
+    io.sockets.in(room).emit('user_data', all_games[room].players.map(function (p) {
         return {
             _id: p.user._id,
             name: p.user.name,
@@ -95,7 +94,7 @@ module.exports = function (io) {
             socket.join(data.room.name);
             socket.room = data.room;
             if (data.room.type == 'game') {
-                var player = __.find(game.players, function(p) {return p.user._id.equals(socket.user._id)});
+                var player = __.find(all_games[data.room.name].players, function(p) {return p.user._id.equals(socket.user._id)});
                 if (player) {
                     player.logged_in = true;
                 }
@@ -131,7 +130,7 @@ module.exports = function (io) {
             console.log(socket.user.name, 'has left', data.room.name);
             socket.leave(data.room.name);
             if (data.room.type == 'game') {
-                var player = __.find(game.players, function(p) {return p.user._id.equals(socket.user._id)});
+                var player = __.find(all_games[data.room.name].players, function(p) {return p.user._id.equals(socket.user._id)});
                 if (player) {
                     player.logged_in = false;
                 }
@@ -150,27 +149,27 @@ module.exports = function (io) {
         });
 
         socket.on('toggle_team_select', function (data) {
-            if (socket.user._id.equals(game.current_team().leader._id)) {
-                game.toggle_team_select(data._id);
-                game.deepPopulate('missions.teams.members', function () {
+            if (socket.user._id.equals(all_games[data.room.name].current_team().leader._id)) {
+                all_games[data.room.name].toggle_team_select(data._id);
+                all_games[data.room.name].deepPopulate('missions.teams.members', function () {
                     update_game(io, data.room.name);
                 });
             }
         });
 
         socket.on('toggle_team_vote', function (data) {
-            game.toggle_team_vote(data.user_id, data.vote);
-            game.deepPopulate('missions.votes.user', function() {
-                user_vote = __.find(game.current_team().votes, function(v) {return v.user._id.equals(socket.user._id)});
+            all_games[data.room.name].toggle_team_vote(data.user_id, data.vote);
+            all_games[data.room.name].deepPopulate('missions.votes.user', function() {
+                user_vote = __.find(all_games[data.room.name].current_team().votes, function(v) {return v.user._id.equals(socket.user._id)});
                 socket.emit('team_vote_result', user_vote);
                 update_game(io, data.room.name);
             });
         });
 
         socket.on('toggle_mission_vote', function (data) {
-            game.toggle_mission_vote(data.user_id, data.vote);
-            game.addPopulations(function() {
-                user_vote = __.find(game.current_mission().votes, function(v) {return v.user._id.equals(socket.user._id)});
+            all_games[data.room.name].toggle_mission_vote(data.user_id, data.vote);
+            all_games[data.room.name].addPopulations(function() {
+                user_vote = __.find(all_games[data.room.name].current_mission().votes, function(v) {return v.user._id.equals(socket.user._id)});
                 socket.emit('mission_vote_result', user_vote);
                 update_game(io, data.room.name);
             });
@@ -178,20 +177,20 @@ module.exports = function (io) {
 
         socket.on('toggle_role_select', function (data) {
             // Make a copy in case it doesn't conform to faction requirements
-            var existing_selected_roles = selected_role_ids.slice(0);
-            var index = selected_role_ids.indexOf(data._id);
+            var existing_selected_roles = all_lobbies[data.room.name].selected_role_ids.slice(0);
+            var index = all_lobbies[data.room.name].selected_role_ids.indexOf(data._id);
             if (index > -1) {
-                selected_role_ids.splice(index, 1);
+                all_lobbies[data.room.name].selected_role_ids.splice(index, 1);
             } else {
-                selected_role_ids.push(data._id);
+                all_lobbies[data.room.name].selected_role_ids.push(data._id);
             }
 
             // Get faction count
-            var faction_counts = helpers.faction_counts(selected_role_ids);
+            var faction_counts = helpers.faction_counts(all_lobbies[data.room.name].selected_role_ids);
 
-            helpers.game_reference[lobby_players.length].factions.forEach(function (f) {
+            helpers.game_reference[all_lobbies[data.room.name].players.length].factions.forEach(function (f) {
                 if ((faction_counts[f.faction] || 0) > f.count) {
-                    selected_role_ids = existing_selected_roles.slice(0);
+                    all_lobbies[data.room.name].selected_role_ids = existing_selected_roles.slice(0);
                 }
             });
 
@@ -199,33 +198,33 @@ module.exports = function (io) {
         });
 
         socket.on('set_game_options', function (data) {
-            game_options = data.game_options;
+            all_lobbies[data.room.name].game_options = data.game_options;
             update_lobby(io, data.room.name);
         });
 
         socket.on('add_player', function (data) {
-            var player = __.find(lobby_users, function(u) {return u.user._id.equals(data._id)});
-            lobby_players.push(player);
-            lobby_users = lobby_users.filter(function(u) {
+            var player = __.find(all_lobbies[data.room.name].users, function(u) {return u.user._id.equals(data._id)});
+            all_lobbies[data.room.name].players.push(player);
+            all_lobbies[data.room.name].users = all_lobbies[data.room.name].users.filter(function(u) {
                 return !u.user._id.equals(data._id);
             });
             update_lobby(io, data.room.name);
         });
 
         socket.on('remove_player', function(data) {
-            var player = __.find(lobby_players, function(u) {return u.user._id.equals(data._id)});
-            lobby_users.push(player);
-            lobby_players = lobby_players.filter(function(u) {
+            var player = __.find(all_lobbies[data.room.name].players, function(u) {return u.user._id.equals(data._id)});
+            all_lobbies[data.room.name].users.push(player);
+            all_lobbies[data.room.name].players = all_lobbies[data.room.name].players.filter(function(u) {
                 return !u.user._id.equals(data._id);
             });
             update_lobby(io, data.room.name);
         });
 
         socket.on('select_lady_target', function (data) {
-            if (game.current_mission().lady.source && socket.user._id.equals(game.current_mission().lady.source._id)) {
-                game.select_lady_target(data._id);
+            if (all_games[data.room.name].current_mission().lady.source && socket.user._id.equals(all_games[data.room.name].current_mission().lady.source._id)) {
+                all_games[data.room.name].select_lady_target(data._id);
             }
-            game.deepPopulate('missions.lady.source missions.lady.target', function() {
+            all_games[data.room.name].deepPopulate('missions.lady.source missions.lady.target', function() {
                 update_revealed_data(socket);
                 update_game(io, data.room.name);
                 update_revealed_data(socket);
@@ -233,22 +232,20 @@ module.exports = function (io) {
         });
 
         socket.on('assassinate', function(data) {
-            var player = __.find(game.players, function(p) {return p.user._id.equals(data._id)});
+            var player = __.find(all_games[data.room.name].players, function(p) {return p.user._id.equals(data._id)});
             console.log('Assassinating:', player);
-            game.result = (player.role.name != 'Merlin');
+            all_games[data.room.name].result = (player.role.name != 'Merlin');
             update_game(io, data.room.name);
         });
 
         socket.on('create_game', function (data) {
             var g = new Game({});
-            g.setup_game(lobby_players.map(function(u){return u.user._id}), selected_role_ids, game_options);
-            lobby_players = [];
-            selected_role_ids = [];
-            game_options = { lady_enabled: true };
+            g.setup_game(all_lobbies[socket.room.name].players.map(function(u){return u.user._id}), all_lobbies[socket.room.name].selected_role_ids, all_lobbies[socket.room.name].game_options);
+            delete all_lobbies[socket.room.name];
             g.save(function(err, new_game) {
                 new_game.addPopulations(function (err, updated_game){
-                    game = updated_game;
-                    io.sockets.in(data.room.name).emit('redirect', '/game');
+                    all_games[data.room.name] = updated_game;
+                    io.sockets.in(data.room.name).emit('redirect', '/game/' + all_games[data.room.name]._id.toString());
                 });
             });
         });

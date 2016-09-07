@@ -21,6 +21,10 @@ app.controller('HallController', function ($scope, $window, socket) {
         $window.location.href = '/lobby/' + lobby_name;
     }
 
+    $scope.join_game = function(game_id) {
+        $window.location.href = '/game/' + game_id;
+    }
+
     // Socket listeners here
     socket.on('connect', setup_socket);
     socket.on('console', function(data) {console.log(data)});

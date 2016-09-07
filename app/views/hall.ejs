@@ -43,7 +43,7 @@
             <div class="panel-heading" data-toggle="collapse" href="#game_list" aria-expanded="true" aria-controls="game_list">All Games</div>
             <div class="panel-body collapse in" id="game_list">
                 <ul class="list-group">
-                    <li class="list-group-item {{game.result === null ? '' : 'disabled'}}" ng-repeat="game in games" ng-click="game_select(game._id)">
+                    <li class="list-group-item {{game.result === null ? '' : 'disabled'}}" ng-repeat="game in games" ng-click="join_game(game._id)">
                         <span ng-repeat="player in game.players">{{player.user.name}}, </span>
                     </li>
                 </ul>
