@@ -83,7 +83,7 @@ app.get('/auth/google/callback',
     function (req, res) {
         console.log('Params', req.params);
         console.log('Query', req.query);
-        res.redirect('/lobby');
+        res.redirect('/hall');
     }
 );
 
@@ -95,7 +95,7 @@ app.get('/auth/facebook/callback',
     function (req, res) {
         console.log('Params', req.params);
         console.log('Query', req.query);
-        res.redirect('/lobby');
+        res.redirect('/hall');
     }
 );
 
