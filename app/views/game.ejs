@@ -3,6 +3,7 @@
     <head>
         <title>Electric Resistance</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script>var room_name = '<%= room_name %>';</script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="/angular/angular.min.js"></script>
         <script src="/jquery/dist/jquery.min.js"></script>
@@ -26,7 +27,7 @@
                     <li class="{{'vote' | selected:current_page}} col-xs-4 text-center"><a href="#" ng-click="set_page('vote')"><span class="glyphicon glyphicon-blackboard"></span><br />Vote</a></li>
                     <li class="{{'info' | selected:current_page}} col-xs-4 text-center"><a href="#" ng-click="set_page('info')"><span class="glyphicon glyphicon-search"></span><br />Info</a></li>
                 </ul>
-                <p class="navbar-text col-med-3 hidden-xs hidden-sm">Signed in as {{player.user.name}} - <a href="/lobby" class="navbar-link">Logout</a></p>
+                <p class="navbar-text col-med-3 hidden-xs hidden-sm">Signed in as {{player.user.name}} - <a href="/hall" class="navbar-link">Logout</a></p>
             </div>
         </nav>
         <div class="container-fluid">

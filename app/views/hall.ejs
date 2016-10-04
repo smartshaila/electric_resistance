@@ -24,10 +24,26 @@
             </div>
         </nav>
         <div class="panel panel-info">
+            <div class="panel-heading" data-toggle="collapse" href="#lobby_list" aria-expanded="true" aria-controls="game_list">All Lobbies</div>
+            <div class="panel-body collapse in" id="lobby_list">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Enter lobby name..." ng-model="lobby_name">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" ng-click="create_lobby()">Create Lobby</button>
+                    </span>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="(name, lobby) in lobbies" ng-click="join_lobby(name)">
+                        <span>{{name}} - {{lobby}}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="panel panel-info">
             <div class="panel-heading" data-toggle="collapse" href="#game_list" aria-expanded="true" aria-controls="game_list">All Games</div>
             <div class="panel-body collapse in" id="game_list">
                 <ul class="list-group">
-                    <li class="list-group-item {{game.result === null ? '' : 'disabled'}}" ng-repeat="game in games" ng-click="game_select(game._id)">
+                    <li class="list-group-item {{game.result === null ? '' : 'disabled'}}" ng-repeat="game in games" ng-click="join_game(game._id)">
                         <span ng-repeat="player in game.players">{{player.user.name}}, </span>
                     </li>
                 </ul>

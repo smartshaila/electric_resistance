@@ -83,7 +83,7 @@ app.get('/auth/google/callback',
     function (req, res) {
         console.log('Params', req.params);
         console.log('Query', req.query);
-        res.redirect('/lobby');
+        res.redirect('/hall');
     }
 );
 
@@ -95,7 +95,7 @@ app.get('/auth/facebook/callback',
     function (req, res) {
         console.log('Params', req.params);
         console.log('Query', req.query);
-        res.redirect('/lobby');
+        res.redirect('/hall');
     }
 );
 
@@ -113,20 +113,24 @@ app.get('/logout', function(req, res) {
     res.redirect('/');
 });
 
-app.get('/', function(req, res, next) {
+app.get('/', function(req, res) {
     res.render('index');
 });
 
-app.get('/hall', function(req, res, next) {
+app.get('/hall', function(req, res) {
     res.render('hall');
 });
 
-app.get('/lobby', function(req, res, next) {
-    res.render('lobby');
+//app.get('/lobby', function(req, res, next) {
+//    res.render('lobby');
+//});
+
+app.get('/lobby/:name', function(req , res){
+    res.render('lobby', {room_name: req.params.name});
 });
 
-app.get('/game', function(req, res, next) {
-    res.render('game');
+app.get('/game/:id', function(req, res) {
+    res.render('game', {room_name: req.params.id});
 });
 
 //This is to test stuff...
