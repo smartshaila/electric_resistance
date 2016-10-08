@@ -10,7 +10,7 @@ var lobby_template = {
     players: [],
     selected_role_ids: [],
     game_options: {lady_enabled: false}
-}
+};
 
 Game.findPopulated({}, function (err, games) {
     game = games[games.length - 1];
@@ -104,7 +104,7 @@ module.exports = function (io) {
                 update_game(io, data.room.name);
             } else if (data.room.type == 'lobby') {
                 if (!all_lobbies[data.room.name]) {
-                    all_lobbies[data.room.name] = __.clone(lobby_template);
+                    all_lobbies[data.room.name] = JSON.parse(JSON.stringify(lobby_template));
                 }
                 var player = __.find(all_lobbies[data.room.name].players, function(p) {return p.user._id.equals(socket.user._id)});
                 if (player) {
@@ -136,11 +136,11 @@ module.exports = function (io) {
                 }
                 update_user_data(io, data.room.name);
             } else if (data.room.type == 'lobby') {
-                var player = __.find(lobby_players, function(p) {return p.user._id.equals(socket.user._id)});
+                var player = __.find(all_lobbies[data.room.name].players, function(p) {return p.user._id.equals(socket.user._id)});
                 if (player) {
                     player.logged_in = false;
                 } else {
-                    lobby_users = lobby_users.filter(function (u) {
+                    all_lobbies[data.room.name].users = all_lobbies[data.room.name].users.filter(function (u) {
                         return !u.user._id.equals(socket.user._id);
                     });
                 }
