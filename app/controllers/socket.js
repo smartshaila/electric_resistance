@@ -17,7 +17,7 @@ Game.findPopulated({}, function (err, games) {
 });
 
 Game.findPopulated({}, function (err, games) {
-    all_games = games.reduce(function(obj, game) {
+    all_games = games.reverse().reduce(function(obj, game) {
         obj[game._id.toString()] = game;
         return obj;
     }, {});
