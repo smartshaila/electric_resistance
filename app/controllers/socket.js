@@ -244,14 +244,15 @@ module.exports = function (io) {
             delete all_lobbies[socket.room.name];
             g.save(function(err, new_game) {
                 new_game.addPopulations(function (err, updated_game){
-                    all_games[data.room.name] = updated_game;
-                    io.sockets.in(data.room.name).emit('redirect', '/game/' + all_games[data.room.name]._id.toString());
+                    var game_id = updated_game._id.toString();
+                    all_games[game_id] = updated_game;
+                    io.sockets.in(data.room.name).emit('redirect', '/game/' + game_id);
                 });
             });
         });
 
         socket.on('disconnect', function () {
-            if (socket.room != null && socket.room.type == 'lobby') {
+            if (socket.room != null && socket.room.type == 'lobby' && all_lobbies[socket.room.name]) {
                 all_lobbies[socket.room.name].users = all_lobbies[socket.room.name].users.filter(function (u) {
                     return u.user._id != socket.user._id;
                 });
