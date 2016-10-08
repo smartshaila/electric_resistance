@@ -10,7 +10,7 @@ var lobby_template = {
     players: [],
     selected_role_ids: [],
     game_options: {lady_enabled: false}
-}
+};
 
 Game.findPopulated({}, function (err, games) {
     game = games[games.length - 1];
@@ -104,7 +104,7 @@ module.exports = function (io) {
                 update_game(io, data.room.name);
             } else if (data.room.type == 'lobby') {
                 if (!all_lobbies[data.room.name]) {
-                    all_lobbies[data.room.name] = __.clone(lobby_template);
+                    all_lobbies[data.room.name] = JSON.parse(JSON.stringify(lobby_template));
                 }
                 var player = __.find(all_lobbies[data.room.name].players, function(p) {return p.user._id.equals(socket.user._id)});
                 if (player) {
@@ -136,11 +136,11 @@ module.exports = function (io) {
                 }
                 update_user_data(io, data.room.name);
             } else if (data.room.type == 'lobby') {
-                var player = __.find(lobby_players, function(p) {return p.user._id.equals(socket.user._id)});
+                var player = __.find(all_lobbies[data.room.name].players, function(p) {return p.user._id.equals(socket.user._id)});
                 if (player) {
                     player.logged_in = false;
                 } else {
-                    lobby_users = lobby_users.filter(function (u) {
+                    all_lobbies[data.room.name].users = all_lobbies[data.room.name].users.filter(function (u) {
                         return !u.user._id.equals(socket.user._id);
                     });
                 }
@@ -244,14 +244,15 @@ module.exports = function (io) {
             delete all_lobbies[socket.room.name];
             g.save(function(err, new_game) {
                 new_game.addPopulations(function (err, updated_game){
-                    all_games[data.room.name] = updated_game;
-                    io.sockets.in(data.room.name).emit('redirect', '/game/' + all_games[data.room.name]._id.toString());
+                    var game_id = updated_game._id.toString();
+                    all_games[game_id] = updated_game;
+                    io.sockets.in(data.room.name).emit('redirect', '/game/' + game_id);
                 });
             });
         });
 
         socket.on('disconnect', function () {
-            if (socket.room != null && socket.room.type == 'lobby') {
+            if (socket.room != null && socket.room.type == 'lobby' && all_lobbies[socket.room.name]) {
                 all_lobbies[socket.room.name].users = all_lobbies[socket.room.name].users.filter(function (u) {
                     return u.user._id != socket.user._id;
                 });
