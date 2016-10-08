@@ -34,7 +34,7 @@
                 </div>
                 <ul class="list-group">
                     <li class="list-group-item" ng-repeat="(name, lobby) in lobbies" ng-click="join_lobby(name)">
-                        <span>{{name}} - {{lobby}}</span>
+                        <span>{{name}}</span> - <span ng-repeat="user in lobby.players">{{user.user.name}}, </span><span ng-repeat="user in lobby.users">{{user.user.name}}, </span>
                     </li>
                 </ul>
             </div>

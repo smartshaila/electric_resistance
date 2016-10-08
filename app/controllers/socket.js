@@ -21,7 +21,7 @@ Game.findPopulated({}, function (err, games) {
         obj[game._id.toString()] = game;
         return obj;
     }, {});
-    console.log(all_games);
+//    console.log(all_games);
 });
 
 //var lobby_users = [];
