@@ -26,6 +26,13 @@ angular.module('resistance_filters', [])
             }
         }
     })
+    .filter('player_list', function(){
+        return function(obj) {
+            //obj can be lobby or game
+            var people = (obj.players || []).concat(obj.users || []);
+            return people.map(function(p) {return p.user.name;}).join(', ');
+        }
+    })
     .filter('connection_icon', function() {
         return function(status) {
             if (status) {
