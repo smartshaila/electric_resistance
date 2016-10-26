@@ -34,7 +34,7 @@
                 </div>
                 <ul class="list-group">
                     <li class="list-group-item" ng-repeat="(name, lobby) in lobbies" ng-click="join_lobby(name)">
-                        <span>{{name}}</span> - <span ng-repeat="user in lobby.players">{{user.user.name}}, </span><span ng-repeat="user in lobby.users">{{user.user.name}}, </span>
+                        <span>{{name}} - {{lobby | player_list}}</span>
                     </li>
                 </ul>
             </div>
@@ -44,7 +44,7 @@
             <div class="panel-body collapse in" id="game_list">
                 <ul class="list-group">
                     <li class="list-group-item {{game.result === null ? '' : 'disabled'}}" ng-repeat="game in games" ng-click="join_game(game._id)">
-                        <span ng-repeat="player in game.players">{{player.user.name}}, </span>
+                        <span>{{game | player_list}}</span>
                     </li>
                 </ul>
             </div>

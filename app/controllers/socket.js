@@ -73,6 +73,7 @@ function update_user_data(io, room) {
 }
 
 function update_lobby(io, room) {
+    update_hall_data(io, room);
     io.sockets.in(room).emit('update', {
         users: all_lobbies[room].users,
         players: all_lobbies[room].players,
