@@ -198,7 +198,7 @@ angular.module('resistance_filters', [])
                     return 'hidden';
                 }
             } else if (panel == 'assassinate') {
-                if (scope.player.role.name == 'Assassin') {
+                if (scope.player.role.name == 'Assassin' && scope.game.result == null) {
                     return '';
                 } else {
                     return 'hidden';

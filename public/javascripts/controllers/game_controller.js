@@ -131,10 +131,10 @@ app.controller('GameController', function ($scope, $window, socket) {
         if (team_index === '-1') {
             team_index = ($scope.display_team() > 0) ? $scope.display_team() - 1 : 0;
         }
-        if (team_index === '+1' && $scope.display_mission_index != -1) {
+        if (team_index === '+1') {
             team_index = $scope.display_team() + 1;
         }
-        $scope.display_team_index = ($scope.display_mission_index == -1 && team_index >= $scope.current_mission().teams.length - 1) ? -1 : team_index;
+        $scope.display_team_index = (team_index >= $scope.current_mission().teams.length - 1) ? -1 : team_index;
     };
     $scope.display_team = function() {
         return $scope.display_team_index == -1 ? ($scope.current_mission().teams.length - 1) : $scope.display_team_index;
