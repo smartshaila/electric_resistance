@@ -259,6 +259,7 @@ module.exports = function (io) {
                 new_game.addPopulations(function (err, updated_game){
                     var game_id = updated_game._id.toString();
                     all_games[game_id] = updated_game;
+                    build_game_list();
                     io.sockets.in(data.room.name).emit('redirect', '/game/' + game_id);
                 });
             });
