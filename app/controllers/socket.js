@@ -149,6 +149,15 @@ module.exports = function (io) {
             }
         });
 
+        socket.on('save_user', function(data) {
+            console.log(data);
+            socket.user.name = data.user.name;
+            socket.user.save(function(err){
+                //TODO: Update games here to show new user name
+                console.log(socket.user);
+            });
+        });
+
         socket.on('toggle_team_select', function (data) {
             if (socket.user._id.equals(all_games[data.room.name].current_team().leader._id)) {
                 all_games[data.room.name].toggle_team_select(data._id);

@@ -25,6 +25,11 @@ app.controller('HallController', function ($scope, $window, socket) {
         $window.location.href = '/game/' + game_id;
     };
 
+    $scope.save_user = function() {
+        socket.emit('save_user', {user: $scope.me});
+        $('#user_profile').modal('toggle');
+    };
+
 //    $scope.game_players = function(game) {
 //        return game.players.map(function(p){return p.user.name;})
 //    };
