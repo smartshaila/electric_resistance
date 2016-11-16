@@ -12,17 +12,21 @@ var lobby_template = {
     game_options: {lady_enabled: false}
 };
 
-Game.findPopulated({}, function (err, games) {
-    game = games[games.length - 1];
-});
+//Game.findPopulated({}, function (err, games) {
+//    game = games[games.length - 1];
+//});
 
-Game.findPopulated({}, function (err, games) {
-    all_games = games.reverse().reduce(function(obj, game) {
-        obj[game._id.toString()] = game;
-        return obj;
-    }, {});
+function build_game_list() {
+    Game.findPopulated({}, function (err, games) {
+        all_games = games.reverse().reduce(function(obj, game) {
+            obj[game._id.toString()] = game;
+            return obj;
+        }, {});
 //    console.log(all_games);
-});
+    });
+}
+
+build_game_list();
 
 //var lobby_users = [];
 //var lobby_players = [];
@@ -147,6 +151,14 @@ module.exports = function (io) {
                 }
                 update_lobby(io, data.room.name);
             }
+        });
+
+        socket.on('save_user', function(data) {
+            console.log(data);
+            socket.user.name = data.user.name;
+            socket.user.save(function(err){
+                build_game_list();
+            });
         });
 
         socket.on('toggle_team_select', function (data) {

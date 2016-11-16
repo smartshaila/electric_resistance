@@ -121,6 +121,18 @@ app.get('/hall', function(req, res) {
     res.render('hall');
 });
 
+//app.get('/profile', function(req, res) {
+//   res.render('profile', {user: req.user});
+//});
+//
+//app.post('/update_profile', function(req, res) {
+//    req.user.name = req.body.display_name;
+//    req.user.save(function(err){
+//        if (err) throw err;
+//        res.render('profile', {user: req.user});
+//    });
+//});
+
 //app.get('/lobby', function(req, res, next) {
 //    res.render('lobby');
 //});
